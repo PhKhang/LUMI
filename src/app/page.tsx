@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Button, HStack } from "@chakra-ui/react"
 
 export default function Home() {
   return (
@@ -50,6 +51,12 @@ export default function Home() {
             Read our docs
           </a>
         </div>
+            <HStack>
+              <Button>Button of Chakra</Button>
+              <Button className="font-bold-italic" rounded="full" colorPalette="teal" variant="outline">
+                Call us 
+              </Button>
+            </HStack>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a

@@ -8,8 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-nunito);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +21,78 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-nunito), Arial, Helvetica, sans-serif;
+}
+
+.font-extralight {
+  font-family: var(--font-nunito);
+  font-weight: 200; 
+}
+.font-extralight-italic {
+  font-family: var(--font-nunito);
+  font-weight: 200;
+  font-style: italic;
+}
+.font-light {
+  font-family: var(--font-nunito);
+  font-weight: 300; 
+}
+.font-light-italic {
+  font-family: var(--font-nunito);
+  font-weight: 300;
+  font-style: italic;
+}
+.font-normal {
+  font-family: var(--font-nunito);
+  font-weight: 400;
+}
+.font-normal-italic {
+  font-family: var(--font-nunito);
+  font-weight: 400;
+  font-style: italic; 
+}
+.font-medium {
+  font-family: var(--font-nunito);
+  font-weight: 500; 
+}
+.font-medium-italic {
+  font-family: var(--font-nunito);
+  font-weight: 500;
+  font-style: italic; 
+}
+.font-semibold {
+  font-family: var(--font-nunito);
+  font-weight: 600; 
+}
+.font-semibold-italic {
+  font-family: var(--font-nunito);
+  font-weight: 600;
+  font-style: italic;
+}
+.font-bold {
+  font-family: var(--font-nunito);
+  font-weight: 700;
+}
+.font-bold-italic {
+  font-family: var(--font-nunito);
+  font-weight: 700;
+  font-style: italic;
+}
+.font-extrabold {
+  font-family: var(--font-nunito);
+  font-weight: 800; 
+}
+.font-extrabold-italic {
+  font-family: var(--font-nunito);
+  font-weight: 800;
+  font-style: italic;
+}
+.font-black {
+  font-family: var(--font-nunito);
+  font-weight: 900; 
+}
+.font-black-italic {
+  font-family: var(--font-nunito);
+  font-weight: 900;
+  font-style: italic; 
 }
