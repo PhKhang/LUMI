@@ -22,6 +22,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-nunito), Arial, Helvetica, sans-serif;
+  font-size: large;
 }
 
 .font-extralight {

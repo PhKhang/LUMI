@@ -9,6 +9,7 @@ tokens: {
         accent: { value: "#16A34A" },
         text: { value: "#242424" },
         background: { value: "#FFFFFF" },
+        hover_background_yellow: { value: "rgba(254, 249, 195, 0.4)" },
     },
     fonts: {
         body: { value: "var(--font-nunito)" },
