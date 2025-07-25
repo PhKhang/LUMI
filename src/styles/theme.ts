@@ -7,9 +7,25 @@ tokens: {
         primary: { value: "#FACC15" },
         secondary: { value: "#4ADE80" },
         accent: { value: "#16A34A" },
-        text: { value: "#242424" },
-        background: { value: "#FFFFFF" },
+        text: { 
+          primary: { value: "#242424" },
+          secondary: { value: "#4A5568" },
+          muted: { value: "#718096" },
+        },
+        background: { 
+          primary: { value: "#FFFFFF" }, 
+          secondary: { value: "#F7FAFC" }, 
+          accent: { value: "#EDF2F7" },
+        },
+        border: {
+          primary: { value: "#E2E8F0" }, 
+          secondary: { value: "#CBD5E0" }, 
+        },
         hover_background_yellow: { value: "rgba(254, 249, 195, 0.4)" },
+        link: {
+          default: { value: "#4A5568" }, 
+          hover: { value: "#3182CE" },
+        }
     },
     fonts: {
         body: { value: "var(--font-nunito)" },
@@ -17,7 +33,5 @@ tokens: {
 },
 },
 })
-
-
 
 export const system = createSystem(defaultConfig, config)

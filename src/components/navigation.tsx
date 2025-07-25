@@ -13,12 +13,8 @@ import {
 import { MenuButton, MenuList, Menu, MenuItem } from "@chakra-ui/menu"
 import { Dispatch, SetStateAction } from "react"
 import { BiDownArrow } from "react-icons/bi"
-
-interface NavigationItem {
-  key: string
-  en: string
-  vi: string
-}
+import Link from "next/link"
+import { NAVIGATION_ITEMS } from "@/lib/routes"
 
 interface NavigationProps {
   currentLanguage: "en" | "vi"
@@ -33,39 +29,34 @@ const pickPalette = (name: string) => {
 }
 
 export default function Navigation({ currentLanguage, onLanguageChange }: NavigationProps) {
-  const navigationItems: NavigationItem[] = [
-    { key: "home", en: "Home", vi: "Trang chủ" },
-    { key: "fullTest", en: "Full Test", vi: "Bài thi Đầy đủ" },
-    { key: "miniTest", en: "Mini Test", vi: "Bài thi Ngắn" },
-    { key: "wordNote", en: "Word Note", vi: "Sổ Từ vựng" },
-  ]
-
-  const getNavText = (item: NavigationItem) => {
-    return currentLanguage === "vi" ? item.vi : item.en
-  }
+  const navigationItems = NAVIGATION_ITEMS.MAIN
 
   return (
-    <Box bg="primary" px={5} py={2}>
+    <Box bg="primary" px={5} py={1}>
       <Flex justify="space-between" align="center" mx="auto">
-        <Box>
-          <img src="/lumi-simple-logo.svg" alt="LUMI Logo" style={{ height: "18px" }} />
-        </Box>
+        <Link href="/home">
+          <Box cursor="pointer">
+            <img src="/lumi-simple-logo.svg" alt="LUMI Logo" style={{ height: "18px" }} />
+          </Box>
+        </Link>
 
         <HStack gap={8}>
           {navigationItems.map((item) => (
-            <Box
-              paddingY={5}  
-              paddingX={3}
-              key={item.key}
-              color="text"
-              _hover={{ bg: "hover_background_yellow" }} 
-              borderRadius="full"
-              fontSize={"md"}
-              className="font-semibold"
-              py={0}
-            >
-              {getNavText(item)}
-            </Box>
+            <Link key={item.href} href={item.href}>
+              <Box
+                paddingY={5}  
+                paddingX={3}
+                color="text.primary"
+                _hover={{ bg: "hover_background_yellow" }} 
+                borderRadius="full"
+                fontSize={"md"}
+                className="font-semibold"
+                py={0}
+                cursor="pointer"
+              >
+                {item.label}
+              </Box>
+            </Link>
           ))}
 
             {/* <Menu>

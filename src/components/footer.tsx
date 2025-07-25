@@ -1,30 +1,26 @@
 "use client"
 
 import { Box, Container, Flex, VStack, HStack, Text, Link } from "@chakra-ui/react"
-import { useColorModeValue } from "@chakra-ui/color-mode"
 import { Icon } from "@chakra-ui/react";
 import { MdEmail } from "react-icons/md";
-import { HoldPhoneIcon } from "hugeicons-react";
+import { BiPhoneCall } from "react-icons/bi";
 
 interface FooterProps {
   currentLanguage: string
 }
 
 export default function Footer({ currentLanguage }: FooterProps) {
-  const bgColor = useColorModeValue("white", "gray.800")
-  const textColor = useColorModeValue("gray.600", "gray.300")
-  const headingColor = useColorModeValue("gray.800", "white")
 
   const footerContent = {
     vi: {
-      navigation: "Thanh điều hướng",
-      help: "Trợ giúp",
-      contact: "Liên hệ",
-      homepage: "Trang chủ",
-      fullTestPractice: "Luyện tập - Full Test",
-      miniTestPractice: "Luyện tập - Mini Test",
-      tutorialGuide: "Sổ Tư Vựng",
-      studyReport: "Báo cáo học tập",
+      navigation: "Navigation",
+      help: "Help",
+      contact: "Contact",
+      homepage: "Homepage",
+      fullTestPractice: "Full Test",
+      miniTestPractice: "Mini Test",
+      tutorialGuide: "Vocabulary Guide",
+      studyReport: "Study Report",
       supportKnowledge: "Support & Knowledge Base",
       community: "LUMI Community",
       talkToSales: "Talk to Sales",
@@ -37,8 +33,8 @@ export default function Footer({ currentLanguage }: FooterProps) {
       help: "Help",
       contact: "Contact",
       homepage: "Homepage",
-      fullTestPractice: "Practice - Full Test",
-      miniTestPractice: "Practice - Mini Test",
+      fullTestPractice: "Full Test",
+      miniTestPractice: "Mini Test",
       tutorialGuide: "Vocabulary Guide",
       studyReport: "Study Report",
       supportKnowledge: "Support & Knowledge Base",
@@ -53,83 +49,71 @@ export default function Footer({ currentLanguage }: FooterProps) {
   const content = footerContent[currentLanguage as keyof typeof footerContent]
 
   return (
-    <Box bg={bgColor} py={10} mt={16} borderTop="1px" borderColor="gray.200">
+    <Box bg="primary" py={10} mt={16} borderTop="1px" borderColor="border.primary">
       <Container maxW="1200px">
         <Flex justify="space-between" align="start" wrap="wrap" gap={8}>
           <VStack align="start" gap={4}>
             <HStack>
-              <Box
-                w={10}
-                h={10}
-                bg="#FFD700"
-                borderRadius="full"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text fontWeight="bold" fontSize="sm">
-                  LUMI
-                </Text>
-              </Box>
+              <img src="/full-logo.svg" alt="LUMI" width="80" />
             </HStack>
           </VStack>
 
           <VStack align="start" gap={3}>
-            <Text fontWeight="bold" color={headingColor}>
+            <Text fontWeight="bold" color="text.primary">
               {content.navigation}
             </Text>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.homepage}
             </Link>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.fullTestPractice}
             </Link>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.miniTestPractice}
             </Link>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.tutorialGuide}
             </Link>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.studyReport}
             </Link>
           </VStack>
 
           <VStack align="start" gap={3}>
-            <Text fontWeight="bold" color={headingColor}>
+            <Text fontWeight="bold" color="text.primary">
               {content.help}
             </Text>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.supportKnowledge}
             </Link>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.community}
             </Link>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.talkToSales}
             </Link>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.mediaKit}
             </Link>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.privacyTerms}
             </Link>
-            <Link color={textColor} _hover={{ color: "blue.500" }}>
+            <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.status}
             </Link>
           </VStack>
 
           <VStack align="start" gap={3}>
-            <Text fontWeight="bold" color={headingColor}>
+            <Text fontWeight="bold" color="text.primary">
               {content.contact}
             </Text>
             <HStack>
-              <Icon as={HoldPhoneIcon} color={textColor} />
-              <Text color={textColor}>(+84) 123456789</Text>
+              <Icon as={BiPhoneCall} color="text.secondary" />
+              <Text color="text.secondary">(+84) 123456789</Text>
             </HStack>
             <HStack>
-              <Icon as={MdEmail} color={textColor} />
-              <Text color={textColor}>contact@lumi.com.vn</Text>
+              <Icon as={MdEmail} color="text.secondary" />
+              <Text color="text.secondary">contact@lumi.com.vn</Text>
             </HStack>
           </VStack>
         </Flex>

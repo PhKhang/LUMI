@@ -12,8 +12,8 @@ const nunito = Nunito({
 })
 
 export const metadata: Metadata = {
-  title: "LUMI - IELTS Test Practice",
-  description: "Practice IELTS tests with LUMI, your personal IELTS test preparation assistant.",
+  title: "LUMI",
+  description: "Learn, Upgrade, Master your IELTS skills with LUMI",
   icons: {
     icon: "/favicon.png",
   },
