@@ -1,10 +1,12 @@
 "use client"
 
 import { Box, Container, Flex, VStack, HStack, Text, Link } from "@chakra-ui/react"
+import { useColorModeValue } from "@chakra-ui/color-mode"
 import { Icon } from "@chakra-ui/react";
 import { MdEmail } from "react-icons/md";
+import { HoldPhoneIcon } from "hugeicons-react";
 import { BiPhoneCall } from "react-icons/bi";
-
+import NextLink from "next/link"
 interface FooterProps {
   currentLanguage: string
 }
@@ -13,14 +15,15 @@ export default function Footer({ currentLanguage }: FooterProps) {
 
   const footerContent = {
     vi: {
-      navigation: "Navigation",
-      help: "Help",
-      contact: "Contact",
-      homepage: "Homepage",
-      fullTestPractice: "Full Test",
-      miniTestPractice: "Mini Test",
-      tutorialGuide: "Vocabulary Guide",
-      studyReport: "Study Report",
+      navigation: "Thanh điều hướng",
+      help: "Trợ giúp",
+      contact: "Liên hệ",
+      homepage: "Trang chủ",
+      fullTestPractice: "Luyện tập - Full Test",
+      miniTestPractice: "Luyện tập - Mini Test",
+      tutorialGuide: "Sổ Tư Vựng",
+      studyReport: "Báo cáo học tập",
+      testResult: "Kết quả bài làm",
       supportKnowledge: "Support & Knowledge Base",
       community: "LUMI Community",
       talkToSales: "Talk to Sales",
@@ -37,6 +40,7 @@ export default function Footer({ currentLanguage }: FooterProps) {
       miniTestPractice: "Mini Test",
       tutorialGuide: "Vocabulary Guide",
       studyReport: "Study Report",
+      testResult: "Test Result",
       supportKnowledge: "Support & Knowledge Base",
       community: "LUMI Community",
       talkToSales: "Talk to Sales",
@@ -76,6 +80,9 @@ export default function Footer({ currentLanguage }: FooterProps) {
             </Link>
             <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.studyReport}
+            </Link>
+            <Link as={NextLink} href="/test-result" _hover={{ color: "blue.500" }}>
+              {content.testResult}
             </Link>
           </VStack>
 
