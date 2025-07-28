@@ -80,7 +80,7 @@ export default function ReportPage() {
         >
             <HStack justify="space-between" mb={6}>
               <Text fontSize="xl" fontWeight="bold" color={textColor}>
-                🎯 Điểm số của bạn
+                🎯 Your Score
               </Text>
               <Icon as={MdShare} color={mutedColor} boxSize={5} cursor="pointer" />
             </HStack>
@@ -95,7 +95,7 @@ export default function ReportPage() {
                   />
                   <PolarRadiusAxis angle={90} domain={[0, 9]} />
                   <Radar
-                    name="Mục tiêu"
+                    name="Target"
                   dataKey="target"
                   stroke="#F6D55C"
                   fill="#F6D55C"
@@ -103,7 +103,7 @@ export default function ReportPage() {
                   strokeWidth={3}
                 />
                 <Radar
-                  name="Điểm số hiện tại"
+                  name="Current"
                   dataKey="currentScore"
                   stroke="#48BB78"
                   fill="#48BB78"
@@ -129,12 +129,12 @@ export default function ReportPage() {
           <HStack mb={6}>
             <Text fontSize="24px">🦉</Text>
             <Text fontSize="xl" fontWeight="bold" color={textColor}>
-              Trợ lý LUMI
+              LUMI Assistant
             </Text>
           </HStack>
 
           <Text fontSize="lg" color="green.500" fontWeight="medium" mb={4}>
-            Xin chào Uyên Nhi, đây là báo cáo học tập của bạn:
+            Hello Uyên Nhi, here is your study report:
           </Text>
 
           <Flex gap={6} direction={{ base: "column", md: "row" }} align="start">
@@ -146,9 +146,9 @@ export default function ReportPage() {
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">📖 </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Reading: </Text>
-                  Kỹ năng <Text as="span" fontWeight="bold">tốt nhất</Text> của bạn với độ chính xác 82%, ít gặp lỗi sai 
-                  khi làm các Passage 1 và 2, nhưng <Text as="span" fontWeight="bold">thường mất điểm ở Passage 3</Text>. Dạng 
-                  bài mạnh là <Text as="span" fontWeight="bold">Multiple Choice</Text>, dạng yếu là <Text as="span" fontWeight="bold">Matching Headings</Text> (52%).
+                  Your <Text as="span" fontWeight="bold">strongest skill</Text> with 82% accuracy, fewer errors 
+                  in Passages 1 and 2, but <Text as="span" fontWeight="bold">often lose points in Passage 3</Text>. Strong in 
+                  <Text as="span" fontWeight="bold"> Multiple Choice</Text>, weak in <Text as="span" fontWeight="bold">Matching Headings</Text> (52%).
                 </Text>
               </Box>
 
@@ -158,8 +158,8 @@ export default function ReportPage() {
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">🎧 </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Listening: </Text>
-                  Kết quả ổn định với điểm trung bình 7.0/9.0, bạn thường 
-                  gặp khó khăn ở <Text as="span" fontWeight="bold">Part 2, Part 4</Text>, và dạng bài <Text as="span" fontWeight="bold">Map/Diagram Labelling</Text>.
+                  Stable results with average score of 7.0/9.0, you often 
+                  struggle with <Text as="span" fontWeight="bold">Part 2, Part 4</Text>, and <Text as="span" fontWeight="bold">Map/Diagram Labelling</Text> questions.
                 </Text>
               </Box>
 
@@ -169,9 +169,9 @@ export default function ReportPage() {
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">✍️ </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Writing: </Text>
-                  Bạn <Text as="span" fontWeight="bold">chủ yếu sử dụng câu đơn, từ vựng còn bị lặp lại, cấu 
-                  trúc ngữ pháp chưa đa dạng</Text>. Cần ôn tập <Text as="span" color="orange.500" fontWeight="bold">phần Overview của Task 1</Text> và 
-                  <Text as="span" color="orange.500" fontWeight="bold"> luyện tiếp kết thúc luận điểm trong bài Task 2</Text>.
+                  You <Text as="span" fontWeight="bold">mainly use simple sentences, repetitive vocabulary, and limited 
+                  grammatical structures</Text>. Need to practice <Text as="span" color="orange.500" fontWeight="bold">Task 1 Overview section</Text> and 
+                  <Text as="span" color="orange.500" fontWeight="bold"> conclusion arguments in Task 2</Text>.
                 </Text>
               </Box>
 
@@ -181,8 +181,8 @@ export default function ReportPage() {
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">🗣️ </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Speaking: </Text>
-                  Điểm số trung bình, cần cải thiện <Text as="span" fontWeight="bold">fluency và pronunciation</Text>. 
-                  Thường gặp khó khăn ở <Text as="span" fontWeight="bold">Part 2</Text> và cần phát triển từ vựng chủ đề.
+                  Average score, need to improve <Text as="span" fontWeight="bold">fluency and pronunciation</Text>. 
+                  Often struggle with <Text as="span" fontWeight="bold">Part 2</Text> and need to develop topic-specific vocabulary.
                 </Text>
               </Box>
             </VStack>
@@ -190,7 +190,7 @@ export default function ReportPage() {
             {/* Right Column - Suggestions */}
             <Box flex="1" minW="250px">
               <Text fontSize="lg" fontWeight="bold" color="green.500" mb={4}>
-                ✨ LUMI gợi ý bạn những bài tập sau:
+                ✨ LUMI suggests the following exercises:
               </Text>
               
               <VStack align="start" gap={3}>
