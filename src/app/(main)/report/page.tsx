@@ -23,8 +23,11 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts'
+import { useState } from 'react'
 
 export default function ReportPage() {
+  const [selectedSkill, setSelectedSkill] = useState('Listening')
+  
   const bgColor = useColorModeValue("white", "gray.800")
   const textColor = useColorModeValue("gray.800", "black")
   const mutedColor = useColorModeValue("gray.700", "gray.300")
@@ -79,12 +82,13 @@ export default function ReportPage() {
           borderWidth="1px"
           borderColor={borderColor}
         >
-            <HStack justify="space-between" mb={6}>
+            <HStack justify="space-between" mb={3}>
               <Text fontSize="xl" fontWeight="bold" color={textColor}>
                 🎯 Your Score
               </Text>
               <Icon as={MdShare} color={mutedColor} boxSize={5} cursor="pointer" />
             </HStack>
+            <Box height="1px" bg={borderColor} mb={6} />
 
             <Box height="400px">
               <ResponsiveContainer width="100%" height="100%">
@@ -127,12 +131,13 @@ export default function ReportPage() {
           borderWidth="1px"
           borderColor={borderColor}
         >
-          <HStack mb={6}>
+          <HStack mb={3}>
             <Text fontSize="24px">🦉</Text>
             <Text fontSize="xl" fontWeight="bold" color={textColor}>
               LUMI Assistant
             </Text>
           </HStack>
+          <Box height="1px" bg={borderColor} mb={6} />
 
           <Text fontSize="lg" color="green.500" fontWeight="medium" mb={4}>
             Hello Uyên Nhi, here is your study report:
@@ -237,7 +242,7 @@ export default function ReportPage() {
           borderWidth="1px"
           borderColor={borderColor}
         >
-          <HStack justify="space-between" mb={6}>
+          <HStack justify="space-between" mb={3}>
             <HStack>
               <Icon as={MdCalendarToday} color="green.500" boxSize={5} />
               <Text fontSize="xl" fontWeight="bold" color={textColor}>
@@ -246,6 +251,7 @@ export default function ReportPage() {
             </HStack>
             <Icon as={MdLaunch} color={mutedColor} boxSize={4} cursor="pointer" />
           </HStack>
+          <Box height="1px" bg={borderColor} mb={6} />
 
           <SimpleGrid columns={2} gap={4}>
             <Box 
@@ -284,20 +290,62 @@ export default function ReportPage() {
           borderWidth="1px"
           borderColor={borderColor}
         >
-          <Text fontSize="xl" fontWeight="bold" color={textColor} mb={6}>
+          <Text fontSize="xl" fontWeight="bold" color={textColor} mb={3}>
             Learning Performance Statistics
           </Text>
+          <Box height="1px" bg={borderColor} mb={6} />
 
-          {/* Skill Tabs */}
-          <HStack mb={6} gap={2}>
-            <Button size="sm" variant="outline" color={textColor}>Reading</Button>
-            <Button size="sm" bg="yellow.400" color="black" fontWeight="medium">Listening</Button>
-            <Button size="sm" variant="outline" color={textColor}>Writing</Button>
-            <Button size="sm" variant="outline" color={textColor}>Speaking</Button>
-          </HStack>
-
-          {/* Performance Metrics */}
-          <SimpleGrid columns={{ base: 2, md: 5 }} gap={4}>
+          {/* Skill Selector and Performance Metrics in same row */}
+          <SimpleGrid columns={{ base: 2, md: 6 }} gap={4}>
+            {/* Skill Selector - 2x2 Grid */}
+            <Box 
+              gridColumn={{ base: "1 / -1", md: "1 / 2" }}
+              bg={cardBgColor} 
+              borderRadius="md"
+            >
+              <SimpleGrid columns={2} gap={0} h="full">
+                {['Reading', 'Listening', 'Writing', 'Speaking'].map((skill, index) => (
+                  <Box
+                    key={skill}
+                    p={4}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    textAlign="center"
+                    cursor="pointer"
+                    fontWeight="medium"
+                    fontSize="xs"
+                    transition="all 0.2s"
+                    borderRightWidth={index % 2 === 0 ? "1px" : "0"}
+                    borderBottomWidth={index < 2 ? "1px" : "0"}
+                    borderColor={borderColor}
+                    borderTopLeftRadius={index === 0 ? "md" : "0"}
+                    borderTopRightRadius={index === 1 ? "md" : "0"}
+                    borderBottomLeftRadius={index === 2 ? "md" : "0"}
+                    borderBottomRightRadius={index === 3 ? "md" : "0"}
+                    onClick={() => setSelectedSkill(skill)}
+                  >
+                    <Box
+                      px={1}
+                      py={0.25}
+                      bg={selectedSkill === skill ? "yellow.400" : "transparent"}
+                      color={selectedSkill === skill ? "black" : textColor}
+                      borderRadius="full"
+                      transition="all 0.2s"
+                      fontWeight="medium"
+                      fontSize="xs"
+                      _hover={{
+                        bg: selectedSkill === skill ? "yellow.500" : "gray.100"
+                      }}
+                    >
+                      {skill}
+                    </Box>
+                  </Box>
+                ))}
+              </SimpleGrid>
+            </Box>
+            
+            {/* Performance Metrics */}
             <Box 
               p={4} 
               bg={cardBgColor} 
@@ -306,8 +354,8 @@ export default function ReportPage() {
               borderColor={borderColor}
               textAlign="center"
             >
-              <Text fontSize="sm" color={mutedColor} mb={2}>Tests Completed</Text>
-              <Text fontSize="xl" fontWeight="bold" color={textColor}>9</Text>
+              <Text fontSize="xs" color={mutedColor} mb={2}>Tests Completed</Text>
+              <Text fontSize="md" fontWeight="bold" color={textColor}>9</Text>
             </Box>
             
             <Box 
@@ -318,8 +366,8 @@ export default function ReportPage() {
               borderColor={borderColor}
               textAlign="center"
             >
-              <Text fontSize="sm" color={mutedColor} mb={2}>Accuracy</Text>
-              <Text fontSize="xl" fontWeight="bold" color={textColor}>75%</Text>
+              <Text fontSize="xs" color={mutedColor} mb={2}>Accuracy</Text>
+              <Text fontSize="md" fontWeight="bold" color={textColor}>75%</Text>
             </Box>
             
             <Box 
@@ -330,8 +378,8 @@ export default function ReportPage() {
               borderColor={borderColor}
               textAlign="center"
             >
-              <Text fontSize="sm" color={mutedColor} mb={2}>Avg. Rewind Count</Text>
-              <Text fontSize="xl" fontWeight="bold" color={textColor}>2.7 times</Text>
+              <Text fontSize="xs" color={mutedColor} mb={2}>Avg. Rewind Count</Text>
+              <Text fontSize="md" fontWeight="bold" color={textColor}>2.7 times</Text>
             </Box>
             
             <Box 
@@ -342,8 +390,8 @@ export default function ReportPage() {
               borderColor={borderColor}
               textAlign="center"
             >
-              <Text fontSize="sm" color={mutedColor} mb={2}>Average Score</Text>
-              <Text fontSize="xl" fontWeight="bold" color={textColor}>7.0/9.0</Text>
+              <Text fontSize="xs" color={mutedColor} mb={2}>Average Score</Text>
+              <Text fontSize="md" fontWeight="bold" color={textColor}>7.0/9.0</Text>
             </Box>
             
             <Box 
@@ -354,8 +402,8 @@ export default function ReportPage() {
               borderColor={borderColor}
               textAlign="center"
             >
-              <Text fontSize="sm" color={mutedColor} mb={2}>Highest Score</Text>
-              <Text fontSize="xl" fontWeight="bold" color={textColor}>8.0/9.0</Text>
+              <Text fontSize="xs" color={mutedColor} mb={2}>Highest Score</Text>
+              <Text fontSize="md" fontWeight="bold" color={textColor}>8.0/9.0</Text>
             </Box>
           </SimpleGrid>
         </Box>
