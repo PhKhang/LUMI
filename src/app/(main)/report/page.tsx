@@ -9,10 +9,11 @@ import {
   SimpleGrid, 
   Icon,
   Link,
-  Badge
+  Badge,
+  Button
 } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
-import { MdShare, MdOpenInNew } from "react-icons/md"
+import { MdShare, MdOpenInNew, MdCalendarToday, MdLaunch } from "react-icons/md"
 import { 
   RadarChart, 
   PolarGrid, 
@@ -26,7 +27,7 @@ import {
 export default function ReportPage() {
   const bgColor = useColorModeValue("white", "gray.800")
   const textColor = useColorModeValue("gray.800", "black")
-  const mutedColor = useColorModeValue("black.600", "black")
+  const mutedColor = useColorModeValue("gray.700", "gray.300")
   const cardBgColor = useColorModeValue("white", "gray.700")
   const borderColor = useColorModeValue("gray.200", "gray.600")
 
@@ -196,8 +197,8 @@ export default function ReportPage() {
               <VStack align="start" gap={3}>
                 <VStack align="start" gap={1}>
                   <HStack>
-                    <Text color="black" fontSize="16px">•</Text>
-                    <Text color="black" fontWeight="medium">Reading:</Text>
+                    <Text color={textColor} fontSize="16px">•</Text>
+                    <Text color={textColor} fontWeight="medium">Reading:</Text>
                     <Link color="blue.500" textDecoration="underline" fontSize="sm">
                       The Step Pyramid Of Djoser
                     </Link>
@@ -208,8 +209,8 @@ export default function ReportPage() {
 
                 <VStack align="start" gap={1}>
                   <HStack>
-                    <Text color="black" fontSize="16px">•</Text>
-                    <Text color="black" fontWeight="medium">Listening:</Text>
+                    <Text color={textColor} fontSize="16px">•</Text>
+                    <Text color={textColor} fontWeight="medium">Listening:</Text>
                     <Link color="blue.500" textDecoration="underline" fontSize="sm">
                       The New Housing
                     </Link>
@@ -220,6 +221,143 @@ export default function ReportPage() {
               </VStack>
             </Box>
           </Flex>
+        </Box>
+      </Flex>
+
+      {/* Bottom Section - Exam Schedule and Learning Stats */}
+      <Flex gap={8} maxW="1400px" mx="auto" mt={8} direction={{ base: "column", lg: "row" }}>
+        {/* Left - Exam Schedule (30%) */}
+        <Box 
+          flex="0 0 30%" 
+          minW="300px"
+          bg={cardBgColor} 
+          borderRadius="lg" 
+          boxShadow="md" 
+          p={6}
+          borderWidth="1px"
+          borderColor={borderColor}
+        >
+          <HStack justify="space-between" mb={6}>
+            <HStack>
+              <Icon as={MdCalendarToday} color="green.500" boxSize={5} />
+              <Text fontSize="xl" fontWeight="bold" color={textColor}>
+                Exam Schedule
+              </Text>
+            </HStack>
+            <Icon as={MdLaunch} color={mutedColor} boxSize={4} cursor="pointer" />
+          </HStack>
+
+          <SimpleGrid columns={2} gap={4}>
+            <Box 
+              p={4} 
+              bg={cardBgColor} 
+              borderRadius="md" 
+              borderWidth="2px" 
+              borderColor={borderColor}
+              textAlign="center"
+            >
+              <Text fontSize="sm" color={mutedColor} mb={2}>Exam Date</Text>
+              <Text fontSize="xl" fontWeight="bold" color={textColor}>01/01/2026</Text>
+            </Box>
+            
+            <Box 
+              p={4} 
+              bg={cardBgColor} 
+              borderRadius="md" 
+              borderWidth="2px" 
+              borderColor={borderColor}
+              textAlign="center"
+            >
+              <Text fontSize="sm" color={mutedColor} mb={2}>Days Remaining</Text>
+              <Text fontSize="xl" fontWeight="bold" color={textColor}>183 days</Text>
+            </Box>
+          </SimpleGrid>
+        </Box>
+
+        {/* Right - Learning Performance Statistics (70%) */}
+        <Box 
+          flex="1"
+          bg={cardBgColor} 
+          borderRadius="lg" 
+          boxShadow="md" 
+          p={6}
+          borderWidth="1px"
+          borderColor={borderColor}
+        >
+          <Text fontSize="xl" fontWeight="bold" color={textColor} mb={6}>
+            Learning Performance Statistics
+          </Text>
+
+          {/* Skill Tabs */}
+          <HStack mb={6} gap={2}>
+            <Button size="sm" variant="outline" color={textColor}>Reading</Button>
+            <Button size="sm" bg="yellow.400" color="black" fontWeight="medium">Listening</Button>
+            <Button size="sm" variant="outline" color={textColor}>Writing</Button>
+            <Button size="sm" variant="outline" color={textColor}>Speaking</Button>
+          </HStack>
+
+          {/* Performance Metrics */}
+          <SimpleGrid columns={{ base: 2, md: 5 }} gap={4}>
+            <Box 
+              p={4} 
+              bg={cardBgColor} 
+              borderRadius="md" 
+              borderWidth="2px" 
+              borderColor={borderColor}
+              textAlign="center"
+            >
+              <Text fontSize="sm" color={mutedColor} mb={2}>Tests Completed</Text>
+              <Text fontSize="xl" fontWeight="bold" color={textColor}>9</Text>
+            </Box>
+            
+            <Box 
+              p={4} 
+              bg={cardBgColor} 
+              borderRadius="md" 
+              borderWidth="2px" 
+              borderColor={borderColor}
+              textAlign="center"
+            >
+              <Text fontSize="sm" color={mutedColor} mb={2}>Accuracy</Text>
+              <Text fontSize="xl" fontWeight="bold" color={textColor}>75%</Text>
+            </Box>
+            
+            <Box 
+              p={4} 
+              bg={cardBgColor} 
+              borderRadius="md" 
+              borderWidth="2px" 
+              borderColor={borderColor}
+              textAlign="center"
+            >
+              <Text fontSize="sm" color={mutedColor} mb={2}>Avg. Rewind Count</Text>
+              <Text fontSize="xl" fontWeight="bold" color={textColor}>2.7 times</Text>
+            </Box>
+            
+            <Box 
+              p={4} 
+              bg={cardBgColor} 
+              borderRadius="md" 
+              borderWidth="2px" 
+              borderColor={borderColor}
+              textAlign="center"
+            >
+              <Text fontSize="sm" color={mutedColor} mb={2}>Average Score</Text>
+              <Text fontSize="xl" fontWeight="bold" color={textColor}>7.0/9.0</Text>
+            </Box>
+            
+            <Box 
+              p={4} 
+              bg={cardBgColor} 
+              borderRadius="md" 
+              borderWidth="2px" 
+              borderColor={borderColor}
+              textAlign="center"
+            >
+              <Text fontSize="sm" color={mutedColor} mb={2}>Highest Score</Text>
+              <Text fontSize="xl" fontWeight="bold" color={textColor}>8.0/9.0</Text>
+            </Box>
+          </SimpleGrid>
         </Box>
       </Flex>
     </Box>
