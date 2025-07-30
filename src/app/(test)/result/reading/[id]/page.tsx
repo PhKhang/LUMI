@@ -229,7 +229,7 @@ export default function TestResult() {
       </Box>
 
       {/* Main Content */}
-      <Flex h="calc(100vh - 125px)" mx="auto">
+      <Flex h="calc(100vh - 130px)" mx="auto">
         {/* Left Panel - Reading Content */}
         <Box width={`${leftPanelWidth}%`} borderRight="1px" borderColor={borderColor} overflow="auto" p={6} bg={contentBackgroundColor}>
           <VStack align="start" gap={4}>
