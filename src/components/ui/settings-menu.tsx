@@ -1,8 +1,9 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { HStack, Box, Flex, Text, Button, IconButton, Icon } from "@chakra-ui/react"
 import { MenuButton, MenuList, Menu, MenuItem } from "@chakra-ui/menu"
-import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
+import { useColorMode } from "@/components/ui/color-mode"
 import { MdSettings, MdLightMode, MdDarkMode } from "react-icons/md"
 
 interface SettingsMenuProps {
@@ -12,16 +13,35 @@ interface SettingsMenuProps {
 
 export default function SettingsMenu({ fontSize, onFontSizeChange }: SettingsMenuProps) {
   const { colorMode, toggleColorMode } = useColorMode()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <HStack>
+        <Button size="md" borderRadius="full" variant="outline">
+          <Icon as={MdSettings} />
+          Button 
+        </Button>
+      </HStack>
+    )
+  }
+
+  const isDark = colorMode === "dark"
 
   return (
     <HStack>
       <Menu>
-        <MenuButton as={IconButton} aria-label="Settings" variant="ghost">
-          <Icon as={MdSettings} />
+        <MenuButton as={Button} colorPalette="white" variant="surface" borderRadius={"full"} size="sm">
+          <Icon as={MdSettings} mr={2}/>
+          Settings
         </MenuButton>
         <MenuList
-          bg={useColorModeValue("#FEFFEB", "#292929")}
-          borderColor={useColorModeValue("green", "gray")}
+          bg={isDark ? "#292929" : "#FEFFEB"}
+          borderColor={isDark ? "gray" : "green"}
           boxShadow="lg"
           zIndex={1000}
           borderWidth="1px"
@@ -29,9 +49,9 @@ export default function SettingsMenu({ fontSize, onFontSizeChange }: SettingsMen
         >
           <MenuItem
             onClick={toggleColorMode}
-            color={useColorModeValue("black", "white")}
+            color={isDark ? "white" : "black"}
             _hover={{
-              bg: useColorModeValue("gray", "gray"),
+              bg: "gray",
               borderRadius: "10px",
             }}
             borderRadius="md"
@@ -45,7 +65,7 @@ export default function SettingsMenu({ fontSize, onFontSizeChange }: SettingsMen
 
           <Box px={3} py={2}>
             <Flex align="center" gap={3}>
-              <Text fontSize="sm" color={useColorModeValue("black", "white")} minW="70px">
+              <Text fontSize="sm" color={isDark ? "white" : "black"} minW="70px">
                 Font Size:
               </Text>
               <HStack gap={1}>
