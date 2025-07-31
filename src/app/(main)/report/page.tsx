@@ -14,7 +14,6 @@ import {
   Progress,
   Pagination
 } from "@chakra-ui/react"
-import { useColorModeValue } from "@/components/ui/color-mode"
 import { MdShare, MdOpenInNew, MdCalendarToday, MdLaunch, MdHeadphones, MdMenuBook, MdEdit, MdRecordVoiceOver } from "react-icons/md"
 import { 
   RadarChart, 
@@ -25,20 +24,49 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function ReportPage() {
   const [selectedSkill, setSelectedSkill] = useState('Listening')
   const [selectedTab, setSelectedTab] = useState('Reading')
   const [currentPage, setCurrentPage] = useState(1)
+  const [mounted, setMounted] = useState(false)
+  const [selectedFilter, setSelectedFilter] = useState('Theo tên bài')
   const pageSize = 5
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Reset filter and page when tab changes
+  useEffect(() => {
+    if (selectedTab === 'Speaking') {
+      setSelectedFilter('Theo câu hỏi')
+    } else if (selectedTab === 'Writing') {
+      setSelectedFilter('Theo dạng câu hỏi')
+    } else {
+      setSelectedFilter('Theo thời gian')
+    }
+    setCurrentPage(1)
+  }, [selectedTab])
+
+  // Reset page when filter changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedFilter])
   
-  const bgColor = useColorModeValue("white", "gray.800")
-  const textColor = useColorModeValue("gray.800", "black")
-  const mutedColor = useColorModeValue("gray.700", "gray.300")
-  const cardBgColor = useColorModeValue("white", "gray.700")
-  const borderColor = useColorModeValue("gray.100", "gray.700")
-  const tableBorderColor = useColorModeValue("gray.200", "gray.600")
+  // Using theme colors instead of color mode values
+  const bgColor = "background.primary"
+  const textColor = "text.primary"
+  const mutedColor = "text.muted"
+  const cardBgColor = "background.primary"
+  const borderColor = "border.primary"
+  const tableBorderColor = "border.secondary"
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return null
+  }
 
   // Data cho exam history
   const allExamHistoryData = [
@@ -364,25 +392,171 @@ export default function ReportPage() {
 
   // Get current page data based on selected tab
   const getCurrentData = () => {
+    let data = []
     switch(selectedTab) {
       case 'Listening':
-        return allExamHistoryData
+        data = allExamHistoryData
+        break
       case 'Reading':
-        return readingHistoryData
+        data = readingHistoryData
+        break
       case 'Writing':
-        return writingHistoryData
+        data = writingHistoryData
+        break
       case 'Speaking':
-        return speakingHistoryData
+        data = speakingHistoryData
+        break
       default:
-        return allExamHistoryData
+        data = allExamHistoryData
     }
+    return data
   }
 
-  const currentData = getCurrentData()
-  const totalItems = currentData.length
+  // Sort the entire dataset based on selected filter and skill
+  const getSortedData = () => {
+    const currentData = getCurrentData()
+    let sortedData = [...currentData]
+
+    switch(selectedFilter) {
+      case 'Theo tên bài':
+        sortedData.sort((a: any, b: any) => {
+          const nameA = a["Tên bài"] || ""
+          const nameB = b["Tên bài"] || ""
+          return nameA.localeCompare(nameB, 'vi', { sensitivity: 'base' })
+        })
+        break
+        
+      case 'Theo thời gian':
+        // Sort by submission time (newest first)
+        sortedData.sort((a: any, b: any) => {
+          const timeA = a["Thời gian nộp bài"] || ""
+          const timeB = b["Thời gian nộp bài"] || ""
+          return timeB.localeCompare(timeA)
+        })
+        break
+        
+      case 'Theo kết quả':
+        if (selectedTab === 'Listening' || selectedTab === 'Reading') {
+          // Sort by accuracy percentage (highest first)
+          sortedData.sort((a: any, b: any) => {
+            const accuracyA = a["Tỷ lệ đúng"] || 0
+            const accuracyB = b["Tỷ lệ đúng"] || 0
+            return accuracyB - accuracyA
+          })
+        } else if (selectedTab === 'Writing' || selectedTab === 'Speaking') {
+          // Sort by score (highest first)
+          sortedData.sort((a: any, b: any) => {
+            const scoreA = a["Kết quả"] || 0
+            const scoreB = b["Kết quả"] || 0
+            return scoreB - scoreA
+          })
+        }
+        break
+        
+      case 'Theo dạng câu hỏi':
+        if (selectedTab === 'Writing') {
+          // Sort by question type (Task 1 first, then Task 2)
+          sortedData.sort((a: any, b: any) => {
+            const taskA = a["Task"] || ""
+            const taskB = b["Task"] || ""
+            if (taskA !== taskB) {
+              return taskA.localeCompare(taskB)
+            }
+            // If same task, sort by question type
+            const typeA = a["Dạng đề"] || ""
+            const typeB = b["Dạng đề"] || ""
+            return typeA.localeCompare(typeB, 'vi', { sensitivity: 'base' })
+          })
+        } else if (selectedTab === 'Speaking') {
+          // Sort by Part (1, 2, 3), then by topic
+          sortedData.sort((a: any, b: any) => {
+            const partA = a["Part"] || 0
+            const partB = b["Part"] || 0
+            if (partA !== partB) {
+              return partA - partB
+            }
+            // If same part, sort by topic
+            const topicA = a["Topic"] || ""
+            const topicB = b["Topic"] || ""
+            return topicA.localeCompare(topicB, 'vi', { sensitivity: 'base' })
+          })
+        } else {
+          // For Listening/Reading, sort by test name
+          sortedData.sort((a: any, b: any) => {
+            const nameA = a["Tên bài"] || ""
+            const nameB = b["Tên bài"] || ""
+            return nameA.localeCompare(nameB, 'vi', { sensitivity: 'base' })
+          })
+        }
+        break
+        
+      case 'Theo section':
+        if (selectedTab === 'Speaking') {
+          // Sort by Part number
+          sortedData.sort((a: any, b: any) => {
+            const partA = a["Part"] || 0
+            const partB = b["Part"] || 0
+            return partA - partB
+          })
+        } else if (selectedTab === 'Writing') {
+          // Sort by Task
+          sortedData.sort((a: any, b: any) => {
+            const taskA = a["Task"] || ""
+            const taskB = b["Task"] || ""
+            return taskA.localeCompare(taskB, 'vi', { sensitivity: 'base' })
+          })
+        } else {
+          // For Listening/Reading, sort by test name (could be extended to sort by section if data available)
+          sortedData.sort((a: any, b: any) => {
+            const nameA = a["Tên bài"] || ""
+            const nameB = b["Tên bài"] || ""
+            return nameA.localeCompare(nameB, 'vi', { sensitivity: 'base' })
+          })
+        }
+        break
+        
+      case 'Theo câu hỏi':
+        if (selectedTab === 'Speaking') {
+          // Sort by question text alphabetically
+          sortedData.sort((a: any, b: any) => {
+            const questionA = a["Câu hỏi"] || ""
+            const questionB = b["Câu hỏi"] || ""
+            return questionA.localeCompare(questionB, 'vi', { sensitivity: 'base' })
+          })
+        }
+        break
+        
+      case 'Theo độ khó':
+        // Sort by difficulty based on accuracy/score
+        if (selectedTab === 'Listening' || selectedTab === 'Reading') {
+          // Lower accuracy = higher difficulty (show hardest first)
+          sortedData.sort((a: any, b: any) => {
+            const accuracyA = a["Tỷ lệ đúng"] || 0
+            const accuracyB = b["Tỷ lệ đúng"] || 0
+            return accuracyA - accuracyB
+          })
+        } else if (selectedTab === 'Writing' || selectedTab === 'Speaking') {
+          // Lower score = higher difficulty (show hardest first)
+          sortedData.sort((a: any, b: any) => {
+            const scoreA = a["Kết quả"] || 0
+            const scoreB = b["Kết quả"] || 0
+            return scoreA - scoreB
+          })
+        }
+        break
+        
+      default:
+        break
+    }
+
+    return sortedData
+  }
+
+  const sortedData = getSortedData()
+  const totalItems = sortedData.length
   const startIndex = (currentPage - 1) * pageSize
   const endIndex = startIndex + pageSize
-  const examHistoryData = currentData.slice(startIndex, endIndex)
+  const examHistoryData = sortedData.slice(startIndex, endIndex)
 
   // Format date for display
   const formatDate = (dateStr: string) => {
@@ -818,48 +992,51 @@ export default function ReportPage() {
           {/* Filter Tabs */}
           <HStack gap={6} mb={6}>
             {selectedTab === 'Listening' || selectedTab === 'Reading' ? (
-              ['Theo tên bài', 'Theo dạng câu hỏi', 'Theo section'].map((filter, index) => (
+              ['Theo thời gian', 'Theo tên bài', 'Theo kết quả', 'Theo độ khó'].map((filter, index) => (
                 <Text
                   key={filter}
                   fontSize="sm"
-                  color={index === 0 ? "green.500" : mutedColor}
-                  fontWeight={index === 0 ? "bold" : "normal"}
-                  borderBottom={index === 0 ? "2px solid" : "none"}
+                  color={selectedFilter === filter ? "green.500" : mutedColor}
+                  fontWeight={selectedFilter === filter ? "bold" : "normal"}
+                  borderBottom={selectedFilter === filter ? "2px solid" : "none"}
                   borderBottomColor="green.500"
                   pb={1}
                   cursor="pointer"
+                  onClick={() => setSelectedFilter(filter)}
                   _hover={{ color: "green.500" }}
                 >
                   {filter}
                 </Text>
               ))
             ) : selectedTab === 'Writing' ? (
-              ['Theo tên bài', 'Theo dạng câu hỏi', 'Theo section'].map((filter, index) => (
+              ['Theo dạng câu hỏi', 'Theo thời gian', 'Theo section', 'Theo kết quả'].map((filter, index) => (
                 <Text
                   key={filter}
                   fontSize="sm"
-                  color={index === 0 ? "green.500" : mutedColor}
-                  fontWeight={index === 0 ? "bold" : "normal"}
-                  borderBottom={index === 0 ? "2px solid" : "none"}
+                  color={selectedFilter === filter ? "green.500" : mutedColor}
+                  fontWeight={selectedFilter === filter ? "bold" : "normal"}
+                  borderBottom={selectedFilter === filter ? "2px solid" : "none"}
                   borderBottomColor="green.500"
                   pb={1}
                   cursor="pointer"
+                  onClick={() => setSelectedFilter(filter)}
                   _hover={{ color: "green.500" }}
                 >
                   {filter}
                 </Text>
               ))
             ) : selectedTab === 'Speaking' ? (
-              ['Theo câu hỏi', 'Theo dạng câu hỏi', 'Theo section'].map((filter, index) => (
+              ['Theo câu hỏi', 'Theo section', 'Theo thời gian', 'Theo kết quả'].map((filter, index) => (
                 <Text
                   key={filter}
                   fontSize="sm"
-                  color={index === 0 ? "green.500" : mutedColor}
-                  fontWeight={index === 0 ? "bold" : "normal"}
-                  borderBottom={index === 0 ? "2px solid" : "none"}
+                  color={selectedFilter === filter ? "green.500" : mutedColor}
+                  fontWeight={selectedFilter === filter ? "bold" : "normal"}
+                  borderBottom={selectedFilter === filter ? "2px solid" : "none"}
                   borderBottomColor="green.500"
                   pb={1}
                   cursor="pointer"
+                  onClick={() => setSelectedFilter(filter)}
                   _hover={{ color: "green.500" }}
                 >
                   {filter}
@@ -878,7 +1055,7 @@ export default function ReportPage() {
             <Box as="table" w="full" borderCollapse="collapse">
               {/* Table Header */}
               <Box as="thead">
-                <Box as="tr" bg={useColorModeValue("gray.50", "gray.700")}>
+                <Box as="tr" bg="background.secondary">
                   {selectedTab === 'Listening' || selectedTab === 'Reading' ? (
                     <>
                       <Box 
@@ -891,7 +1068,7 @@ export default function ReportPage() {
                         textAlign="left"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="25%"
                       >
                         Tên bài
@@ -906,7 +1083,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="12%"
                       >
                         Thời gian nộp bài
@@ -921,7 +1098,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="10%"
                       >
                         Thời gian làm bài
@@ -936,7 +1113,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="8%"
                       >
                         Tổng số câu
@@ -951,7 +1128,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         bg="green.100"
                         w="6%"
                       >
@@ -967,7 +1144,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         bg="red.100"
                         w="6%"
                       >
@@ -983,7 +1160,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         bg="gray.100"
                         w="6%"
                       >
@@ -999,7 +1176,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="12%"
                       >
                         Tỷ lệ đúng
@@ -1014,7 +1191,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="7.5%"
                       >
                         Làm lại
@@ -1027,7 +1204,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="7.5%"
                       >
                         Xem lại
@@ -1045,7 +1222,7 @@ export default function ReportPage() {
                         textAlign="left"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="35%"
                       >
                         Tên bài
@@ -1060,7 +1237,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="10%"
                       >
                         Task
@@ -1075,7 +1252,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="15%"
                       >
                         Dạng đề
@@ -1090,7 +1267,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="12%"
                       >
                         Thời gian nộp bài
@@ -1105,7 +1282,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="10%"
                       >
                         Thời gian làm bài
@@ -1120,7 +1297,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         bg="green.100"
                         w="8%"
                       >
@@ -1136,7 +1313,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="5%"
                       >
                         Làm lại
@@ -1149,7 +1326,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="5%"
                       >
                         Xem lại
@@ -1167,7 +1344,7 @@ export default function ReportPage() {
                         textAlign="left"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="15%"
                       >
                         Topic
@@ -1182,7 +1359,7 @@ export default function ReportPage() {
                         textAlign="left"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="45%"
                       >
                         Câu hỏi
@@ -1197,7 +1374,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="8%"
                       >
                         Part
@@ -1212,7 +1389,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="12%"
                       >
                         Thời gian nộp bài
@@ -1227,7 +1404,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         bg="green.100"
                         w="10%"
                       >
@@ -1243,7 +1420,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="5%"
                       >
                         Làm lại
@@ -1256,7 +1433,7 @@ export default function ReportPage() {
                         textAlign="center"
                         fontWeight="bold"
                         fontSize="sm"
-                        color="black"
+                        color="text.primary"
                         w="5%"
                       >
                         Xem lại
@@ -1275,7 +1452,7 @@ export default function ReportPage() {
                     <Box 
                       as="tr" 
                       key={exam.id}
-                      _hover={{ bg: useColorModeValue("gray.50", "gray.600") }}
+                      _hover={{ bg: "background.secondary" }}
                     >
                       {selectedTab === 'Listening' || selectedTab === 'Reading' ? (
                         <>

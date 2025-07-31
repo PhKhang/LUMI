@@ -9,7 +9,7 @@ export const ROUTES = {
     VOCABULARY: '/practice/vocabulary',
   },
   STUDY: {
-    REPORTS: '/study/reports',
+    REPORTS: '/report',
     HISTORY: '/study/history',
     PROGRESS: '/study/progress',
   },
