@@ -11,7 +11,8 @@ import {
   Link,
   Badge,
   Button,
-  Progress
+  Progress,
+  Pagination
 } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
 import { MdShare, MdOpenInNew, MdCalendarToday, MdLaunch, MdHeadphones, MdMenuBook, MdEdit, MdRecordVoiceOver } from "react-icons/md"
@@ -29,6 +30,8 @@ import { useState } from 'react'
 export default function ReportPage() {
   const [selectedSkill, setSelectedSkill] = useState('Listening')
   const [selectedTab, setSelectedTab] = useState('Reading')
+  const [currentPage, setCurrentPage] = useState(1)
+  const pageSize = 5
   
   const bgColor = useColorModeValue("white", "gray.800")
   const textColor = useColorModeValue("gray.800", "black")
@@ -37,7 +40,7 @@ export default function ReportPage() {
   const borderColor = useColorModeValue("gray.200", "gray.600")
 
   // Data cho exam history
-  const examHistoryData = [
+  const allExamHistoryData = [
     {
       id: 1,
       "Tên bài": "Orange 19 Listening - Test 2",
@@ -92,8 +95,69 @@ export default function ReportPage() {
       "Sai": 2,
       "Bỏ qua": 0,
       "Tỷ lệ đúng": 80.0
+    },
+    {
+      id: 6,
+      "Tên bài": "IELTS Writing Task 1 - Bar Chart",
+      "Thời gian nộp bài": "30/06/25 18:45:12",
+      "Thời gian làm bài": "00:20:15",
+      "Tổng số câu": 8,
+      "Đúng": 6,
+      "Sai": 2,
+      "Bỏ qua": 0,
+      "Tỷ lệ đúng": 75.0
+    },
+    {
+      id: 7,
+      "Tên bài": "Academic Reading - Passage 1",
+      "Thời gian nộp bài": "29/06/25 16:30:45",
+      "Thời gian làm bài": "00:18:22",
+      "Tổng số câu": 12,
+      "Đúng": 9,
+      "Sai": 3,
+      "Bỏ qua": 0,
+      "Tỷ lệ đúng": 75.0
+    },
+    {
+      id: 8,
+      "Tên bài": "Listening Practice - Section 2",
+      "Thời gian nộp bài": "28/06/25 14:22:18",
+      "Thời gian làm bài": "00:15:08",
+      "Tổng số câu": 10,
+      "Đúng": 7,
+      "Sai": 3,
+      "Bỏ qua": 0,
+      "Tỷ lệ đúng": 70.0
+    },
+    {
+      id: 9,
+      "Tên bài": "Speaking Part 2 - Describe a place",
+      "Thời gian nộp bài": "27/06/25 11:15:33",
+      "Thời gian làm bài": "00:03:45",
+      "Tổng số câu": 5,
+      "Đúng": 4,
+      "Sai": 1,
+      "Bỏ qua": 0,
+      "Tỷ lệ đúng": 80.0
+    },
+    {
+      id: 10,
+      "Tên bài": "Writing Task 2 - Opinion Essay",
+      "Thời gian nộp bài": "26/06/25 20:10:27",
+      "Thời gian làm bài": "00:35:18",
+      "Tổng số câu": 15,
+      "Đúng": 12,
+      "Sai": 3,
+      "Bỏ qua": 0,
+      "Tỷ lệ đúng": 80.0
     }
   ]
+
+  // Get current page data
+  const totalItems = allExamHistoryData.length
+  const startIndex = (currentPage - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  const examHistoryData = allExamHistoryData.slice(startIndex, endIndex)
 
   // Format date for display
   const formatDate = (dateStr: string) => {
@@ -545,164 +609,417 @@ export default function ReportPage() {
             ))}
           </HStack>
 
-          {/* Table Container with vertical lines */}
+          {/* Table Container using HTML table */}
           <Box 
             borderWidth="1px" 
             borderColor={borderColor} 
             borderRadius="lg" 
             overflow="hidden"
-            position="relative"
           >
-            {/* Vertical separators - positioned to match column boundaries */}
-            <Box position="absolute" top="0" bottom="0" left="19.4%" w="1px" bg={borderColor} zIndex={1} />
-            <Box position="absolute" top="0" bottom="0" left="29.1%" w="1px" bg={borderColor} zIndex={1} />
-            <Box position="absolute" top="0" bottom="0" left="38.8%" w="1px" bg={borderColor} zIndex={1} />
-            <Box position="absolute" top="0" bottom="0" left="46.6%" w="1px" bg={borderColor} zIndex={1} />
-            <Box position="absolute" top="0" bottom="0" left="54.4%" w="1px" bg={borderColor} zIndex={1} />
-            <Box position="absolute" top="0" bottom="0" left="62.2%" w="1px" bg={borderColor} zIndex={1} />
-            <Box position="absolute" top="0" bottom="0" left="70%" w="1px" bg={borderColor} zIndex={1} />
-            <Box position="absolute" top="0" bottom="0" left="84.5%" w="1px" bg={borderColor} zIndex={1} />
-            <Box position="absolute" top="0" bottom="0" left="91.8%" w="1px" bg={borderColor} zIndex={1} />
-
-            {/* Table Header */}
-            <HStack 
-              bg={useColorModeValue("gray.50", "gray.700")} 
-              p={4} 
-              fontWeight="bold" 
-              fontSize="sm"
-              borderBottomWidth="1px"
-              borderBottomColor={borderColor}
-              gap={0}
-              position="relative"
-              zIndex={2}
-            >
-              <Text flex="2" minW="200px" color="black" pr={4} pl={2}>Tên bài</Text>
-              <Text flex="1" textAlign="center" color="black" px={4}>Thời gian nộp bài</Text>
-              <Text flex="1" textAlign="center" color="black" px={4}>Thời gian làm bài</Text>
-              <Text flex="0.8" textAlign="center" color="black" px={4}>Tổng số câu</Text>
-              <Text flex="0.8" textAlign="center" bg="green.100" p={2} color="black" px={4}>Đúng</Text>
-              <Text flex="0.8" textAlign="center" bg="red.100" p={2} color="black" px={4}>Sai</Text>
-              <Text flex="0.8" textAlign="center" bg="gray.100" p={2} color="black" px={4}>Bỏ qua</Text>
-              <Text flex="1.5" textAlign="center" color="black" px={4}>Tỷ lệ đúng</Text>
-              <Text flex="0.7" textAlign="center" color="black" px={4}>Làm lại</Text>
-              <Text flex="0.7" textAlign="center" color="black" pl={4} pr={2}>Xem lại</Text>
-            </HStack>
-
-            {/* Table Body */}
-            <VStack gap={0}>
-              {examHistoryData.map((exam) => {
-                const { date, time } = formatDate(exam["Thời gian nộp bài"])
-                
-                return (
-                  <HStack 
-                    key={exam.id}
+            <Box as="table" w="full" borderCollapse="collapse">
+              {/* Table Header */}
+              <Box as="thead">
+                <Box as="tr" bg={useColorModeValue("gray.50", "gray.700")}>
+                  <Box 
+                    as="th" 
                     p={4} 
-                    borderBottomWidth="1px" 
+                    borderRightWidth="1px" 
+                    borderRightColor={borderColor}
+                    borderBottomWidth="1px"
                     borderBottomColor={borderColor}
-                    align="center"
-                    minH="80px"
-                    w="full"
-                    _last={{ borderBottomWidth: 0 }}
-                    gap={0}
-                    position="relative"
-                    zIndex={2}
+                    textAlign="left"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    w="25%"
                   >
-                    {/* Tên bài */}
-                    <Box flex="2" minW="200px" pr={4} pl={2}>
-                      <Text fontSize="sm" fontWeight="medium" color={textColor}>
-                        {exam["Tên bài"]}
-                      </Text>
-                    </Box>
+                    Tên bài
+                  </Box>
+                  <Box 
+                    as="th" 
+                    p={4} 
+                    borderRightWidth="1px" 
+                    borderRightColor={borderColor}
+                    borderBottomWidth="1px"
+                    borderBottomColor={borderColor}
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    w="12%"
+                  >
+                    Thời gian nộp bài
+                  </Box>
+                  <Box 
+                    as="th" 
+                    p={4} 
+                    borderRightWidth="1px" 
+                    borderRightColor={borderColor}
+                    borderBottomWidth="1px"
+                    borderBottomColor={borderColor}
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    w="10%"
+                  >
+                    Thời gian làm bài
+                  </Box>
+                  <Box 
+                    as="th" 
+                    p={4} 
+                    borderRightWidth="1px" 
+                    borderRightColor={borderColor}
+                    borderBottomWidth="1px"
+                    borderBottomColor={borderColor}
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    w="8%"
+                  >
+                    Tổng số câu
+                  </Box>
+                  <Box 
+                    as="th" 
+                    p={4} 
+                    borderRightWidth="1px" 
+                    borderRightColor={borderColor}
+                    borderBottomWidth="1px"
+                    borderBottomColor={borderColor}
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    bg="green.100"
+                    w="6%"
+                  >
+                    Đúng
+                  </Box>
+                  <Box 
+                    as="th" 
+                    p={4} 
+                    borderRightWidth="1px" 
+                    borderRightColor={borderColor}
+                    borderBottomWidth="1px"
+                    borderBottomColor={borderColor}
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    bg="red.100"
+                    w="6%"
+                  >
+                    Sai
+                  </Box>
+                  <Box 
+                    as="th" 
+                    p={4} 
+                    borderRightWidth="1px" 
+                    borderRightColor={borderColor}
+                    borderBottomWidth="1px"
+                    borderBottomColor={borderColor}
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    bg="gray.100"
+                    w="6%"
+                  >
+                    Bỏ qua
+                  </Box>
+                  <Box 
+                    as="th" 
+                    p={4} 
+                    borderRightWidth="1px" 
+                    borderRightColor={borderColor}
+                    borderBottomWidth="1px"
+                    borderBottomColor={borderColor}
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    w="12%"
+                  >
+                    Tỷ lệ đúng
+                  </Box>
+                  <Box 
+                    as="th" 
+                    p={4} 
+                    borderRightWidth="1px" 
+                    borderRightColor={borderColor}
+                    borderBottomWidth="1px"
+                    borderBottomColor={borderColor}
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    w="7.5%"
+                  >
+                    Làm lại
+                  </Box>
+                  <Box 
+                    as="th" 
+                    p={4}
+                    borderBottomWidth="1px"
+                    borderBottomColor={borderColor}
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    color="black"
+                    w="7.5%"
+                  >
+                    Xem lại
+                  </Box>
+                </Box>
+              </Box>
 
-                    {/* Thời gian nộp bài */}
-                    <Box flex="1" textAlign="center" px={4}>
-                      <Text fontSize="sm" fontWeight="medium" color={textColor}>
-                        {date}
-                      </Text>
-                      <Text fontSize="xs" color={mutedColor}>
-                        {time}
-                      </Text>
-                    </Box>
-
-                    {/* Thời gian làm bài */}
-                    <Text flex="1" textAlign="center" fontSize="sm" color={textColor} px={4}>
-                      {exam["Thời gian làm bài"]}
-                    </Text>
-
-                    {/* Tổng số câu */}
-                    <Text flex="0.8" textAlign="center" fontSize="sm" fontWeight="bold" color={textColor} px={4}>
-                      {exam["Tổng số câu"]}
-                    </Text>
-
-                    {/* Đúng */}
-                    <Text flex="0.8" textAlign="center" fontSize="sm" fontWeight="bold" color="green.600" px={4}>
-                      {exam["Đúng"]}
-                    </Text>
-
-                    {/* Sai */}
-                    <Text flex="0.8" textAlign="center" fontSize="sm" fontWeight="bold" color="red.600" px={4}>
-                      {exam["Sai"]}
-                    </Text>
-
-                    {/* Bỏ qua */}
-                    <Text flex="0.8" textAlign="center" fontSize="sm" fontWeight="bold" color="gray.600" px={4}>
-                      {exam["Bỏ qua"]}
-                    </Text>
-
-                    {/* Tỷ lệ đúng */}
-                    <Box flex="1.5" textAlign="center" px={4}>
-                      <Text fontSize="sm" fontWeight="bold" color={textColor} mb={1}>
-                        {exam["Tỷ lệ đúng"]}%
-                      </Text>
+              {/* Table Body */}
+              <Box as="tbody">
+                {examHistoryData.map((exam, index) => {
+                  const { date, time } = formatDate(exam["Thời gian nộp bài"])
+                  
+                  return (
+                    <Box 
+                      as="tr" 
+                      key={exam.id}
+                      _hover={{ bg: useColorModeValue("gray.50", "gray.600") }}
+                    >
+                      {/* Tên bài */}
                       <Box 
-                        w="full" 
-                        h="8px" 
-                        bg="gray.200" 
-                        borderRadius="full" 
-                        overflow="hidden"
+                        as="td" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={borderColor}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        verticalAlign="middle"
                       >
-                        <Box
-                          h="full"
-                          bg={exam["Tỷ lệ đúng"] >= 80 ? "green.500" : exam["Tỷ lệ đúng"] >= 60 ? "yellow.500" : "red.500"}
-                          w={`${exam["Tỷ lệ đúng"]}%`}
-                          borderRadius="full"
-                        />
+                        <Text fontSize="sm" fontWeight="medium" color={textColor}>
+                          {exam["Tên bài"]}
+                        </Text>
+                      </Box>
+
+                      {/* Thời gian nộp bài */}
+                      <Box 
+                        as="td" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={borderColor}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        textAlign="center"
+                        verticalAlign="middle"
+                      >
+                        <Text fontSize="sm" fontWeight="medium" color={textColor}>
+                          {date}
+                        </Text>
+                        <Text fontSize="xs" color={mutedColor}>
+                          {time}
+                        </Text>
+                      </Box>
+
+                      {/* Thời gian làm bài */}
+                      <Box 
+                        as="td" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={borderColor}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        textAlign="center"
+                        verticalAlign="middle"
+                      >
+                        <Text fontSize="sm" color={textColor}>
+                          {exam["Thời gian làm bài"]}
+                        </Text>
+                      </Box>
+
+                      {/* Tổng số câu */}
+                      <Box 
+                        as="td" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={borderColor}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        textAlign="center"
+                        verticalAlign="middle"
+                      >
+                        <Text fontSize="sm" fontWeight="bold" color={textColor}>
+                          {exam["Tổng số câu"]}
+                        </Text>
+                      </Box>
+
+                      {/* Đúng */}
+                      <Box 
+                        as="td" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={borderColor}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        textAlign="center"
+                        verticalAlign="middle"
+                      >
+                        <Text fontSize="sm" fontWeight="bold" color="green.600">
+                          {exam["Đúng"]}
+                        </Text>
+                      </Box>
+
+                      {/* Sai */}
+                      <Box 
+                        as="td" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={borderColor}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        textAlign="center"
+                        verticalAlign="middle"
+                      >
+                        <Text fontSize="sm" fontWeight="bold" color="red.600">
+                          {exam["Sai"]}
+                        </Text>
+                      </Box>
+
+                      {/* Bỏ qua */}
+                      <Box 
+                        as="td" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={borderColor}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        textAlign="center"
+                        verticalAlign="middle"
+                      >
+                        <Text fontSize="sm" fontWeight="bold" color="gray.600">
+                          {exam["Bỏ qua"]}
+                        </Text>
+                      </Box>
+
+                      {/* Tỷ lệ đúng */}
+                      <Box 
+                        as="td" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={borderColor}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        textAlign="center"
+                        verticalAlign="middle"
+                      >
+                        <Text fontSize="sm" fontWeight="bold" color={textColor} mb={1}>
+                          {exam["Tỷ lệ đúng"]}%
+                        </Text>
+                        <Box 
+                          w="full" 
+                          h="8px" 
+                          bg="gray.200" 
+                          borderRadius="full" 
+                          overflow="hidden"
+                        >
+                          <Box
+                            h="full"
+                            bg={exam["Tỷ lệ đúng"] >= 80 ? "green.500" : exam["Tỷ lệ đúng"] >= 60 ? "yellow.500" : "red.500"}
+                            w={`${exam["Tỷ lệ đúng"]}%`}
+                            borderRadius="full"
+                          />
+                        </Box>
+                      </Box>
+
+                      {/* Làm lại */}
+                      <Box 
+                        as="td" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={borderColor}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        textAlign="center"
+                        verticalAlign="middle"
+                      >
+                        <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                          Làm lại
+                        </Link>
+                      </Box>
+
+                      {/* Xem lại */}
+                      <Box 
+                        as="td" 
+                        p={4}
+                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                        borderBottomColor={borderColor}
+                        textAlign="center"
+                        verticalAlign="middle"
+                      >
+                        <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                          Xem lại
+                        </Link>
                       </Box>
                     </Box>
-
-                    {/* Làm lại */}
-                    <Box flex="0.7" textAlign="center" px={4}>
-                      <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                        Làm lại
-                      </Link>
-                    </Box>
-
-                    {/* Xem lại */}
-                    <Box flex="0.7" textAlign="center" pl={4} pr={2}>
-                      <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                        Xem lại
-                      </Link>
-                    </Box>
-                  </HStack>
-                )
-              })}
-            </VStack>
+                  )
+                })}
+              </Box>
+            </Box>
           </Box>
 
           {/* Pagination */}
-          <HStack justify="space-between" mt={4}>
-            <Text fontSize="sm" color={mutedColor}>
-              1 of 10
-            </Text>
-            <HStack gap={2}>
-              <Button size="sm" variant="outline" disabled>
-                ←
-              </Button>
-              <Button size="sm" variant="outline">
-                →
-              </Button>
-            </HStack>
-          </HStack>
+          <VStack gap={2} mt={4}>
+            {/* Pagination controls centered */}
+            <Flex justify="center" w="full">
+              <Pagination.Root 
+                count={totalItems} 
+                pageSize={pageSize} 
+                page={currentPage}
+                onPageChange={(e) => setCurrentPage(e.page)}
+              >
+                <HStack gap={1}>
+                  <Pagination.PrevTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      ←
+                    </Button>
+                  </Pagination.PrevTrigger>
+                  
+                  <Pagination.Context>
+                    {({ pages }) =>
+                      pages.map((page, index) =>
+                        page.type === "page" ? (
+                          <Pagination.Item key={index} {...page} asChild>
+                            <Button 
+                              variant={page.value === currentPage ? "solid" : "outline"} 
+                              size="sm"
+                              colorScheme={page.value === currentPage ? "blue" : "gray"}
+                            >
+                              {page.value}
+                            </Button>
+                          </Pagination.Item>
+                        ) : (
+                          <Pagination.Ellipsis key={index} index={index}>
+                            <Text fontSize="sm" color={mutedColor}>...</Text>
+                          </Pagination.Ellipsis>
+                        ),
+                      )
+                    }
+                  </Pagination.Context>
+                  
+                  <Pagination.NextTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      →
+                    </Button>
+                  </Pagination.NextTrigger>
+                </HStack>
+              </Pagination.Root>
+            </Flex>
+            
+            {/* Results info below and to the right */}
+            <Flex justify="flex-end" w="full">
+              <Text fontSize="sm" color={mutedColor}>
+                Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems} results
+              </Text>
+            </Flex>
+          </VStack>
         </Box>
       </Box>
     </Box>
