@@ -37,7 +37,8 @@ export default function ReportPage() {
   const textColor = useColorModeValue("gray.800", "black")
   const mutedColor = useColorModeValue("gray.700", "gray.300")
   const cardBgColor = useColorModeValue("white", "gray.700")
-  const borderColor = useColorModeValue("gray.200", "gray.600")
+  const borderColor = useColorModeValue("gray.100", "gray.700")
+  const tableBorderColor = useColorModeValue("gray.200", "gray.600")
 
   // Data cho exam history
   const allExamHistoryData = [
@@ -612,7 +613,7 @@ export default function ReportPage() {
           {/* Table Container using HTML table */}
           <Box 
             borderWidth="1px" 
-            borderColor={borderColor} 
+            borderColor={tableBorderColor} 
             borderRadius="lg" 
             overflow="hidden"
           >
@@ -624,9 +625,9 @@ export default function ReportPage() {
                     as="th" 
                     p={4} 
                     borderRightWidth="1px" 
-                    borderRightColor={borderColor}
+                    borderRightColor={tableBorderColor}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="left"
                     fontWeight="bold"
                     fontSize="sm"
@@ -639,9 +640,9 @@ export default function ReportPage() {
                     as="th" 
                     p={4} 
                     borderRightWidth="1px" 
-                    borderRightColor={borderColor}
+                    borderRightColor={tableBorderColor}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="center"
                     fontWeight="bold"
                     fontSize="sm"
@@ -654,9 +655,9 @@ export default function ReportPage() {
                     as="th" 
                     p={4} 
                     borderRightWidth="1px" 
-                    borderRightColor={borderColor}
+                    borderRightColor={tableBorderColor}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="center"
                     fontWeight="bold"
                     fontSize="sm"
@@ -669,9 +670,9 @@ export default function ReportPage() {
                     as="th" 
                     p={4} 
                     borderRightWidth="1px" 
-                    borderRightColor={borderColor}
+                    borderRightColor={tableBorderColor}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="center"
                     fontWeight="bold"
                     fontSize="sm"
@@ -684,9 +685,9 @@ export default function ReportPage() {
                     as="th" 
                     p={4} 
                     borderRightWidth="1px" 
-                    borderRightColor={borderColor}
+                    borderRightColor={tableBorderColor}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="center"
                     fontWeight="bold"
                     fontSize="sm"
@@ -700,9 +701,9 @@ export default function ReportPage() {
                     as="th" 
                     p={4} 
                     borderRightWidth="1px" 
-                    borderRightColor={borderColor}
+                    borderRightColor={tableBorderColor}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="center"
                     fontWeight="bold"
                     fontSize="sm"
@@ -716,9 +717,9 @@ export default function ReportPage() {
                     as="th" 
                     p={4} 
                     borderRightWidth="1px" 
-                    borderRightColor={borderColor}
+                    borderRightColor={tableBorderColor}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="center"
                     fontWeight="bold"
                     fontSize="sm"
@@ -732,9 +733,9 @@ export default function ReportPage() {
                     as="th" 
                     p={4} 
                     borderRightWidth="1px" 
-                    borderRightColor={borderColor}
+                    borderRightColor={tableBorderColor}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="center"
                     fontWeight="bold"
                     fontSize="sm"
@@ -747,9 +748,9 @@ export default function ReportPage() {
                     as="th" 
                     p={4} 
                     borderRightWidth="1px" 
-                    borderRightColor={borderColor}
+                    borderRightColor={tableBorderColor}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="center"
                     fontWeight="bold"
                     fontSize="sm"
@@ -762,7 +763,7 @@ export default function ReportPage() {
                     as="th" 
                     p={4}
                     borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
+                    borderBottomColor={tableBorderColor}
                     textAlign="center"
                     fontWeight="bold"
                     fontSize="sm"
@@ -790,9 +791,9 @@ export default function ReportPage() {
                         as="td" 
                         p={4} 
                         borderRightWidth="1px" 
-                        borderRightColor={borderColor}
+                        borderRightColor={tableBorderColor}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         verticalAlign="middle"
                       >
                         <Text fontSize="sm" fontWeight="medium" color={textColor}>
@@ -805,9 +806,9 @@ export default function ReportPage() {
                         as="td" 
                         p={4} 
                         borderRightWidth="1px" 
-                        borderRightColor={borderColor}
+                        borderRightColor={tableBorderColor}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         textAlign="center"
                         verticalAlign="middle"
                       >
@@ -824,9 +825,9 @@ export default function ReportPage() {
                         as="td" 
                         p={4} 
                         borderRightWidth="1px" 
-                        borderRightColor={borderColor}
+                        borderRightColor={tableBorderColor}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         textAlign="center"
                         verticalAlign="middle"
                       >
@@ -840,9 +841,9 @@ export default function ReportPage() {
                         as="td" 
                         p={4} 
                         borderRightWidth="1px" 
-                        borderRightColor={borderColor}
+                        borderRightColor={tableBorderColor}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         textAlign="center"
                         verticalAlign="middle"
                       >
@@ -856,9 +857,9 @@ export default function ReportPage() {
                         as="td" 
                         p={4} 
                         borderRightWidth="1px" 
-                        borderRightColor={borderColor}
+                        borderRightColor={tableBorderColor}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         textAlign="center"
                         verticalAlign="middle"
                       >
@@ -872,9 +873,9 @@ export default function ReportPage() {
                         as="td" 
                         p={4} 
                         borderRightWidth="1px" 
-                        borderRightColor={borderColor}
+                        borderRightColor={tableBorderColor}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         textAlign="center"
                         verticalAlign="middle"
                       >
@@ -888,9 +889,9 @@ export default function ReportPage() {
                         as="td" 
                         p={4} 
                         borderRightWidth="1px" 
-                        borderRightColor={borderColor}
+                        borderRightColor={tableBorderColor}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         textAlign="center"
                         verticalAlign="middle"
                       >
@@ -904,9 +905,9 @@ export default function ReportPage() {
                         as="td" 
                         p={4} 
                         borderRightWidth="1px" 
-                        borderRightColor={borderColor}
+                        borderRightColor={tableBorderColor}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         textAlign="center"
                         verticalAlign="middle"
                       >
@@ -934,9 +935,9 @@ export default function ReportPage() {
                         as="td" 
                         p={4} 
                         borderRightWidth="1px" 
-                        borderRightColor={borderColor}
+                        borderRightColor={tableBorderColor}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         textAlign="center"
                         verticalAlign="middle"
                       >
@@ -950,7 +951,7 @@ export default function ReportPage() {
                         as="td" 
                         p={4}
                         borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
+                        borderBottomColor={tableBorderColor}
                         textAlign="center"
                         verticalAlign="middle"
                       >
