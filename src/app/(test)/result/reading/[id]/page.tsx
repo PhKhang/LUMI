@@ -14,6 +14,8 @@ import {
   MdNote,
   MdSearch,
 } from "react-icons/md"
+import { FiChevronDown } from "react-icons/fi"
+import { TbNotes } from "react-icons/tb"
 
 interface Question {
   id: number
@@ -34,7 +36,8 @@ export default function TestResult() {
   const [expandedExplanations, setExpandedExplanations] = useState<Set<number>>(new Set())
   const [highlightedText, setHighlightedText] = useState<number | null>(null)
   const bgColor = useColorModeValue("#F6F0E7", "gray.800") // background for entire page
-  const contentBackgroundColor = useColorModeValue("white", "gray.900") // background color for left (passages content) and right (test answers) panel
+  const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900") // background color for left (passages content) and right (test answers) panel
+  const questionBackgroundColor = useColorModeValue("white", "gray.700") // background color for question card
   const borderColor = useColorModeValue("gray.200", "gray.600")
   const textColor = useColorModeValue("gray.800", "white")
   const mutedColor = useColorModeValue("gray.600", "gray.400")
@@ -126,43 +129,97 @@ export default function TestResult() {
     }
   }
 
+  const getQuestionHeaderFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "lg"
+      case "large":
+        return "2xl"
+      default:
+        return "xl"
+    }
+  }
+
+  const getQuestionBoxSize = () => {
+    switch (fontSize) {
+      case "small":
+        return { minW: "40px", h: "40px" }
+      case "large":
+        return { minW: "60px", h: "60px" }
+      default:
+        return { minW: "50px", h: "50px" }
+    }
+  }
+
+  const getAnswerTextFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "xs"
+      case "large":
+        return "md"
+      default:
+        return "sm"
+    }
+  }
+
+  const getQuestionNumberFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "xl"
+      case "large":
+        return "3xl"
+      default:
+        return "2xl"
+    }
+  }
+
   return (
     <Box minH="100vh" bg={bgColor}>
-      <Box bg={bgColor} borderBottom="1px" borderColor={borderColor} p={4}>
+      <Box bg={bgColor} borderBottom="1px" borderColor={borderColor} px={4}>
         <Box display="grid" gridTemplateColumns="1fr auto 1fr" alignItems="center" w="full" mx="auto">
           {/* Left Section - Close Button + Tabs */}
-          <HStack gap={4} justify="flex-start">
-            <IconButton aria-label="Close" variant="ghost" size="sm" rounded="full" background={"gray.500"} _hover={{ bg: "gray.600" }}> <Icon as={MdClose} /> </IconButton>
-            <Tabs.Root
-              defaultValue="note"
-              variant="line"
-            >
-              <Tabs.List>
-                <Tabs.Trigger value="note">
-                  <Icon as={MdNote} />
-                  Chế độ ghi chú
-                </Tabs.Trigger>
-                <Tabs.Trigger value="lookup">
-                  <Icon as={MdSearch} />
-                  Chế độ tra từ
-                </Tabs.Trigger>
-              </Tabs.List>
-            </Tabs.Root>
+          <HStack gap={4} height="100%">
+            <Box alignItems="center">
+              <IconButton aria-label="Close" variant="outline" size="sm" rounded="full"> <Icon as={MdClose} /> </IconButton>
+            </Box>
+            <Box marginTop="auto">
+              <Tabs.Root
+                defaultValue="note"
+                variant="line"
+              >
+                <Tabs.List>
+                  <Tabs.Trigger value="note">
+                    <Icon as={MdNote} />
+                    Chế độ ghi chú
+                  </Tabs.Trigger>
+                  <Tabs.Trigger value="lookup">
+                    <Icon as={MdSearch} />
+                    Chế độ tra từ
+                  </Tabs.Trigger>
+                </Tabs.List>
+              </Tabs.Root>
+            </Box>
           </HStack>
 
           {/* Center Section - Time + Score */}
-          <HStack gap={6} justify="center">
-            <HStack>
-              <Icon as={MdAccessTime} color="green.500" />
-              <Text fontWeight="medium" color={textColor}>
-                00:10:39
+          <Box py={3}>
+            <HStack gap={2} justify="center" bg={questionBackgroundColor} px={3} py={1} borderRadius={"full"}>
+              <HStack>
+                <Icon as={MdAccessTime} color="accent" />
+                <Text fontSize={getFontSizeValue()} fontWeight="medium" color={textColor}>
+                  00:10:39
+                </Text>
+              </HStack>
+
+              {/* Vertical Divider */}
+              <Box width="1px" height="10px" bg="#E5E5EA" />
+
+              <Text fontSize={getFontSizeValue()} fontWeight="bold" color="accent">
+                {correctAnswers}/{totalQuestions} câu đúng
               </Text>
             </HStack>
+          </Box>
 
-            <Text fontWeight="bold" color="green.500">
-              {correctAnswers}/{totalQuestions} câu đúng
-            </Text>
-          </HStack>
 
           {/* Right Section - Settings */}
           <HStack justify="flex-end">
@@ -172,11 +229,11 @@ export default function TestResult() {
       </Box>
 
       {/* Main Content */}
-      <Flex h="calc(100vh - 150px)" mx="auto">
+      <Flex h="calc(100vh - 130px)" mx="auto">
         {/* Left Panel - Reading Content */}
         <Box width={`${leftPanelWidth}%`} borderRight="1px" borderColor={borderColor} overflow="auto" p={6} bg={contentBackgroundColor}>
           <VStack align="start" gap={4}>
-            <Image src="/horseshoe-crab.png" alt="Horseshoe Crab" maxW="400px" borderRadius="md" mx="auto" />
+            <Image src="/horseshoe-crab.png" alt="Horseshoe Crab" maxW="240px" borderRadius="md" mx="auto" />
 
             <Text fontSize="xl" fontWeight="bold" color={textColor}>
               [Recent Tests] - The Horseshoe Crab
@@ -262,16 +319,15 @@ export default function TestResult() {
 
         {/* Right Panel - Questions */}
         <Box width={`${100 - leftPanelWidth}%`} overflow="auto" p={6} bg = {contentBackgroundColor}>
-          <VStack align="start" gap={6}>
-            <Text fontSize="2xl" fontWeight="bold" color={textColor}>
-              Questions 1-5
-            </Text>
-
-            <Box>
-              <Text fontSize={getFontSizeValue()} color={textColor} mb={2}>
+          <VStack align="start" gap={0}>
+            <Box mb={4}>
+              <Text fontSize={getQuestionHeaderFontSize()} fontWeight="bold" color={textColor}>
+                Questions 1-5
+              </Text>
+              <Text fontSize={getFontSizeValue()} color={textColor} mb={0}>
                 Reading Passage 2 has six sections, A-F. Which section contains the following information?
               </Text>
-              <Text fontSize="sm" fontStyle="italic" color={mutedColor}>
+              <Text fontSize={getFontSizeValue()} fontStyle="italic" color={mutedColor}>
                 NB You may use any letter more than once.
               </Text>
             </Box>
@@ -282,16 +338,16 @@ export default function TestResult() {
                 <HStack align="center" gap={4} mb={4}>
                   {/* Question Number */}
                   <Box
-                    bg="gray.100"
+                    bg={questionBackgroundColor}
                     borderRadius="lg"
                     p={3}
-                    minW="60px"
-                    h="60px"
+                    {...getQuestionBoxSize()}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
+                    shadow={"md"}
                   >
-                    <Text fontSize="xl" fontWeight="bold" color="yellow.400">
+                    <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
                       {question.id}
                     </Text>
                   </Box>
@@ -306,7 +362,7 @@ export default function TestResult() {
                     minW="60px"
                     textAlign="center"
                   >
-                    <Text fontWeight="bold" fontSize="lg">
+                    <Text fontWeight="bold" fontSize={getFontSizeValue()}>
                       {question.userAnswer || "—"}
                     </Text>
                   </Box>
@@ -319,8 +375,8 @@ export default function TestResult() {
 
                 {/* Answer Section */}
                 <Flex justify="space-between" align="center">
-                  <Box bg="gray.200" px={4} py={2} borderRadius="lg">
-                    <Text fontSize="sm" color="gray.700">
+                  <Box bg="gray.200" px={4} py={2} borderRadius="md">
+                    <Text fontSize={getAnswerTextFontSize()} color="gray.700">
                       {question.id}. Answer:{" "}
                       <Text as="span" fontWeight="bold">
                         {question.correctAnswer}
@@ -331,6 +387,7 @@ export default function TestResult() {
                   <HStack gap={2}>
                     <Button
                       size="sm"
+                      colorPalette="green"
                       variant="outline"
                       onClick={() => handleLocate(question.id)}
                       borderRadius="full"
@@ -340,12 +397,11 @@ export default function TestResult() {
                     <Button
                       size="sm"
                       variant="solid"
-                      color="white"
-                      background="green"
+                      colorPalette="green"
                       onClick={() => toggleExplanation(question.id)}
                       borderRadius="full"
                     >
-                      <Icon as={MdHelp} /> Explain
+                      <Icon as={TbNotes} /> Explain
                     </Button>
                   </HStack>
                 </Flex>
