@@ -9,13 +9,15 @@ import SettingsMenu from "@/components/ui/settings-menu"
 import {
   MdClose,
   MdAccessTime,
-  MdLocationOn,
   MdHelp,
   MdNote,
   MdSearch,
+  MdTimer
 } from "react-icons/md"
 import { FiChevronDown } from "react-icons/fi"
 import { TbNotes } from "react-icons/tb"
+import { PiMapPin } from "react-icons/pi"
+import { BiChevronDown } from "react-icons/bi"
 
 interface Question {
   id: number
@@ -110,9 +112,9 @@ export default function TestResult() {
     const status = getQuestionStatus(question)
     switch (status) {
       case "correct":
-        return "green.500"
+        return "green.600"
       case "incorrect":
-        return "red.500"
+        return "#DC2626"
       default:
         return "gray.400"
     }
@@ -174,11 +176,11 @@ export default function TestResult() {
   }
 
   return (
-    <Box minH="100vh" bg={bgColor}>
-      <Box bg={bgColor} borderBottom="1px" borderColor={borderColor} px={4}>
+    <Box minH="100vh" bg={bgColor} overflow="hidden">
+      <Box bg={bgColor} borderColor={borderColor} px={4}>
         <Box display="grid" gridTemplateColumns="1fr auto 1fr" alignItems="center" w="full" mx="auto">
           {/* Left Section - Close Button + Tabs */}
-          <HStack gap={4} height="100%">
+          <HStack gap={4} height="60px">
             <Box alignItems="center">
               <IconButton aria-label="Close" variant="outline" size="sm" rounded="full"> <Icon as={MdClose} /> </IconButton>
             </Box>
@@ -205,7 +207,7 @@ export default function TestResult() {
           <Box py={3}>
             <HStack gap={2} justify="center" bg={questionBackgroundColor} px={3} py={1} borderRadius={"full"}>
               <HStack>
-                <Icon as={MdAccessTime} color="accent" />
+                <Icon as={MdTimer} color="accent" />
                 <Text fontSize={getFontSizeValue()} fontWeight="medium" color={textColor}>
                   00:10:39
                 </Text>
@@ -215,7 +217,7 @@ export default function TestResult() {
               <Box width="1px" height="10px" bg="#E5E5EA" />
 
               <Text fontSize={getFontSizeValue()} fontWeight="bold" color="accent">
-                {correctAnswers}/{totalQuestions} câu đúng
+                {correctAnswers}/{totalQuestions} correct answers
               </Text>
             </HStack>
           </Box>
@@ -229,7 +231,7 @@ export default function TestResult() {
       </Box>
 
       {/* Main Content */}
-      <Flex h="calc(100vh - 130px)" mx="auto">
+      <Flex h="calc(100vh - 125px)" mx="auto">
         {/* Left Panel - Reading Content */}
         <Box width={`${leftPanelWidth}%`} borderRight="1px" borderColor={borderColor} overflow="auto" p={6} bg={contentBackgroundColor}>
           <VStack align="start" gap={4}>
@@ -327,8 +329,8 @@ export default function TestResult() {
               <Text fontSize={getFontSizeValue()} color={textColor} mb={0}>
                 Reading Passage 2 has six sections, A-F. Which section contains the following information?
               </Text>
-              <Text fontSize={getFontSizeValue()} fontStyle="italic" color={mutedColor}>
-                NB You may use any letter more than once.
+              <Text fontSize={getFontSizeValue()} fontStyle="italic" color={textColor}>
+                <Text as="span" fontWeight="bold">NB</Text> You may use any letter more than once.
               </Text>
             </Box>
 
@@ -356,15 +358,22 @@ export default function TestResult() {
                   <Box
                     bg={getUserAnswerBgColor(question)}
                     color="white"
-                    px={6}
+                    px={4}
                     py={2}
                     borderRadius="full"
-                    minW="60px"
+                    height="35px"
+                    width="125px"
                     textAlign="center"
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    border="1px solid"
+                    borderColor="gray.500"
                   >
-                    <Text fontWeight="bold" fontSize={getFontSizeValue()}>
+                    <Text fontWeight="bold" fontSize={getAnswerTextFontSize()}>
                       {question.userAnswer || "—"}
                     </Text>
+                    <Icon as={FiChevronDown} height="24px" color="white" />
                   </Box>
 
                   {/* Question Text */}
@@ -392,7 +401,7 @@ export default function TestResult() {
                       onClick={() => handleLocate(question.id)}
                       borderRadius="full"
                     >
-                      <Icon as={MdLocationOn} /> Locate
+                      <Icon as={PiMapPin} /> <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
                     </Button>
                     <Button
                       size="sm"
@@ -433,28 +442,32 @@ export default function TestResult() {
       </Flex>
 
       {/* Question Navigation */}
-      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} p={4}>
-        <Flex justify="center" mx="auto">
-          <SimpleGrid columns={13} gap={2}>
-            
+      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} display="flex" alignItems="center" justifyContent="center" height="65px">
+        <Flex justify="center">
+          <SimpleGrid columns={13} gap={1} bg={contentBackgroundColor} px={2} py={1} borderRadius="md" border="1px solid" borderColor="green.600">
             {Array.from({ length: totalQuestions }, (_, i) => {
               const questionNum = i + 1
               const question = questions.find((q) => q.id === questionNum)
               const status = question ? getQuestionStatus(question) : "unanswered"
               console.log(`Question ${questionNum} status: ${status}`)
               return (
-                <Button
+                <IconButton
                   key={questionNum}
                   size="sm"
                   variant="solid"
                   color="white"
-                  background={status === "correct" ? "green.500" : status === "incorrect" ? "red.500" : "gray"}
-                  minW="40px"
-                  h="40px"
+                  background={status === "correct" ? "green.600" : status === "incorrect" ? "#DC2626" : "gray.500"}
+                  _hover={status === "correct" ? { background: "green.700" } : status === "incorrect" ? { background: "#B91C1C" } : {}}
+                  minW="35px"
+                  h="35px"
                   borderRadius="full"
+                  border="1px solid"
+                  borderColor={borderColor}
                 >
-                  {questionNum}
-                </Button>
+                  <Text fontSize="md" fontWeight="bold">
+                    {questionNum}
+                  </Text>
+                </IconButton>
               )
             })}
           </SimpleGrid>

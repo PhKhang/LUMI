@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { HStack, Box, Flex, Text, Button, IconButton, Icon } from "@chakra-ui/react"
+import { HStack, Box, Flex, Text, Button, Icon } from "@chakra-ui/react"
 import { MenuButton, MenuList, Menu, MenuItem } from "@chakra-ui/menu"
 import { useColorMode } from "@/components/ui/color-mode"
-import { MdSettings, MdLightMode, MdDarkMode } from "react-icons/md"
+import { MdSettings } from "react-icons/md"
+import { LumiSwitch } from "@/components/ui/switch"
 
 interface SettingsMenuProps {
   fontSize: "small" | "medium" | "large"
@@ -23,8 +24,8 @@ export default function SettingsMenu({ fontSize, onFontSizeChange }: SettingsMen
     return (
       <HStack>
         <Button size="md" borderRadius="full" variant="outline">
-          <Icon as={MdSettings} />
-          Button 
+          <Icon as={MdSettings} mr={2} />
+          <Text fontWeight={"bold"}>Settings</Text>
         </Button>
       </HStack>
     )
@@ -36,8 +37,10 @@ export default function SettingsMenu({ fontSize, onFontSizeChange }: SettingsMen
     <HStack>
       <Menu>
         <MenuButton as={Button} colorPalette="white" variant="surface" borderRadius={"full"} size="sm">
-          <Icon as={MdSettings} mr={2}/>
-          Settings
+          <HStack gap={2}>
+            <Icon as={MdSettings} />
+            <Text fontWeight={"bold"}>Settings</Text>
+          </HStack>
         </MenuButton>
         <MenuList
           bg={isDark ? "#292929" : "#FEFFEB"}
@@ -47,21 +50,13 @@ export default function SettingsMenu({ fontSize, onFontSizeChange }: SettingsMen
           borderWidth="1px"
           borderRadius="10px"
         >
-          <MenuItem
-            onClick={toggleColorMode}
-            color={isDark ? "white" : "black"}
-            _hover={{
-              bg: "gray",
-              borderRadius: "10px",
-            }}
-            borderRadius="md"
-            px={8}
-            py={8}
-            fontSize="1rem"
-          >
-            <Icon as={colorMode === "light" ? MdDarkMode : MdLightMode} />
-            {colorMode === "light" ? "Dark Mode" : "Light Mode"}
-          </MenuItem>
+          <LumiSwitch
+            colorPalette="yellow"
+            size="lg"
+            checked={colorMode === "dark"}
+            onCheckedChange={toggleColorMode}
+            label={colorMode === "dark" ? "Dark Mode" : "Light Mode"}
+          />
 
           <Box px={3} py={2}>
             <Flex align="center" gap={3}>
@@ -70,34 +65,37 @@ export default function SettingsMenu({ fontSize, onFontSizeChange }: SettingsMen
               </Text>
               <HStack gap={1}>
                 <Button
-                  size="xs"
+                  size="sm"
                   variant={fontSize === "small" ? "solid" : "outline"}
                   colorScheme={fontSize === "small" ? "blue" : "gray"}
                   onClick={() => onFontSizeChange("small")}
-                  borderRadius="md"
-                  px={2}
+                  borderRadius="full"
+                  w={8}
+                  h={8}
                 >
-                  Small
+                  S
                 </Button>
                 <Button
-                  size="xs"
+                  size="sm"
                   variant={fontSize === "medium" ? "solid" : "outline"}
                   colorScheme={fontSize === "medium" ? "blue" : "gray"}
                   onClick={() => onFontSizeChange("medium")}
-                  borderRadius="md"
-                  px={2}
+                  borderRadius="full"
+                  w={8}
+                  h={8}
                 >
-                  Medium
+                  M
                 </Button>
                 <Button
-                  size="xs"
+                  size="sm"
                   variant={fontSize === "large" ? "solid" : "outline"}
                   colorScheme={fontSize === "large" ? "blue" : "gray"}
                   onClick={() => onFontSizeChange("large")}
-                  borderRadius="md"
-                  px={2}
+                  borderRadius="full"
+                  w={8}
+                  h={8}
                 >
-                  Large
+                  L
                 </Button>
               </HStack>
             </Flex>
