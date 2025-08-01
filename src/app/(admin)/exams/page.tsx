@@ -12,13 +12,15 @@ import {
   Container
 } from "@chakra-ui/react"
 import { Field } from "@chakra-ui/react"
-import { MdLightbulb, MdArrowForward } from "react-icons/md"
+import { MdLightbulb, MdArrowForward, MdArrowBack, MdCheck, MdHeadphones, MdMenuBook, MdEdit, MdMic } from "react-icons/md"
 import { useState } from "react"
 
 export default function ExamsPage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [testName, setTestName] = useState("")
   const [testType, setTestType] = useState("mini")
+  const [selectedSkill, setSelectedSkill] = useState("reading")
+  const [selectedSection, setSelectedSection] = useState("")
 
   const steps = [
     { number: 1, title: "Thông tin bài", description: "Tên và loại bài Test" },
@@ -57,7 +59,11 @@ export default function ExamsPage() {
                   fontWeight="bold"
                   fontSize="sm"
                 >
-                  {step.number}
+                  {currentStep > step.number ? (
+                    <Icon as={MdCheck} boxSize={5} />
+                  ) : (
+                    step.number
+                  )}
                 </Flex>
                 
                 {/* Step Info */}
@@ -254,18 +260,432 @@ export default function ExamsPage() {
               </Box>
             </VStack>
           )}
+
+          {/* Step 2 Content */}
+          {currentStep === 2 && (
+            <VStack align="start" gap={6}>
+              <Box>
+                <Text fontSize="xl" fontWeight="bold" color="text.primary" mb={2}>
+                  Chọn Nội dung
+                </Text>
+                <Text fontSize="sm" color="text.muted">
+                  Chọn nội dung cho bài Mini Test
+                </Text>
+              </Box>
+
+              {/* Skill Selection */}
+              <Box w="full">
+                <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={4}>
+                  Chọn kỹ năng
+                </Text>
+                
+                <VStack align="start" gap={3}>
+                  {/* Row 1: Listening and Reading */}
+                  <HStack w="full" gap={4}>
+                    {[
+                      { key: "listening", label: "Listening", description: "Bài thi IELTS hoàn chỉnh với đầy đủ 4 kỹ năng", icon: MdHeadphones },
+                      { key: "reading", label: "Reading", description: "Bài thi IELTS hoàn chỉnh với đầy đủ 4 kỹ năng", icon: MdMenuBook }
+                    ].map((skill) => (
+                      <Box 
+                        key={skill.key}
+                        flex="1"
+                        p={4}
+                        borderWidth="1px"
+                        borderRadius="lg"
+                        cursor="pointer"
+                        borderColor={selectedSkill === skill.key ? "accent" : "border.primary"}
+                        bg={selectedSkill === skill.key ? "background.accent" : "background.primary"}
+                        _hover={{ borderColor: "secondary" }}
+                        onClick={() => {
+                          setSelectedSkill(skill.key)
+                          setSelectedSection("")
+                        }}
+                      >
+                        <HStack align="start" gap={3}>
+                          <Box
+                            w={4}
+                            h={4}
+                            borderRadius="full"
+                            borderWidth="2px"
+                            borderColor={selectedSkill === skill.key ? "accent" : "border.secondary"}
+                            bg={selectedSkill === skill.key ? "accent" : "transparent"}
+                            mt={0.5}
+                            position="relative"
+                          >
+                            {selectedSkill === skill.key && (
+                              <Box
+                                w={2}
+                                h={2}
+                                borderRadius="full"
+                                bg="background.primary"
+                                position="absolute"
+                                top="50%"
+                                left="50%"
+                                transform="translate(-50%, -50%)"
+                              />
+                            )}
+                          </Box>
+                          <Box>
+                            <Icon 
+                              as={skill.icon} 
+                              boxSize={6} 
+                              color={selectedSkill === skill.key ? "accent" : "text.muted"} 
+                              mb={1}
+                            />
+                          </Box>
+                        </HStack>
+                        <VStack align="start" gap={1} mt={2}>
+                          <Text fontWeight="bold" color="text.primary">
+                            {skill.label}
+                          </Text>
+                          <Text fontSize="sm" color="text.muted">
+                            {skill.description}
+                          </Text>
+                        </VStack>
+                      </Box>
+                    ))}
+                  </HStack>
+
+                  {/* Row 2: Writing and Speaking */}
+                  <HStack w="full" gap={4}>
+                    {[
+                      { key: "writing", label: "Writing", description: "Bài thi IELTS nhỏ với 1 kỹ năng", icon: MdEdit },
+                      { key: "speaking", label: "Speaking", description: "Bài thi IELTS nhỏ với 1 kỹ năng", icon: MdMic }
+                    ].map((skill) => (
+                      <Box 
+                        key={skill.key}
+                        flex="1"
+                        p={4}
+                        borderWidth="1px"
+                        borderRadius="lg"
+                        cursor="pointer"
+                        borderColor={selectedSkill === skill.key ? "accent" : "border.primary"}
+                        bg={selectedSkill === skill.key ? "background.accent" : "background.primary"}
+                        _hover={{ borderColor: "secondary" }}
+                        onClick={() => {
+                          setSelectedSkill(skill.key)
+                          setSelectedSection("")
+                        }}
+                      >
+                        <HStack align="start" gap={3}>
+                          <Box
+                            w={4}
+                            h={4}
+                            borderRadius="full"
+                            borderWidth="2px"
+                            borderColor={selectedSkill === skill.key ? "accent" : "border.secondary"}
+                            bg={selectedSkill === skill.key ? "accent" : "transparent"}
+                            mt={0.5}
+                            position="relative"
+                          >
+                            {selectedSkill === skill.key && (
+                              <Box
+                                w={2}
+                                h={2}
+                                borderRadius="full"
+                                bg="background.primary"
+                                position="absolute"
+                                top="50%"
+                                left="50%"
+                                transform="translate(-50%, -50%)"
+                              />
+                            )}
+                          </Box>
+                          <Box>
+                            <Icon 
+                              as={skill.icon} 
+                              boxSize={6} 
+                              color={selectedSkill === skill.key ? "accent" : "text.muted"} 
+                              mb={1}
+                            />
+                          </Box>
+                        </HStack>
+                        <VStack align="start" gap={1} mt={2}>
+                          <Text fontWeight="bold" color="text.primary">
+                            {skill.label}
+                          </Text>
+                          <Text fontSize="sm" color="text.muted">
+                            {skill.description}
+                          </Text>
+                        </VStack>
+                      </Box>
+                    ))}
+                  </HStack>
+                </VStack>
+              </Box>
+
+              {/* Section Selection - Show based on selected skill */}
+              {selectedSkill && (
+                <Box w="full">
+                  <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={4}>
+                    {selectedSkill === "reading" ? "Chọn Section" : 
+                     selectedSkill === "listening" ? "Chọn Part" :
+                     selectedSkill === "writing" ? "Chọn Task" :
+                     "Chọn Part"}
+                  </Text>
+                  
+                  <HStack w="full" gap={3}>
+                    {/* Reading Sections */}
+                    {selectedSkill === "reading" && [
+                      { key: "full", label: "Full Section", description: "Bao gồm tất cả các phần" },
+                      { key: "passage1", label: "Passage 1", description: "Chỉ tạo cho section này" },
+                      { key: "passage2", label: "Passage 2", description: "Chỉ tạo cho section này" },
+                      { key: "passage3", label: "Passage 3", description: "Chỉ tạo cho section này" }
+                    ].map((section) => (
+                      <Box 
+                        key={section.key}
+                        flex="1"
+                        p={3}
+                        borderWidth="1px"
+                        borderRadius="lg"
+                        cursor="pointer"
+                        borderColor={selectedSection === section.key ? "accent" : "border.primary"}
+                        bg={selectedSection === section.key ? "background.accent" : "background.primary"}
+                        _hover={{ borderColor: "secondary" }}
+                        onClick={() => setSelectedSection(section.key)}
+                        textAlign="center"
+                      >
+                        <VStack align="center" gap={2}>
+                          <Box
+                            w={4}
+                            h={4}
+                            borderRadius="full"
+                            borderWidth="2px"
+                            borderColor={selectedSection === section.key ? "accent" : "border.secondary"}
+                            bg={selectedSection === section.key ? "accent" : "transparent"}
+                            position="relative"
+                            mx="auto"
+                          >
+                            {selectedSection === section.key && (
+                              <Box
+                                w={2}
+                                h={2}
+                                borderRadius="full"
+                                bg="background.primary"
+                                position="absolute"
+                                top="50%"
+                                left="50%"
+                                transform="translate(-50%, -50%)"
+                              />
+                            )}
+                          </Box>
+                          <VStack gap={1}>
+                            <Text fontWeight="bold" color="text.primary" fontSize="sm">
+                              {section.label}
+                            </Text>
+                            <Text fontSize="xs" color="text.muted" textAlign="center">
+                              {section.description}
+                            </Text>
+                          </VStack>
+                        </VStack>
+                      </Box>
+                    ))}
+
+                    {/* Listening Parts */}
+                    {selectedSkill === "listening" && [
+                      { key: "full", label: "Full Part", description: "Bao gồm tất cả các phần" },
+                      { key: "part1", label: "Part 1", description: "Chỉ tạo cho part này" },
+                      { key: "part2", label: "Part 2", description: "Chỉ tạo cho part này" },
+                      { key: "part3", label: "Part 3", description: "Chỉ tạo cho part này" }
+                    ].map((section) => (
+                      <Box 
+                        key={section.key}
+                        flex="1"
+                        p={3}
+                        borderWidth="1px"
+                        borderRadius="lg"
+                        cursor="pointer"
+                        borderColor={selectedSection === section.key ? "accent" : "border.primary"}
+                        bg={selectedSection === section.key ? "background.accent" : "background.primary"}
+                        _hover={{ borderColor: "secondary" }}
+                        onClick={() => setSelectedSection(section.key)}
+                        textAlign="center"
+                      >
+                        <VStack align="center" gap={2}>
+                          <Box
+                            w={4}
+                            h={4}
+                            borderRadius="full"
+                            borderWidth="2px"
+                            borderColor={selectedSection === section.key ? "accent" : "border.secondary"}
+                            bg={selectedSection === section.key ? "accent" : "transparent"}
+                            position="relative"
+                            mx="auto"
+                          >
+                            {selectedSection === section.key && (
+                              <Box
+                                w={2}
+                                h={2}
+                                borderRadius="full"
+                                bg="background.primary"
+                                position="absolute"
+                                top="50%"
+                                left="50%"
+                                transform="translate(-50%, -50%)"
+                              />
+                            )}
+                          </Box>
+                          <VStack gap={1}>
+                            <Text fontWeight="bold" color="text.primary" fontSize="sm">
+                              {section.label}
+                            </Text>
+                            <Text fontSize="xs" color="text.muted" textAlign="center">
+                              {section.description}
+                            </Text>
+                          </VStack>
+                        </VStack>
+                      </Box>
+                    ))}
+
+                    {/* Writing Tasks */}
+                    {selectedSkill === "writing" && [
+                      { key: "full", label: "Full Writing", description: "Bao gồm tất cả task" },
+                      { key: "task1", label: "Task 1", description: "Chỉ tạo task 1" },
+                      { key: "task2", label: "Task 2", description: "Chỉ tạo task 2" }
+                    ].map((section) => (
+                      <Box 
+                        key={section.key}
+                        flex="1"
+                        p={3}
+                        borderWidth="1px"
+                        borderRadius="lg"
+                        cursor="pointer"
+                        borderColor={selectedSection === section.key ? "accent" : "border.primary"}
+                        bg={selectedSection === section.key ? "background.accent" : "background.primary"}
+                        _hover={{ borderColor: "secondary" }}
+                        onClick={() => setSelectedSection(section.key)}
+                        textAlign="center"
+                      >
+                        <VStack align="center" gap={2}>
+                          <Box
+                            w={4}
+                            h={4}
+                            borderRadius="full"
+                            borderWidth="2px"
+                            borderColor={selectedSection === section.key ? "accent" : "border.secondary"}
+                            bg={selectedSection === section.key ? "accent" : "transparent"}
+                            position="relative"
+                            mx="auto"
+                          >
+                            {selectedSection === section.key && (
+                              <Box
+                                w={2}
+                                h={2}
+                                borderRadius="full"
+                                bg="background.primary"
+                                position="absolute"
+                                top="50%"
+                                left="50%"
+                                transform="translate(-50%, -50%)"
+                              />
+                            )}
+                          </Box>
+                          <VStack gap={1}>
+                            <Text fontWeight="bold" color="text.primary" fontSize="sm">
+                              {section.label}
+                            </Text>
+                            <Text fontSize="xs" color="text.muted" textAlign="center">
+                              {section.description}
+                            </Text>
+                          </VStack>
+                        </VStack>
+                      </Box>
+                    ))}
+
+                    {/* Speaking Parts */}
+                    {selectedSkill === "speaking" && [
+                      { key: "full", label: "Full Speaking", description: "Bao gồm tất cả part" },
+                      { key: "part1", label: "Part 1", description: "Chỉ tạo part 1" },
+                      { key: "part2", label: "Part 2", description: "Chỉ tạo part 2" },
+                      { key: "part3", label: "Part 3", description: "Chỉ tạo part 3" }
+                    ].map((section) => (
+                      <Box 
+                        key={section.key}
+                        flex="1"
+                        p={3}
+                        borderWidth="1px"
+                        borderRadius="lg"
+                        cursor="pointer"
+                        borderColor={selectedSection === section.key ? "accent" : "border.primary"}
+                        bg={selectedSection === section.key ? "background.accent" : "background.primary"}
+                        _hover={{ borderColor: "secondary" }}
+                        onClick={() => setSelectedSection(section.key)}
+                        textAlign="center"
+                      >
+                        <VStack align="center" gap={2}>
+                          <Box
+                            w={4}
+                            h={4}
+                            borderRadius="full"
+                            borderWidth="2px"
+                            borderColor={selectedSection === section.key ? "accent" : "border.secondary"}
+                            bg={selectedSection === section.key ? "accent" : "transparent"}
+                            position="relative"
+                            mx="auto"
+                          >
+                            {selectedSection === section.key && (
+                              <Box
+                                w={2}
+                                h={2}
+                                borderRadius="full"
+                                bg="background.primary"
+                                position="absolute"
+                                top="50%"
+                                left="50%"
+                                transform="translate(-50%, -50%)"
+                              />
+                            )}
+                          </Box>
+                          <VStack gap={1}>
+                            <Text fontWeight="bold" color="text.primary" fontSize="sm">
+                              {section.label}
+                            </Text>
+                            <Text fontSize="xs" color="text.muted" textAlign="center">
+                              {section.description}
+                            </Text>
+                          </VStack>
+                        </VStack>
+                      </Box>
+                    ))}
+                  </HStack>
+                </Box>
+              )}
+            </VStack>
+          )}
         </Box>
 
-        {/* Next Button */}
-        <Flex justify="flex-end" mt={6}>
+        {/* Navigation Buttons */}
+        <Flex justify="space-between" mt={6}>
+          {/* Back Button - Show only on step 2+ */}
+          {currentStep > 1 && (
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => setCurrentStep(Math.max(currentStep - 1, 1))}
+              borderColor="border.primary"
+              color="text.primary"
+              _hover={{ borderColor: "secondary", bg: "background.secondary" }}
+            >
+              <HStack gap={2}>
+                <Icon as={MdArrowBack} />
+                <Text>Quay lại</Text>
+              </HStack>
+            </Button>
+          )}
+
+          {/* Next Button */}
           <Button
             colorScheme="green"
             size="lg"
             onClick={() => setCurrentStep(Math.min(currentStep + 1, 5))}
-            disabled={!testName.trim()}
+            disabled={
+              (currentStep === 1 && !testName.trim()) ||
+              (currentStep === 2 && (!selectedSkill || !selectedSection))
+            }
             bg="accent"
             color="white"
             _hover={{ bg: "secondary" }}
+            ml={currentStep === 1 ? "auto" : 0}
           >
             <HStack gap={2}>
               <Text>Tiếp theo</Text>
