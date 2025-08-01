@@ -1758,9 +1758,180 @@ Bước 4: Chọn đáp án đúng.`}
               </Box>
             </VStack>
           )}
+          
+          {/* Step 5 Content - Xem lại & Đăng bài */}
+          {currentStep === 5 && (
+            <VStack align="start" gap={6}>
+              <Box w="full">
+                <Text fontSize="xl" fontWeight="bold" color="text.primary" mb={2}>
+                  Xem lại & Đăng bài
+                </Text>
+                <Text fontSize="sm" color="text.muted" mb={6}>
+                  Xem lại cấu hình bài kiểm tra của bạn trước khi đăng
+                </Text>
+              </Box>
+
+              {/* Review Content */}
+              <VStack align="start" gap={4} w="full">
+                {/* Thông tin Bài Test */}
+                <Box 
+                  w="full" 
+                  bg="background.primary" 
+                  borderWidth="1px" 
+                  borderColor="border.primary" 
+                  borderRadius="lg" 
+                  p={4}
+                >
+                  <Text fontSize="lg" fontWeight="bold" color="text.primary" mb={4}>
+                    Thông tin Bài Test
+                  </Text>
+                  
+                  <HStack justify="space-between" align="center" w="full">
+                    <VStack align="start" gap={2}>
+                      <HStack gap={8}>
+                        <Box>
+                          <Text fontSize="sm" color="text.muted" mb={1}>Tên:</Text>
+                          <Text fontSize="sm" fontWeight="medium" color="text.primary">
+                            {testName || "[Cambridge 18] Reading Test 1"}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text fontSize="sm" color="text.muted" mb={1}>Loại:</Text>
+                          <Text fontSize="sm" fontWeight="medium" color="text.primary">
+                            {testType === "full" || selectedSection === "full" ? "Full Test" : "Mini Test"}
+                          </Text>
+                        </Box>
+                      </HStack>
+                    </VStack>
+                  </HStack>
+                </Box>
+
+                {/* Bao gồm */}
+                <Box 
+                  w="full" 
+                  bg="background.primary" 
+                  borderWidth="1px" 
+                  borderColor="border.primary" 
+                  borderRadius="lg" 
+                  p={4}
+                >
+                  <Text fontSize="lg" fontWeight="bold" color="text.primary" mb={4}>
+                    Bao gồm
+                  </Text>
+                  
+                  <VStack align="start" gap={4} w="full">
+                    {/* Test Type Badge */}
+                    <Box
+                      bg="black"
+                      color="white"
+                      px={4}
+                      py={2}
+                      borderRadius="md"
+                      fontSize="sm"
+                      fontWeight="medium"
+                      w="fit-content"
+                    >
+                      {selectedSkill === "reading" && selectedSection === "full" && "Reading Full Test"}
+                      {selectedSkill === "reading" && selectedSection === "passage1" && "Reading Passage 1"}
+                      {selectedSkill === "reading" && selectedSection === "passage2" && "Reading Passage 2"}
+                      {selectedSkill === "reading" && selectedSection === "passage3" && "Reading Passage 3"}
+                      {selectedSkill === "listening" && selectedSection === "full" && "Listening Full Test"}
+                      {selectedSkill === "listening" && selectedSection === "part1" && "Listening Part 1"}
+                      {selectedSkill === "listening" && selectedSection === "part2" && "Listening Part 2"}
+                      {selectedSkill === "listening" && selectedSection === "part3" && "Listening Part 3"}
+                      {selectedSkill === "writing" && selectedSection === "full" && "Writing Full Test"}
+                      {selectedSkill === "writing" && selectedSection === "task1" && "Writing Task 1"}
+                      {selectedSkill === "writing" && selectedSection === "task2" && "Writing Task 2"}
+                      {selectedSkill === "speaking" && selectedSection === "full" && "Speaking Full Test"}
+                      {selectedSkill === "speaking" && selectedSection === "part1" && "Speaking Part 1"}
+                      {selectedSkill === "speaking" && selectedSection === "part2" && "Speaking Part 2"}
+                      {selectedSkill === "speaking" && selectedSection === "part3" && "Speaking Part 3"}
+                      {!selectedSkill && "Reading Full Test"}
+                    </Box>
+
+                    {/* Source Information from Step 4 */}
+                    <Box>
+                      <Text fontSize="sm" color="text.muted" mb={2}>Nguồn tài liệu:</Text>
+                      <Text fontSize="sm" fontWeight="medium" color="text.primary">
+                        {selectedSource || "Cambridge"}
+                      </Text>
+                    </Box>
+
+                    {/* Question Types from Step 3 */}
+                    {passages.length > 0 && (
+                      <Box w="full">
+                        <Text fontSize="sm" color="text.muted" mb={2}>Loại câu hỏi được phát hiện:</Text>
+                        <VStack align="start" gap={2} w="full">
+                          {passages.map((passage) => {
+                            const passageGroups = questionGroups[passage.id as keyof typeof questionGroups] || []
+                            const totalQuestions = passageGroups.reduce((acc, group) => acc + group.questions.length, 0)
+                            
+                            const getActualQuestionTypes = (passageId: string) => {
+                              const groups = questionGroups[passageId as keyof typeof questionGroups] || []
+                              const types = new Set<string>()
+                              
+                              groups.forEach(group => {
+                                const groupKey = `${passageId}_${group.id}`
+                                const questionType = questionGroupTypes[groupKey]
+                                if (questionType) {
+                                  types.add(getQuestionTypeDisplayName(questionType))
+                                }
+                              })
+                              
+                              return Array.from(types)
+                            }
+                            
+                            const questionTypes = getActualQuestionTypes(passage.id)
+                            
+                            return (
+                              <Box key={passage.id} w="full" p={3} bg="background.secondary" borderRadius="md">
+                                <HStack justify="space-between" align="center" w="full">
+                                  <VStack align="start" gap={1}>
+                                    <Text fontSize="sm" fontWeight="bold" color="text.primary">
+                                      {passage.title}
+                                    </Text>
+                                    <HStack gap={2} flexWrap="wrap">
+                                      {questionTypes.length > 0 ? questionTypes.map((type, index) => (
+                                        <Box key={index} bg="gray.100" color="gray.700" px={2} py={1} borderRadius="sm" fontSize="xs">
+                                          {type}
+                                        </Box>
+                                      )) : (
+                                        <Box bg="gray.100" color="gray.700" px={2} py={1} borderRadius="sm" fontSize="xs">
+                                          Chưa có loại câu hỏi
+                                        </Box>
+                                      )}
+                                    </HStack>
+                                  </VStack>
+                                  <Text fontSize="xs" color="text.muted">{totalQuestions || 0} câu</Text>
+                                </HStack>
+                              </Box>
+                            )
+                          })}
+                        </VStack>
+                      </Box>
+                    )}
+                  </VStack>
+                </Box>
+              </VStack>
+
+              {/* Action Buttons */}
+              <HStack justify="flex-end" w="full" mt={8}>
+                <Button
+                  size="lg"
+                  bg="#28A745"
+                  color="white"
+                  _hover={{ bg: "#218838" }}
+                  px={12}
+                >
+                  Đăng bài
+                </Button>
+              </HStack>
+            </VStack>
+          )}
         </Box>
 
-        {/* Navigation Buttons */}
+        
+                {/* Navigation Buttons */}
         <Flex justify="space-between" mt={6}>
           {/* Back Button - Show only on step 2+ */}
           {currentStep > 1 && (
@@ -1779,25 +1950,27 @@ Bước 4: Chọn đáp án đúng.`}
             </Button>
           )}
 
-          {/* Next Button */}
-          <Button
-            colorScheme="green"
-            size="lg"
-            onClick={() => setCurrentStep(Math.min(currentStep + 1, 5))}
-            disabled={
-              (currentStep === 1 && !testName.trim()) ||
-              (currentStep === 2 && (!selectedSkill || !selectedSection))
-            }
-            bg="accent"
-            color="white"
-            _hover={{ bg: "secondary" }}
-            ml={currentStep === 1 ? "auto" : 0}
-          >
-            <HStack gap={2}>
-              <Text>Tiếp theo</Text>
-              <Icon as={MdArrowForward} />
-            </HStack>
-          </Button>
+          {/* Next Button - Hide on step 5 */}
+          {currentStep < 5 && (
+            <Button
+              colorScheme="green"
+              size="lg"
+              onClick={() => setCurrentStep(Math.min(currentStep + 1, 5))}
+              disabled={
+                (currentStep === 1 && !testName.trim()) ||
+                (currentStep === 2 && (!selectedSkill || !selectedSection))
+              }
+              bg="accent"
+              color="white"
+              _hover={{ bg: "secondary" }}
+              ml={currentStep === 1 ? "auto" : 0}
+            >
+              <HStack gap={2}>
+                <Text>Tiếp theo</Text>
+                <Icon as={MdArrowForward} />
+              </HStack>
+            </Button>
+          )}
         </Flex>
       </Container>
     </Box>
