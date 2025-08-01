@@ -44,6 +44,7 @@ export default function TestResult() {
   const textColor = useColorModeValue("gray.800", "white")
   const mutedColor = useColorModeValue("gray.600", "gray.400")
   const explanationBgColor = useColorModeValue("gray.50", "gray.700")
+  const greenThemeColor = useColorModeValue("green.600", "green.500")
 
   const questions: Question[] = [
     {
@@ -185,7 +186,7 @@ export default function TestResult() {
               <IconButton aria-label="Close" variant="outline" size="sm" rounded="full"> <Icon as={MdClose} /> </IconButton>
             </Box>
             <Box marginTop="auto">
-              <TabSelector 
+              <TabSelector
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
               />
@@ -196,7 +197,7 @@ export default function TestResult() {
           <Box py={3}>
             <HStack gap={2} justify="center" bg={questionBackgroundColor} px={3} py={1} borderRadius={"full"}>
               <HStack>
-                <Icon as={MdTimer} color="accent" />
+                <Icon as={MdTimer} color={greenThemeColor} />
                 <Text fontSize={getFontSizeValue()} fontWeight="medium" color={textColor}>
                   00:10:39
                 </Text>
@@ -205,7 +206,7 @@ export default function TestResult() {
               {/* Vertical Divider */}
               <Box width="1px" height="10px" bg="#E5E5EA" />
 
-              <Text fontSize={getFontSizeValue()} fontWeight="bold" color="accent">
+              <Text fontSize={getFontSizeValue()} fontWeight="bold" color={greenThemeColor}>
                 {correctAnswers}/{totalQuestions} correct answers
               </Text>
             </HStack>
