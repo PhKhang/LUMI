@@ -16,6 +16,7 @@ tokens: {
           primary: { value: "#FFFFFF" }, 
           secondary: { value: "#F7FAFC" }, 
           accent: { value: "#EDF2F7" },
+          selected: { value: "#E6F9E6" },
         },
         border: {
           primary: { value: "#E2E8F0" }, 

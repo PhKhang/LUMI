@@ -14,7 +14,6 @@ import {
   Progress,
   Pagination
 } from "@chakra-ui/react"
-import { useColorModeValue } from "@/components/ui/color-mode"
 import { MdShare, MdOpenInNew, MdCalendarToday, MdLaunch, MdHeadphones, MdMenuBook, MdEdit, MdRecordVoiceOver } from "react-icons/md"
 import { 
   RadarChart, 
@@ -25,19 +24,49 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function ReportPage() {
   const [selectedSkill, setSelectedSkill] = useState('Listening')
   const [selectedTab, setSelectedTab] = useState('Reading')
   const [currentPage, setCurrentPage] = useState(1)
+  const [mounted, setMounted] = useState(false)
+  const [selectedFilter, setSelectedFilter] = useState('Theo tên bài')
   const pageSize = 5
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Reset filter and page when tab changes
+  useEffect(() => {
+    if (selectedTab === 'Speaking') {
+      setSelectedFilter('Theo câu hỏi')
+    } else if (selectedTab === 'Writing') {
+      setSelectedFilter('Theo dạng câu hỏi')
+    } else {
+      setSelectedFilter('Theo thời gian')
+    }
+    setCurrentPage(1)
+  }, [selectedTab])
+
+  // Reset page when filter changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedFilter])
   
-  const bgColor = useColorModeValue("white", "gray.800")
-  const textColor = useColorModeValue("gray.800", "black")
-  const mutedColor = useColorModeValue("gray.700", "gray.300")
-  const cardBgColor = useColorModeValue("white", "gray.700")
-  const borderColor = useColorModeValue("gray.200", "gray.600")
+  // Using theme colors instead of color mode values
+  const bgColor = "background.primary"
+  const textColor = "text.primary"
+  const mutedColor = "text.muted"
+  const cardBgColor = "background.primary"
+  const borderColor = "border.primary"
+  const tableBorderColor = "border.secondary"
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return null
+  }
 
   // Data cho exam history
   const allExamHistoryData = [
@@ -153,11 +182,381 @@ export default function ReportPage() {
     }
   ]
 
-  // Get current page data
-  const totalItems = allExamHistoryData.length
+  // Data for Reading
+  const readingHistoryData = [
+    {
+      id: 1,
+      "Tên bài": "Academic Reading - Passage 1",
+      "Thời gian nộp bài": "05/07/25 01:11:23",
+      "Thời gian làm bài": "00:18:32",
+      "Tổng số câu": 13,
+      "Đúng": 11,
+      "Sai": 1,
+      "Bỏ qua": 1,
+      "Tỷ lệ đúng": 85.0
+    },
+    {
+      id: 2,
+      "Tên bài": "Cambridge 19 Reading Test 3",
+      "Thời gian nộp bài": "04/07/25 20:23:16",
+      "Thời gian làm bài": "00:15:45",
+      "Tổng số câu": 14,
+      "Đúng": 9,
+      "Sai": 3,
+      "Bỏ qua": 2,
+      "Tỷ lệ đúng": 64.0
+    },
+    {
+      id: 3,
+      "Tên bài": "IELTS Reading Practice",
+      "Thời gian nộp bài": "03/07/25 19:35:35",
+      "Thời gian làm bài": "00:20:04",
+      "Tổng số câu": 12,
+      "Đúng": 8,
+      "Sai": 4,
+      "Bỏ qua": 0,
+      "Tỷ lệ đúng": 67.0
+    },
+    {
+      id: 4,
+      "Tên bài": "Cambridge 18 Reading Test 1",
+      "Thời gian nộp bài": "02/07/25 16:22:10",
+      "Thời gian làm bài": "00:19:15",
+      "Tổng số câu": 13,
+      "Đúng": 10,
+      "Sai": 2,
+      "Bỏ qua": 1,
+      "Tỷ lệ đúng": 77.0
+    },
+    {
+      id: 5,
+      "Tên bài": "General Reading - Social History",
+      "Thời gian nộp bài": "01/07/25 14:18:45",
+      "Thời gian làm bài": "00:22:30",
+      "Tổng số câu": 15,
+      "Đúng": 12,
+      "Sai": 2,
+      "Bỏ qua": 1,
+      "Tỷ lệ đúng": 80.0
+    },
+    {
+      id: 6,
+      "Tên bài": "IELTS Reading Simulation Test",
+      "Thời gian nộp bài": "30/06/25 11:30:20",
+      "Thời gian làm bài": "00:17:45",
+      "Tổng số câu": 11,
+      "Đúng": 7,
+      "Sai": 3,
+      "Bỏ qua": 1,
+      "Tỷ lệ đúng": 64.0
+    },
+    {
+      id: 7,
+      "Tên bài": "Academic Reading - Science Topic",
+      "Thời gian nộp bài": "29/06/25 09:45:12",
+      "Thời gian làm bài": "00:21:20",
+      "Tổng số câu": 14,
+      "Đúng": 11,
+      "Sai": 2,
+      "Bỏ qua": 1,
+      "Tỷ lệ đúng": 79.0
+    }
+  ]
+
+  // Data for Writing
+  const writingHistoryData = [
+    {
+      id: 1,
+      "Tên bài": "[Real Test] - Study challenges in higher education",
+      "Task": "Task 2",
+      "Dạng đề": "Two-Part Question",
+      "Thời gian nộp bài": "05/07/25 01:11:23",
+      "Thời gian làm bài": "35:12",
+      "Kết quả": 6.0
+    },
+    {
+      id: 2,
+      "Tên bài": "[Forecast] Fruit and vegetable consumption",
+      "Task": "Task 1",
+      "Dạng đề": "Bar Chart",
+      "Thời gian nộp bài": "04/07/25 01:11:23",
+      "Thời gian làm bài": "16:10",
+      "Kết quả": 7.0
+    },
+    {
+      id: 3,
+      "Tên bài": "[Real Test] Student spending abroad",
+      "Task": "Task 1",
+      "Dạng đề": "Mixed Charts",
+      "Thời gian nộp bài": "03/07/25 01:11:23",
+      "Thời gian làm bài": "16:10",
+      "Kết quả": 6.5
+    },
+    {
+      id: 4,
+      "Tên bài": "[Forecast] Environmental protection measures",
+      "Task": "Task 2",
+      "Dạng đề": "Opinion Essay",
+      "Thời gian nộp bài": "02/07/25 14:25:18",
+      "Thời gian làm bài": "38:45",
+      "Kết quả": 6.5
+    },
+    {
+      id: 5,
+      "Tên bài": "[Real Test] Population growth trends",
+      "Task": "Task 1",
+      "Dạng đề": "Line Graph",
+      "Thời gian nộp bài": "01/07/25 16:30:42",
+      "Thời gian làm bài": "18:20",
+      "Kết quả": 7.5
+    },
+    {
+      id: 6,
+      "Tên bài": "[Forecast] Technology impact on education",
+      "Task": "Task 2",
+      "Dạng đề": "Discuss Both Views",
+      "Thời gian nộp bài": "30/06/25 10:15:33",
+      "Thời gian làm bài": "40:12",
+      "Kết quả": 6.0
+    },
+    {
+      id: 7,
+      "Tên bài": "[Real Test] Housing costs comparison",
+      "Task": "Task 1",
+      "Dạng đề": "Table",
+      "Thời gian nộp bài": "29/06/25 13:45:20",
+      "Thời gian làm bài": "17:35",
+      "Kết quả": 7.0
+    }
+  ]
+
+  // Data for Speaking
+  const speakingHistoryData = [
+    {
+      id: 1,
+      "Topic": "Childhood memory",
+      "Câu hỏi": "What did you enjoy doing as a child?",
+      "Part": 1,
+      "Thời gian nộp bài": "05/07/25 01:11:23",
+      "Kết quả": 7.0
+    },
+    {
+      id: 2,
+      "Topic": "Laughing",
+      "Câu hỏi": "When was the last time you laughed?",
+      "Part": 3,
+      "Thời gian nộp bài": "04/07/25 01:11:23",
+      "Kết quả": 6.5
+    },
+    {
+      id: 3,
+      "Topic": "Famous Person",
+      "Câu hỏi": "Describe a famous person that you admired",
+      "Part": 2,
+      "Thời gian nộp bài": "03/07/25 01:11:23",
+      "Kết quả": 6.0
+    },
+    {
+      id: 4,
+      "Topic": "Hometown",
+      "Câu hỏi": "What do you like most about your hometown?",
+      "Part": 1,
+      "Thời gian nộp bài": "02/07/25 15:22:45",
+      "Kết quả": 6.5
+    },
+    {
+      id: 5,
+      "Topic": "Social Media",
+      "Câu hỏi": "How has social media changed the way people communicate?",
+      "Part": 3,
+      "Thời gian nộp bài": "01/07/25 11:18:30",
+      "Kết quả": 7.5
+    },
+    {
+      id: 6,
+      "Topic": "Special Event",
+      "Câu hỏi": "Describe a special event in your life",
+      "Part": 2,
+      "Thời gian nộp bài": "30/06/25 14:35:12",
+      "Kết quả": 6.0
+    },
+    {
+      id: 7,
+      "Topic": "Work",
+      "Câu hỏi": "What kind of job would you like to do in the future?",
+      "Part": 1,
+      "Thời gian nộp bài": "29/06/25 16:40:25",
+      "Kết quả": 7.0
+    }
+  ]
+
+  // Get current page data based on selected tab
+  const getCurrentData = () => {
+    let data = []
+    switch(selectedTab) {
+      case 'Listening':
+        data = allExamHistoryData
+        break
+      case 'Reading':
+        data = readingHistoryData
+        break
+      case 'Writing':
+        data = writingHistoryData
+        break
+      case 'Speaking':
+        data = speakingHistoryData
+        break
+      default:
+        data = allExamHistoryData
+    }
+    return data
+  }
+
+  // Sort the entire dataset based on selected filter and skill
+  const getSortedData = () => {
+    const currentData = getCurrentData()
+    let sortedData = [...currentData]
+
+    switch(selectedFilter) {
+      case 'Theo tên bài':
+        sortedData.sort((a: any, b: any) => {
+          const nameA = a["Tên bài"] || ""
+          const nameB = b["Tên bài"] || ""
+          return nameA.localeCompare(nameB, 'vi', { sensitivity: 'base' })
+        })
+        break
+        
+      case 'Theo thời gian':
+        // Sort by submission time (newest first)
+        sortedData.sort((a: any, b: any) => {
+          const timeA = a["Thời gian nộp bài"] || ""
+          const timeB = b["Thời gian nộp bài"] || ""
+          return timeB.localeCompare(timeA)
+        })
+        break
+        
+      case 'Theo kết quả':
+        if (selectedTab === 'Listening' || selectedTab === 'Reading') {
+          // Sort by accuracy percentage (highest first)
+          sortedData.sort((a: any, b: any) => {
+            const accuracyA = a["Tỷ lệ đúng"] || 0
+            const accuracyB = b["Tỷ lệ đúng"] || 0
+            return accuracyB - accuracyA
+          })
+        } else if (selectedTab === 'Writing' || selectedTab === 'Speaking') {
+          // Sort by score (highest first)
+          sortedData.sort((a: any, b: any) => {
+            const scoreA = a["Kết quả"] || 0
+            const scoreB = b["Kết quả"] || 0
+            return scoreB - scoreA
+          })
+        }
+        break
+        
+      case 'Theo dạng câu hỏi':
+        if (selectedTab === 'Writing') {
+          // Sort by question type (Task 1 first, then Task 2)
+          sortedData.sort((a: any, b: any) => {
+            const taskA = a["Task"] || ""
+            const taskB = b["Task"] || ""
+            if (taskA !== taskB) {
+              return taskA.localeCompare(taskB)
+            }
+            // If same task, sort by question type
+            const typeA = a["Dạng đề"] || ""
+            const typeB = b["Dạng đề"] || ""
+            return typeA.localeCompare(typeB, 'vi', { sensitivity: 'base' })
+          })
+        } else if (selectedTab === 'Speaking') {
+          // Sort by Part (1, 2, 3), then by topic
+          sortedData.sort((a: any, b: any) => {
+            const partA = a["Part"] || 0
+            const partB = b["Part"] || 0
+            if (partA !== partB) {
+              return partA - partB
+            }
+            // If same part, sort by topic
+            const topicA = a["Topic"] || ""
+            const topicB = b["Topic"] || ""
+            return topicA.localeCompare(topicB, 'vi', { sensitivity: 'base' })
+          })
+        } else {
+          // For Listening/Reading, sort by test name
+          sortedData.sort((a: any, b: any) => {
+            const nameA = a["Tên bài"] || ""
+            const nameB = b["Tên bài"] || ""
+            return nameA.localeCompare(nameB, 'vi', { sensitivity: 'base' })
+          })
+        }
+        break
+        
+      case 'Theo section':
+        if (selectedTab === 'Speaking') {
+          // Sort by Part number
+          sortedData.sort((a: any, b: any) => {
+            const partA = a["Part"] || 0
+            const partB = b["Part"] || 0
+            return partA - partB
+          })
+        } else if (selectedTab === 'Writing') {
+          // Sort by Task
+          sortedData.sort((a: any, b: any) => {
+            const taskA = a["Task"] || ""
+            const taskB = b["Task"] || ""
+            return taskA.localeCompare(taskB, 'vi', { sensitivity: 'base' })
+          })
+        } else {
+          // For Listening/Reading, sort by test name (could be extended to sort by section if data available)
+          sortedData.sort((a: any, b: any) => {
+            const nameA = a["Tên bài"] || ""
+            const nameB = b["Tên bài"] || ""
+            return nameA.localeCompare(nameB, 'vi', { sensitivity: 'base' })
+          })
+        }
+        break
+        
+      case 'Theo câu hỏi':
+        if (selectedTab === 'Speaking') {
+          // Sort by question text alphabetically
+          sortedData.sort((a: any, b: any) => {
+            const questionA = a["Câu hỏi"] || ""
+            const questionB = b["Câu hỏi"] || ""
+            return questionA.localeCompare(questionB, 'vi', { sensitivity: 'base' })
+          })
+        }
+        break
+        
+      case 'Theo độ khó':
+        // Sort by difficulty based on accuracy/score
+        if (selectedTab === 'Listening' || selectedTab === 'Reading') {
+          // Lower accuracy = higher difficulty (show hardest first)
+          sortedData.sort((a: any, b: any) => {
+            const accuracyA = a["Tỷ lệ đúng"] || 0
+            const accuracyB = b["Tỷ lệ đúng"] || 0
+            return accuracyA - accuracyB
+          })
+        } else if (selectedTab === 'Writing' || selectedTab === 'Speaking') {
+          // Lower score = higher difficulty (show hardest first)
+          sortedData.sort((a: any, b: any) => {
+            const scoreA = a["Kết quả"] || 0
+            const scoreB = b["Kết quả"] || 0
+            return scoreA - scoreB
+          })
+        }
+        break
+        
+      default:
+        break
+    }
+
+    return sortedData
+  }
+
+  const sortedData = getSortedData()
+  const totalItems = sortedData.length
   const startIndex = (currentPage - 1) * pageSize
   const endIndex = startIndex + pageSize
-  const examHistoryData = allExamHistoryData.slice(startIndex, endIndex)
+  const examHistoryData = sortedData.slice(startIndex, endIndex)
 
   // Format date for display
   const formatDate = (dateStr: string) => {
@@ -592,372 +991,889 @@ export default function ReportPage() {
 
           {/* Filter Tabs */}
           <HStack gap={6} mb={6}>
-            {['Theo tên bài', 'Theo dạng câu hỏi', 'Theo section'].map((filter, index) => (
-              <Text
-                key={filter}
-                fontSize="sm"
-                color={index === 0 ? "green.500" : mutedColor}
-                fontWeight={index === 0 ? "bold" : "normal"}
-                borderBottom={index === 0 ? "2px solid" : "none"}
-                borderBottomColor="green.500"
-                pb={1}
-                cursor="pointer"
-                _hover={{ color: "green.500" }}
-              >
-                {filter}
-              </Text>
-            ))}
+            {selectedTab === 'Listening' || selectedTab === 'Reading' ? (
+              ['Theo thời gian', 'Theo tên bài', 'Theo kết quả', 'Theo độ khó'].map((filter, index) => (
+                <Text
+                  key={filter}
+                  fontSize="sm"
+                  color={selectedFilter === filter ? "green.500" : mutedColor}
+                  fontWeight={selectedFilter === filter ? "bold" : "normal"}
+                  borderBottom={selectedFilter === filter ? "2px solid" : "none"}
+                  borderBottomColor="green.500"
+                  pb={1}
+                  cursor="pointer"
+                  onClick={() => setSelectedFilter(filter)}
+                  _hover={{ color: "green.500" }}
+                >
+                  {filter}
+                </Text>
+              ))
+            ) : selectedTab === 'Writing' ? (
+              ['Theo dạng câu hỏi', 'Theo thời gian', 'Theo section', 'Theo kết quả'].map((filter, index) => (
+                <Text
+                  key={filter}
+                  fontSize="sm"
+                  color={selectedFilter === filter ? "green.500" : mutedColor}
+                  fontWeight={selectedFilter === filter ? "bold" : "normal"}
+                  borderBottom={selectedFilter === filter ? "2px solid" : "none"}
+                  borderBottomColor="green.500"
+                  pb={1}
+                  cursor="pointer"
+                  onClick={() => setSelectedFilter(filter)}
+                  _hover={{ color: "green.500" }}
+                >
+                  {filter}
+                </Text>
+              ))
+            ) : selectedTab === 'Speaking' ? (
+              ['Theo câu hỏi', 'Theo section', 'Theo thời gian', 'Theo kết quả'].map((filter, index) => (
+                <Text
+                  key={filter}
+                  fontSize="sm"
+                  color={selectedFilter === filter ? "green.500" : mutedColor}
+                  fontWeight={selectedFilter === filter ? "bold" : "normal"}
+                  borderBottom={selectedFilter === filter ? "2px solid" : "none"}
+                  borderBottomColor="green.500"
+                  pb={1}
+                  cursor="pointer"
+                  onClick={() => setSelectedFilter(filter)}
+                  _hover={{ color: "green.500" }}
+                >
+                  {filter}
+                </Text>
+              ))
+            ) : null}
           </HStack>
 
           {/* Table Container using HTML table */}
           <Box 
             borderWidth="1px" 
-            borderColor={borderColor} 
+            borderColor={tableBorderColor} 
             borderRadius="lg" 
             overflow="hidden"
           >
             <Box as="table" w="full" borderCollapse="collapse">
               {/* Table Header */}
               <Box as="thead">
-                <Box as="tr" bg={useColorModeValue("gray.50", "gray.700")}>
-                  <Box 
-                    as="th" 
-                    p={4} 
-                    borderRightWidth="1px" 
-                    borderRightColor={borderColor}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="left"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    w="25%"
-                  >
-                    Tên bài
-                  </Box>
-                  <Box 
-                    as="th" 
-                    p={4} 
-                    borderRightWidth="1px" 
-                    borderRightColor={borderColor}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="center"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    w="12%"
-                  >
-                    Thời gian nộp bài
-                  </Box>
-                  <Box 
-                    as="th" 
-                    p={4} 
-                    borderRightWidth="1px" 
-                    borderRightColor={borderColor}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="center"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    w="10%"
-                  >
-                    Thời gian làm bài
-                  </Box>
-                  <Box 
-                    as="th" 
-                    p={4} 
-                    borderRightWidth="1px" 
-                    borderRightColor={borderColor}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="center"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    w="8%"
-                  >
-                    Tổng số câu
-                  </Box>
-                  <Box 
-                    as="th" 
-                    p={4} 
-                    borderRightWidth="1px" 
-                    borderRightColor={borderColor}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="center"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    bg="green.100"
-                    w="6%"
-                  >
-                    Đúng
-                  </Box>
-                  <Box 
-                    as="th" 
-                    p={4} 
-                    borderRightWidth="1px" 
-                    borderRightColor={borderColor}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="center"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    bg="red.100"
-                    w="6%"
-                  >
-                    Sai
-                  </Box>
-                  <Box 
-                    as="th" 
-                    p={4} 
-                    borderRightWidth="1px" 
-                    borderRightColor={borderColor}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="center"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    bg="gray.100"
-                    w="6%"
-                  >
-                    Bỏ qua
-                  </Box>
-                  <Box 
-                    as="th" 
-                    p={4} 
-                    borderRightWidth="1px" 
-                    borderRightColor={borderColor}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="center"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    w="12%"
-                  >
-                    Tỷ lệ đúng
-                  </Box>
-                  <Box 
-                    as="th" 
-                    p={4} 
-                    borderRightWidth="1px" 
-                    borderRightColor={borderColor}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="center"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    w="7.5%"
-                  >
-                    Làm lại
-                  </Box>
-                  <Box 
-                    as="th" 
-                    p={4}
-                    borderBottomWidth="1px"
-                    borderBottomColor={borderColor}
-                    textAlign="center"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    color="black"
-                    w="7.5%"
-                  >
-                    Xem lại
-                  </Box>
+                <Box as="tr" bg="background.secondary">
+                  {selectedTab === 'Listening' || selectedTab === 'Reading' ? (
+                    <>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="left"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="25%"
+                      >
+                        Tên bài
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="12%"
+                      >
+                        Thời gian nộp bài
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="10%"
+                      >
+                        Thời gian làm bài
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="8%"
+                      >
+                        Tổng số câu
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        bg="green.100"
+                        w="6%"
+                      >
+                        Đúng
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        bg="red.100"
+                        w="6%"
+                      >
+                        Sai
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        bg="gray.100"
+                        w="6%"
+                      >
+                        Bỏ qua
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="12%"
+                      >
+                        Tỷ lệ đúng
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="7.5%"
+                      >
+                        Làm lại
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="7.5%"
+                      >
+                        Xem lại
+                      </Box>
+                    </>
+                  ) : selectedTab === 'Writing' ? (
+                    <>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="left"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="35%"
+                      >
+                        Tên bài
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="10%"
+                      >
+                        Task
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="15%"
+                      >
+                        Dạng đề
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="12%"
+                      >
+                        Thời gian nộp bài
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="10%"
+                      >
+                        Thời gian làm bài
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        bg="green.100"
+                        w="8%"
+                      >
+                        Kết quả
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="5%"
+                      >
+                        Làm lại
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="5%"
+                      >
+                        Xem lại
+                      </Box>
+                    </>
+                  ) : selectedTab === 'Speaking' ? (
+                    <>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="left"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="15%"
+                      >
+                        Topic
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="left"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="45%"
+                      >
+                        Câu hỏi
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="8%"
+                      >
+                        Part
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="12%"
+                      >
+                        Thời gian nộp bài
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        bg="green.100"
+                        w="10%"
+                      >
+                        Kết quả
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4} 
+                        borderRightWidth="1px" 
+                        borderRightColor={tableBorderColor}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="5%"
+                      >
+                        Làm lại
+                      </Box>
+                      <Box 
+                        as="th" 
+                        p={4}
+                        borderBottomWidth="1px"
+                        borderBottomColor={tableBorderColor}
+                        textAlign="center"
+                        fontWeight="bold"
+                        fontSize="sm"
+                        color="text.primary"
+                        w="5%"
+                      >
+                        Xem lại
+                      </Box>
+                    </>
+                  ) : null}
                 </Box>
               </Box>
 
               {/* Table Body */}
               <Box as="tbody">
-                {examHistoryData.map((exam, index) => {
+                {examHistoryData.map((exam: any, index) => {
                   const { date, time } = formatDate(exam["Thời gian nộp bài"])
                   
                   return (
                     <Box 
                       as="tr" 
                       key={exam.id}
-                      _hover={{ bg: useColorModeValue("gray.50", "gray.600") }}
+                      _hover={{ bg: "background.secondary" }}
                     >
-                      {/* Tên bài */}
-                      <Box 
-                        as="td" 
-                        p={4} 
-                        borderRightWidth="1px" 
-                        borderRightColor={borderColor}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        verticalAlign="middle"
-                      >
-                        <Text fontSize="sm" fontWeight="medium" color={textColor}>
-                          {exam["Tên bài"]}
-                        </Text>
-                      </Box>
+                      {selectedTab === 'Listening' || selectedTab === 'Reading' ? (
+                        <>
+                          {/* Tên bài */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="medium" color={textColor}>
+                              {exam["Tên bài"]}
+                            </Text>
+                          </Box>
 
-                      {/* Thời gian nộp bài */}
-                      <Box 
-                        as="td" 
-                        p={4} 
-                        borderRightWidth="1px" 
-                        borderRightColor={borderColor}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        textAlign="center"
-                        verticalAlign="middle"
-                      >
-                        <Text fontSize="sm" fontWeight="medium" color={textColor}>
-                          {date}
-                        </Text>
-                        <Text fontSize="xs" color={mutedColor}>
-                          {time}
-                        </Text>
-                      </Box>
+                          {/* Thời gian nộp bài */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="medium" color={textColor}>
+                              {date}
+                            </Text>
+                            <Text fontSize="xs" color={mutedColor}>
+                              {time}
+                            </Text>
+                          </Box>
 
-                      {/* Thời gian làm bài */}
-                      <Box 
-                        as="td" 
-                        p={4} 
-                        borderRightWidth="1px" 
-                        borderRightColor={borderColor}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        textAlign="center"
-                        verticalAlign="middle"
-                      >
-                        <Text fontSize="sm" color={textColor}>
-                          {exam["Thời gian làm bài"]}
-                        </Text>
-                      </Box>
+                          {/* Thời gian làm bài */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" color={textColor}>
+                              {exam["Thời gian làm bài"]}
+                            </Text>
+                          </Box>
 
-                      {/* Tổng số câu */}
-                      <Box 
-                        as="td" 
-                        p={4} 
-                        borderRightWidth="1px" 
-                        borderRightColor={borderColor}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        textAlign="center"
-                        verticalAlign="middle"
-                      >
-                        <Text fontSize="sm" fontWeight="bold" color={textColor}>
-                          {exam["Tổng số câu"]}
-                        </Text>
-                      </Box>
+                          {/* Tổng số câu */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="bold" color={textColor}>
+                              {exam["Tổng số câu"]}
+                            </Text>
+                          </Box>
 
-                      {/* Đúng */}
-                      <Box 
-                        as="td" 
-                        p={4} 
-                        borderRightWidth="1px" 
-                        borderRightColor={borderColor}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        textAlign="center"
-                        verticalAlign="middle"
-                      >
-                        <Text fontSize="sm" fontWeight="bold" color="green.600">
-                          {exam["Đúng"]}
-                        </Text>
-                      </Box>
+                          {/* Đúng */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="bold" color="green.600">
+                              {exam["Đúng"]}
+                            </Text>
+                          </Box>
 
-                      {/* Sai */}
-                      <Box 
-                        as="td" 
-                        p={4} 
-                        borderRightWidth="1px" 
-                        borderRightColor={borderColor}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        textAlign="center"
-                        verticalAlign="middle"
-                      >
-                        <Text fontSize="sm" fontWeight="bold" color="red.600">
-                          {exam["Sai"]}
-                        </Text>
-                      </Box>
+                          {/* Sai */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="bold" color="red.600">
+                              {exam["Sai"]}
+                            </Text>
+                          </Box>
 
-                      {/* Bỏ qua */}
-                      <Box 
-                        as="td" 
-                        p={4} 
-                        borderRightWidth="1px" 
-                        borderRightColor={borderColor}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        textAlign="center"
-                        verticalAlign="middle"
-                      >
-                        <Text fontSize="sm" fontWeight="bold" color="gray.600">
-                          {exam["Bỏ qua"]}
-                        </Text>
-                      </Box>
+                          {/* Bỏ qua */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="bold" color="gray.600">
+                              {exam["Bỏ qua"]}
+                            </Text>
+                          </Box>
 
-                      {/* Tỷ lệ đúng */}
-                      <Box 
-                        as="td" 
-                        p={4} 
-                        borderRightWidth="1px" 
-                        borderRightColor={borderColor}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        textAlign="center"
-                        verticalAlign="middle"
-                      >
-                        <Text fontSize="sm" fontWeight="bold" color={textColor} mb={1}>
-                          {exam["Tỷ lệ đúng"]}%
-                        </Text>
-                        <Box 
-                          w="full" 
-                          h="8px" 
-                          bg="gray.200" 
-                          borderRadius="full" 
-                          overflow="hidden"
-                        >
-                          <Box
-                            h="full"
-                            bg={exam["Tỷ lệ đúng"] >= 80 ? "green.500" : exam["Tỷ lệ đúng"] >= 60 ? "yellow.500" : "red.500"}
-                            w={`${exam["Tỷ lệ đúng"]}%`}
-                            borderRadius="full"
-                          />
-                        </Box>
-                      </Box>
+                          {/* Tỷ lệ đúng */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="bold" color={textColor} mb={1}>
+                              {exam["Tỷ lệ đúng"]}%
+                            </Text>
+                            <Box 
+                              w="full" 
+                              h="8px" 
+                              bg="gray.200" 
+                              borderRadius="full" 
+                              overflow="hidden"
+                            >
+                              <Box
+                                h="full"
+                                bg={exam["Tỷ lệ đúng"] >= 80 ? "green.500" : exam["Tỷ lệ đúng"] >= 60 ? "yellow.500" : "red.500"}
+                                w={`${exam["Tỷ lệ đúng"]}%`}
+                                borderRadius="full"
+                              />
+                            </Box>
+                          </Box>
 
-                      {/* Làm lại */}
-                      <Box 
-                        as="td" 
-                        p={4} 
-                        borderRightWidth="1px" 
-                        borderRightColor={borderColor}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        textAlign="center"
-                        verticalAlign="middle"
-                      >
-                        <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                          Làm lại
-                        </Link>
-                      </Box>
+                          {/* Làm lại */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                              Làm lại
+                            </Link>
+                          </Box>
 
-                      {/* Xem lại */}
-                      <Box 
-                        as="td" 
-                        p={4}
-                        borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
-                        borderBottomColor={borderColor}
-                        textAlign="center"
-                        verticalAlign="middle"
-                      >
-                        <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                          Xem lại
-                        </Link>
-                      </Box>
+                          {/* Xem lại */}
+                          <Box 
+                            as="td" 
+                            p={4}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                              Xem lại
+                            </Link>
+                          </Box>
+                        </>
+                      ) : selectedTab === 'Writing' ? (
+                        <>
+                          {/* Tên bài */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="medium" color={textColor}>
+                              {exam["Tên bài"]}
+                            </Text>
+                          </Box>
+
+                          {/* Task */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="medium" color={textColor}>
+                              {exam["Task"]}
+                            </Text>
+                          </Box>
+
+                          {/* Dạng đề */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" color={textColor}>
+                              {exam["Dạng đề"]}
+                            </Text>
+                          </Box>
+
+                          {/* Thời gian nộp bài */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="medium" color={textColor}>
+                              {date}
+                            </Text>
+                            <Text fontSize="xs" color={mutedColor}>
+                              {time}
+                            </Text>
+                          </Box>
+
+                          {/* Thời gian làm bài */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" color={textColor}>
+                              {exam["Thời gian làm bài"]}
+                            </Text>
+                          </Box>
+
+                          {/* Kết quả */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="bold" color={exam["Kết quả"] >= 7 ? "green.600" : exam["Kết quả"] >= 6 ? "orange.500" : "red.600"}>
+                              {exam["Kết quả"]}
+                            </Text>
+                          </Box>
+
+                          {/* Làm lại */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                              Làm lại
+                            </Link>
+                          </Box>
+
+                          {/* Xem lại */}
+                          <Box 
+                            as="td" 
+                            p={4}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                              Xem lại
+                            </Link>
+                          </Box>
+                        </>
+                      ) : selectedTab === 'Speaking' ? (
+                        <>
+                          {/* Topic */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="medium" color={textColor}>
+                              {exam["Topic"]}
+                            </Text>
+                          </Box>
+
+                          {/* Câu hỏi */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" color={textColor}>
+                              {exam["Câu hỏi"]}
+                            </Text>
+                          </Box>
+
+                          {/* Part */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="bold" color={textColor}>
+                              {exam["Part"]}
+                            </Text>
+                          </Box>
+
+                          {/* Thời gian nộp bài */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="medium" color={textColor}>
+                              {date}
+                            </Text>
+                            <Text fontSize="xs" color={mutedColor}>
+                              {time}
+                            </Text>
+                          </Box>
+
+                          {/* Kết quả */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Text fontSize="sm" fontWeight="bold" color={exam["Kết quả"] >= 7 ? "green.600" : exam["Kết quả"] >= 6 ? "orange.500" : "red.600"}>
+                              {exam["Kết quả"]}
+                            </Text>
+                          </Box>
+
+                          {/* Làm lại */}
+                          <Box 
+                            as="td" 
+                            p={4} 
+                            borderRightWidth="1px" 
+                            borderRightColor={tableBorderColor}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                              Làm lại
+                            </Link>
+                          </Box>
+
+                          {/* Xem lại */}
+                          <Box 
+                            as="td" 
+                            p={4}
+                            borderBottomWidth={index === examHistoryData.length - 1 ? "0" : "1px"}
+                            borderBottomColor={tableBorderColor}
+                            textAlign="center"
+                            verticalAlign="middle"
+                          >
+                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                              Xem lại
+                            </Link>
+                          </Box>
+                        </>
+                      ) : null}
                     </Box>
                   )
                 })}
