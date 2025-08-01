@@ -2,10 +2,11 @@
 
 import { useState } from "react"
 import { useParams } from "next/navigation"
-import { Box, Flex, HStack, VStack, Text, Button, IconButton, Image, SimpleGrid , Icon, Tabs} from "@chakra-ui/react"
+import { Box, Flex, HStack, VStack, Text, Button, IconButton, Image, SimpleGrid , Icon} from "@chakra-ui/react"
 import { CloseButton } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
 import SettingsMenu from "@/components/ui/settings-menu"
+import TabSelector from "@/components/ui/tab-selector"
 import {
   MdClose,
   MdAccessTime,
@@ -17,7 +18,6 @@ import {
 import { FiChevronDown } from "react-icons/fi"
 import { TbNotes } from "react-icons/tb"
 import { PiMapPin } from "react-icons/pi"
-import { BiChevronDown } from "react-icons/bi"
 
 interface Question {
   id: number
@@ -185,21 +185,10 @@ export default function TestResult() {
               <IconButton aria-label="Close" variant="outline" size="sm" rounded="full"> <Icon as={MdClose} /> </IconButton>
             </Box>
             <Box marginTop="auto">
-              <Tabs.Root
-                defaultValue="note"
-                variant="line"
-              >
-                <Tabs.List>
-                  <Tabs.Trigger value="note">
-                    <Icon as={MdNote} />
-                    Chế độ ghi chú
-                  </Tabs.Trigger>
-                  <Tabs.Trigger value="lookup">
-                    <Icon as={MdSearch} />
-                    Chế độ tra từ
-                  </Tabs.Trigger>
-                </Tabs.List>
-              </Tabs.Root>
+              <TabSelector 
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+              />
             </Box>
           </HStack>
 
