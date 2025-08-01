@@ -12,15 +12,31 @@ import {
   Container
 } from "@chakra-ui/react"
 import { Field } from "@chakra-ui/react"
-import { MdLightbulb, MdArrowForward, MdArrowBack, MdCheck, MdHeadphones, MdMenuBook, MdEdit, MdMic } from "react-icons/md"
+import { MdLightbulb, MdArrowForward, MdArrowBack, MdCheck, MdHeadphones, MdMenuBook, MdEdit, MdMic, MdAdd, MdExpandLess, MdFolder, MdFolderOpen, MdImage, MdChevronRight, MdDescription } from "react-icons/md"
 import { useState } from "react"
 
 export default function ExamsPage() {
-  const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState(3)
   const [testName, setTestName] = useState("")
   const [testType, setTestType] = useState("mini")
   const [selectedSkill, setSelectedSkill] = useState("reading")
   const [selectedSection, setSelectedSection] = useState("")
+  const [selectedPassage, setSelectedPassage] = useState("passage1")
+  const [selectedQuestionGroup, setSelectedQuestionGroup] = useState("question1-3")
+  const [passageTitle, setPassageTitle] = useState("The Horseshoe Crab")
+  const [passageContent, setPassageContent] = useState("A. One of the world's oldest animal species, the horseshoe crab, is found along the east coast of the United States and Mexico. Fossil records indicate this creature dates back 450 million years, and it has changed very little over time. This is because its anatomy has been so successful. In fact, the horseshoe crab is more closely related to spiders, scorpions and ticks than it is to true crabs and other crustaceans.\n\nB. The soft body of the horseshoe crab is protected by a large oval shell with jagged, point spines. The two-part body consists of a head and an abdominal region. The head region contains a brain, heart, mouth, nervous system and six pairs of legs. What is significant is that horseshoe crabs possess the rare ability to regrow lost limbs. They also use crawling as their primary means of movement, and commonly bury themselves under the surface of the sand. However, in the water, they will occasionally turn onto their backs and swim upside-down. The mouth of the horseshoe crab is located between the twelve legs. They can only eat when crawling, as the motion allows them to open and close their mouths. Their diet consists mainly of worms and clams.")
+  const [expandedPassages, setExpandedPassages] = useState({
+    passage1: true,
+    passage2: true,
+    passage3: false
+  })
+
+  const togglePassage = (passageKey: string) => {
+    setExpandedPassages(prev => ({
+      ...prev,
+      [passageKey]: !prev[passageKey as keyof typeof prev]
+    }))
+  }
 
   const steps = [
     { number: 1, title: "Thông tin bài", description: "Tên và loại bài Test" },
@@ -650,6 +666,388 @@ export default function ExamsPage() {
                   </HStack>
                 </Box>
               )}
+            </VStack>
+          )}
+
+          {/* Step 3 Content */}
+          {currentStep === 3 && (
+            <VStack align="start" gap={6}>
+              <Box>
+                <Text fontSize="xl" fontWeight="bold" color="text.primary" mb={2}>
+                  Tạo câu hỏi
+                </Text>
+                <Text fontSize="sm" color="text.muted">
+                  Nhấn chọn vào các nhóm câu hỏi để xem và chỉnh sửa các câu hỏi bên trong
+                </Text>
+              </Box>
+
+              {/* Main Content Area */}
+              <Flex align="start" gap={6} w="full" minH="600px">
+                {/* Left Navigation Panel */}
+                <Box 
+                  w="350px" 
+                  bg="white" 
+                  borderRadius="lg" 
+                  p={4}
+                  minH="600px"
+                  overflow="auto"
+                >
+                  {/* Skill Badge */}
+                  <Box 
+                    w="full"
+                    bg="white" 
+                    color="black" 
+                    px={3} 
+                    py={2} 
+                    borderRadius="md" 
+                    fontSize="md" 
+                    fontWeight="medium"
+                    mb={4}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    borderWidth="1px"
+                    borderColor="#E0E0E0"
+                  >
+                    <HStack gap={2}>
+                      <Icon as={MdMenuBook} boxSize={4} color="black" />
+                      <Text color="black">Reading</Text>
+                    </HStack>
+                  </Box>
+
+                  {/* Passage Structure */}
+                  <VStack align="start" gap={0} w="full">
+                    {/* Passage 1 - Container only */}
+                    <Box w="full" bg="white" borderBottomWidth="1px" borderBottomColor="#E0E0E0" p={3} mb={2}>
+                      <HStack justify="space-between" w="full" mb={2}>
+                        <HStack gap={2}>
+                          <Icon as={MdMenuBook} color="#4CAF50" boxSize={6} />
+                          <Text fontSize="lg" fontWeight="bold" color="black">
+                            Passage 1
+                          </Text>
+                        </HStack>
+                        <Icon as={MdAdd} color="black" boxSize={6} cursor="pointer" />
+                      </HStack>
+                      
+                      <VStack align="start" gap={2} ml={6}>
+                        {/* Question Group 1-3 (Selected with green background) */}
+                        <Box 
+                          w="full" 
+                          p={3} 
+                          borderRadius="md" 
+                          bg={selectedQuestionGroup === "question1-3" ? "#E6F9E6" : "white"}
+                          borderColor={selectedQuestionGroup === "question1-3" ? "#4CAF50" : "#E0E0E0"}
+                          borderWidth="1px"
+                          cursor="pointer"
+                          onClick={() => setSelectedQuestionGroup("question1-3")}
+                        >
+                          <HStack gap={2}>
+                            <Icon as={selectedQuestionGroup === "question1-3" ? MdExpandLess : MdChevronRight} color="black" boxSize={5} />
+                            <Icon as={MdFolderOpen} color="black" boxSize={5} />
+                            <Text fontSize="lg" fontWeight="bold" color="black">
+                              Question 1-3
+                            </Text>
+                          </HStack>
+                          {selectedQuestionGroup === "question1-3" && (
+                            <VStack align="start" gap={3} ml={8} mt={3}>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 1</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 2</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 3</Text>
+                              </HStack>
+                            </VStack>
+                          )}
+                        </Box>
+
+                        {/* Question Group 4-7 (Not selected) */}
+                        <Box 
+                          w="full" 
+                          p={3} 
+                          borderRadius="md" 
+                          cursor="pointer"
+                          bg={selectedQuestionGroup === "question4-7" ? "#E6F9E6" : "white"}
+                          borderWidth="1px"
+                          borderColor={selectedQuestionGroup === "question4-7" ? "#4CAF50" : "#E0E0E0"}
+                          _hover={{ bg: "#F5F5F5" }}
+                          onClick={() => setSelectedQuestionGroup("question4-7")}
+                        >
+                          <HStack gap={2}>
+                            <Icon as={selectedQuestionGroup === "question4-7" ? MdExpandLess : MdChevronRight} color="black" boxSize={5} />
+                            <Icon as={MdFolderOpen} color="black" boxSize={5} />
+                            <Text fontSize="lg" fontWeight="bold" color="black">
+                              Question 4-7
+                            </Text>
+                          </HStack>
+                          {selectedQuestionGroup === "question4-7" && (
+                            <VStack align="start" gap={3} ml={8} mt={3}>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 4</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 5</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 6</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 7</Text>
+                              </HStack>
+                            </VStack>
+                          )}
+                        </Box>
+                      </VStack>
+                    </Box>
+
+                    {/* Passage 2 */}
+                    <Box w="full" bg="white" borderBottomWidth="1px" borderBottomColor="#E0E0E0" p={3} mb={2}>
+                      <HStack justify="space-between" w="full" mb={2}>
+                        <HStack gap={2}>
+                          <Icon as={MdMenuBook} color="#4CAF50" boxSize={6} />
+                          <Text fontSize="lg" fontWeight="bold" color="black">
+                            Passage 2
+                          </Text>
+                        </HStack>
+                        <Icon as={MdAdd} color="black" boxSize={6} cursor="pointer" />
+                      </HStack>
+                      
+                      <VStack align="start" gap={2} ml={6}>
+                        {/* Question Group 1-5 */}
+                        <Box 
+                          w="full" 
+                          p={3} 
+                          borderRadius="md" 
+                          cursor="pointer"
+                          bg={selectedQuestionGroup === "question1-5" ? "#E6F9E6" : "white"}
+                          borderWidth="1px"
+                          borderColor={selectedQuestionGroup === "question1-5" ? "#4CAF50" : "#E0E0E0"}
+                          _hover={{ bg: selectedQuestionGroup === "question1-5" ? "#E6F9E6" : "#F5F5F5" }}
+                          onClick={() => setSelectedQuestionGroup("question1-5")}
+                        >
+                          <HStack gap={2}>
+                            <Icon as={selectedQuestionGroup === "question1-5" ? MdExpandLess : MdChevronRight} color="black" boxSize={5} />
+                            <Icon as={MdFolderOpen} color="black" boxSize={5} />
+                            <Text fontSize="lg" fontWeight="bold" color="black">
+                              Question 1-5
+                            </Text>
+                          </HStack>
+                          {selectedQuestionGroup === "question1-5" && (
+                            <VStack align="start" gap={3} ml={8} mt={3}>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 1</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 2</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 3</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 4</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 5</Text>
+                              </HStack>
+                            </VStack>
+                          )}
+                        </Box>
+                      </VStack>
+                    </Box>
+
+                    {/* Passage 3 */}
+                    <Box w="full" bg="white" borderBottomWidth="1px" borderBottomColor="#E0E0E0" p={3} mb={2}>
+                      <HStack justify="space-between" w="full" mb={2}>
+                        <HStack gap={2}>
+                          <Icon as={MdMenuBook} color="#4CAF50" boxSize={6} />
+                          <Text fontSize="lg" fontWeight="bold" color="black">
+                            Passage 3
+                          </Text>
+                        </HStack>
+                        <Icon as={MdAdd} color="black" boxSize={6} cursor="pointer" />
+                      </HStack>
+                      
+                      <VStack align="start" gap={2} ml={6}>
+                        {/* Question Groups for Passage 3 would go here */}
+                        <Box 
+                          w="full" 
+                          p={3} 
+                          borderRadius="md" 
+                          cursor="pointer"
+                          bg={selectedQuestionGroup === "question1-6" ? "#E6F9E6" : "white"}
+                          borderWidth="1px"
+                          borderColor={selectedQuestionGroup === "question1-6" ? "#4CAF50" : "#E0E0E0"}
+                          _hover={{ bg: selectedQuestionGroup === "question1-6" ? "#E6F9E6" : "#F5F5F5" }}
+                          onClick={() => setSelectedQuestionGroup("question1-6")}
+                        >
+                          <HStack gap={2}>
+                            <Icon as={selectedQuestionGroup === "question1-6" ? MdExpandLess : MdChevronRight} color="black" boxSize={5} />
+                            <Icon as={MdFolderOpen} color="black" boxSize={5} />
+                            <Text fontSize="lg" fontWeight="bold" color="black">
+                              Question 1-6
+                            </Text>
+                          </HStack>
+                          {selectedQuestionGroup === "question1-6" && (
+                            <VStack align="start" gap={3} ml={8} mt={3}>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 1</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 2</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 3</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 4</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 5</Text>
+                              </HStack>
+                              <HStack gap={3}>
+                                <Icon as={MdDescription} color="black" boxSize={5} />
+                                <Text fontSize="md" fontWeight="semibold" color="black">Question 6</Text>
+                              </HStack>
+                            </VStack>
+                          )}
+                        </Box>
+                      </VStack>
+                    </Box>
+
+                    {/* Add New Section */}
+                    <Box 
+                      w="full" 
+                      p={4} 
+                      borderWidth="1px" 
+                      borderStyle="dashed" 
+                      borderColor="#B0B0B0" 
+                      borderRadius="lg" 
+                      cursor="pointer"
+                      bg="#F5F5F5"
+                      _hover={{ borderColor: "#4CAF50" }}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      mt={4}
+                    >
+                      <Icon as={MdAdd} color="black" boxSize={6} />
+                    </Box>
+                  </VStack>
+                </Box>
+
+                {/* Right Content Editor */}
+                <Box flex="1" bg="background.primary" borderRadius="lg" p={6} borderWidth="1px" borderColor="border.primary" h="full">
+                  {/* Passage Header */}
+                  <HStack justify="space-between" mb={6}>
+                    <Text fontSize="2xl" fontWeight="bold" color="text.primary">
+                      Passage 1
+                    </Text>
+                    <Icon as={MdExpandLess} color="text.muted" boxSize={6} cursor="pointer" />
+                  </HStack>
+
+                  {/* Image Upload Area */}
+                  <Box 
+                    w="full" 
+                    h="200px" 
+                    borderWidth="2px" 
+                    borderStyle="dashed" 
+                    borderColor="border.secondary" 
+                    borderRadius="lg" 
+                    display="flex" 
+                    flexDirection="column"
+                    justifyContent="center" 
+                    alignItems="center" 
+                    mb={6}
+                    cursor="pointer"
+                    _hover={{ borderColor: "accent" }}
+                  >
+                    <Icon as={MdImage} color="text.muted" boxSize={12} mb={2} />
+                    <Text color="text.muted" fontSize="sm" mb={2}>
+                      Chưa có ảnh minh họa nào
+                    </Text>
+                    <HStack color="accent" fontSize="sm">
+                      <Icon as={MdAdd} boxSize={4} />
+                      <Text>Tải ảnh lên</Text>
+                    </HStack>
+                  </Box>
+
+                  {/* Title Input */}
+                  <Box mb={4}>
+                    <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
+                      Tiêu đề
+                    </Text>
+                    <Input
+                      value={passageTitle}
+                      onChange={(e) => setPassageTitle(e.target.value)}
+                      size="md"
+                      bg="background.primary"
+                      borderColor="border.primary"
+                      color="text.primary"
+                      _focus={{ borderColor: "accent", boxShadow: "0 0 0 1px var(--chakra-colors-accent)" }}
+                    />
+                  </Box>
+
+                  {/* Content Editor */}
+                  <Box>
+                    <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
+                      Nội dung
+                    </Text>
+                    
+                    {/* Editor Toolbar */}
+                    <HStack gap={2} mb={3} p={2} bg="background.secondary" borderRadius="md" borderWidth="1px" borderColor="border.primary">
+                      <Button size="sm" variant="ghost" fontWeight="bold">B</Button>
+                      <Button size="sm" variant="ghost" fontStyle="italic">I</Button>
+                      <Button size="sm" variant="ghost" textDecoration="underline">U</Button>
+                      <Button size="sm" variant="ghost" textDecoration="line-through">S</Button>
+                      <Text color="border.secondary">|</Text>
+                      <Button size="sm" variant="ghost">≡</Button>
+                      <Button size="sm" variant="ghost">::</Button>
+                      <Button size="sm" variant="ghost">⚏</Button>
+                      <Text color="border.secondary">|</Text>
+                      <Button size="sm" variant="ghost">🔗</Button>
+                      <Button size="sm" variant="ghost">T</Button>
+                      <Text color="border.secondary">|</Text>
+                      <Button size="sm" variant="ghost">↶</Button>
+                      <Button size="sm" variant="ghost">↷</Button>
+                    </HStack>
+
+                    {/* Content Textarea */}
+                    <Box
+                      w="full"
+                      minH="300px"
+                      p={4}
+                      borderWidth="1px"
+                      borderColor="border.primary"
+                      borderRadius="md"
+                      bg="background.primary"
+                      _focus={{ borderColor: "accent", boxShadow: "0 0 0 1px var(--chakra-colors-accent)" }}
+                    >
+                      <Text fontSize="sm" color="text.primary" whiteSpace="pre-wrap">
+                        {passageContent}
+                      </Text>
+                    </Box>
+                  </Box>
+                </Box>
+              </Flex>
             </VStack>
           )}
         </Box>
