@@ -1,5 +1,6 @@
 "use client";
 
+import FilterOptions from "@/components/ui/filter-component";
 import TestBlock from "@/components/ui/test-block";
 import {
   Box,
@@ -11,6 +12,8 @@ import {
   Button,
   Badge,
   HStack,
+  VStack,
+  Input
 } from "@chakra-ui/react";
 import { useState } from "react";
 // import Link from "next/link";
@@ -147,7 +150,15 @@ export default function FullTestPage() {
       </Text>
 
       <div className="flex">
-        <div className="filter-bar"></div>
+        <VStack className="filter-bar w-[40rem]" m={2} alignItems={"flex-start"}>
+          <Text fontSize="md" fontWeight="bolder" color="text.primary" mb={2}>Search</Text>
+          <Input id="search" placeholder="Enter to search..." border={"0"} bg={"gray.100"} outline={"bottom"} borderBottom="2px solid"></Input>
+          
+          
+          <Text fontSize="md" fontWeight="bolder" color="text.primary" mb={2} mt={4}>Filter</Text>
+          <FilterOptions />
+        </VStack>
+        
         <div className="tests flex flex-wrap gap-4">
           {tests.map((test) => (
             <TestBlock
