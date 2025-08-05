@@ -2,22 +2,15 @@
 
 import { useState } from "react"
 import { useParams } from "next/navigation"
-import { Box, Flex, HStack, VStack, Text, Button, IconButton, Image, SimpleGrid , Icon} from "@chakra-ui/react"
-import { CloseButton } from "@chakra-ui/react"
+import { Box, Flex, HStack, VStack, Text, IconButton, Image, SimpleGrid, Icon } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
 import SettingsMenu from "@/components/ui/settings-menu"
 import TabSelector from "@/components/ui/tab-selector"
-import {
-  MdClose,
-  MdAccessTime,
-  MdHelp,
-  MdNote,
-  MdSearch,
-  MdTimer
-} from "react-icons/md"
-import { FiChevronDown } from "react-icons/fi"
-import { TbNotes } from "react-icons/tb"
-import { PiMapPin } from "react-icons/pi"
+import PassageMatchingQuestionComponent from "@/components/questionType/passage-matching"
+import MultipleChoiceQuestionComponent from "@/components/questionType/multiple-choice"
+import { MdClose, MdTimer } from "react-icons/md"
+import GapFillQuestionComponent from "@/components/questionType/gap-fill"
+import GapFillBlank from "@/components/questionType/gap-fill-blank"
 
 interface Question {
   id: number
@@ -30,23 +23,38 @@ interface Question {
 
 export default function TestResult() {
   const params = useParams()
-  const examId = params.id as string 
-  
+  const examId = params.id as string
+
   const [activeTab, setActiveTab] = useState<"note" | "lookup">("note")
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("medium")
   const [leftPanelWidth, setLeftPanelWidth] = useState(50)
   const [expandedExplanations, setExpandedExplanations] = useState<Set<number>>(new Set())
   const [highlightedText, setHighlightedText] = useState<number | null>(null)
-  const bgColor = useColorModeValue("#F6F0E7", "gray.800") // background for entire page
-  const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900") // background color for left (passages content) and right (test answers) panel
-  const questionBackgroundColor = useColorModeValue("white", "gray.700") // background color for question card
+
+  const bgColor = useColorModeValue("#F6F0E7", "gray.800")
+  const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900")
+  const questionBackgroundColor = useColorModeValue("white", "gray.700")
   const borderColor = useColorModeValue("gray.200", "gray.600")
   const textColor = useColorModeValue("gray.800", "white")
-  const mutedColor = useColorModeValue("gray.600", "gray.400")
-  const explanationBgColor = useColorModeValue("gray.50", "gray.700")
   const greenThemeColor = useColorModeValue("green.600", "green.500")
 
-  const questions: Question[] = [
+  interface Question {
+    id: number
+    text: string
+    options: string[]
+    correctAnswer: string
+    userAnswer: string | null
+    explanation?: string
+  }
+  
+  interface MultipleChoiceQuestion {
+    id: number
+    correctAnswers: string[]
+    userAnswers: string[]
+    explanation?: string
+  }
+  // Data for passage matching questions
+  const passageMatchingQuestions: Question[] = [
     {
       id: 1,
       text: "A mention of the horseshoe crab's potential value in medical science",
@@ -54,7 +62,7 @@ export default function TestResult() {
       correctAnswer: "A",
       userAnswer: "C",
       explanation:
-        "Hiểu câu hỏi: Mô tả về sự sinh sản của sam biển 🤔. Tìm các keywords được paraphrase trong câu hỏi: female horseshoe crabs communicate → horseshoe crab reproduction, crab eggs by digging holes → reproduction",
+        "Mô tả về sự sinh sản của sam biển 🤔. Bước 2: Tìm các keywords được paraphrase trong câu hỏi: female horseshoe crabs communicate → horseshoe crab reproduction, crab eggs by digging holes → reproduction",
     },
     {
       id: 2,
@@ -86,7 +94,85 @@ export default function TestResult() {
     },
   ]
 
-  const correctAnswers = questions.filter((q) => q.userAnswer === q.correctAnswer).length
+  // Data for multiple choice questions
+  const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
+    {
+      id: 6,
+      correctAnswers: ["A", "D"],
+      userAnswers: ["A", "E"],
+      explanation:
+        "Bước 1: Hiểu yêu cầu câu hỏi: Theo tác giả, hai đặc điểm nào sau đây đúng về sam biển? Bước 2: Tìm các keywords đã được paraphrase trong câu hỏi: possess the rare ability to regrow lost limbs → able to replace their missing legs, copper-containing protein → different mineral composition",
+    },
+    {
+      id: 7,
+      correctAnswers: ["A", "D"],
+      userAnswers: ["A", "E"],
+    },
+  ]
+
+  const multipleChoiceOptions = [
+    { letter: "A", text: "It has a different mineral composition." },
+    { letter: "B", text: "It lacks a bacteria-fighting protein." },
+    { letter: "C", text: "Harmless fungi regularly grow in the blood." },
+    { letter: "D", text: "Its colour changes from blue to red as it circulates." },
+    { letter: "E", text: "The blood cell carries oxygen its surface." },
+  ]
+
+  // Data for gap fill questions
+  const gapFillQuestions = [
+    {
+      id: 10,
+      correctAnswer: "decline",
+      userAnswer: "decline",
+      explanation:
+        "Tìm từ khóa trong đoạn văn về sự suy giảm của quần thể sam biển. Bước 2: widespread decline → decline in population",
+    },
+    {
+      id: 11,
+      correctAnswer: "egg",
+      userAnswer: "eggs",
+      explanation: "Cần chú ý đến dạng số ít/số   của danh từ. Trong ngữ cảnh này cần dùng dạng số ít 'egg'.",
+    },
+    {
+      id: 12,
+      correctAnswer: "biodiversity",
+      userAnswer: "biodiversity",
+    },
+    {
+      id: 13,
+      correctAnswer: "bait",
+      userAnswer: "bait",
+    },
+  ]
+
+  // Summary content for gap fill
+  const gapFillSummaryContent = (
+    <Text mb={4}>
+      A study of the Indian River Lagoon system in Florida has shown a{" "}
+      <GapFillBlank
+        questionNumber={10}
+        userAnswer="decline"
+        correctAnswer="decline"
+        isCorrect={true}
+        fontSize={fontSize}
+      />{" "}
+      in the horseshoe crab's population. This means that animals that eat both horseshoe crabs and their{" "}
+      <GapFillBlank questionNumber={11} userAnswer="eggs" correctAnswer="egg" isCorrect={false} fontSize={fontSize} />{" "}
+      could also be impacted. The result would affect the Indian River Lagoon system's{" "}
+      <GapFillBlank
+        questionNumber={12}
+        userAnswer="biodiversity"
+        correctAnswer="biodiversity"
+        isCorrect={true}
+        fontSize={fontSize}
+      />
+      . Local fishermen taking horseshoe crabs for{" "}
+      <GapFillBlank questionNumber={13} userAnswer="bait" correctAnswer="bait" isCorrect={true} fontSize={fontSize} />{" "}
+      could be one cause of the reduction in numbers.
+    </Text>
+  )
+
+  const correctAnswers = passageMatchingQuestions.filter((q) => q.userAnswer === q.correctAnswer).length
   const totalQuestions = 13
 
   const toggleExplanation = (questionId: number) => {
@@ -104,21 +190,16 @@ export default function TestResult() {
     // Scroll to relevant text in left panel
   }
 
-  const getQuestionStatus = (question: Question) => {
-    if (question.userAnswer === null) return "unanswered"
-    return question.userAnswer === question.correctAnswer ? "correct" : "incorrect"
-  }
-
-  const getUserAnswerBgColor = (question: Question) => {
-    const status = getQuestionStatus(question)
-    switch (status) {
-      case "correct":
-        return "green.600"
-      case "incorrect":
-        return "#DC2626"
-      default:
-        return "gray.400"
+  const getQuestionStatus = (question: Question | MultipleChoiceQuestion) => {
+    if ("userAnswer" in question) {
+      if (question.userAnswer === null) return "unanswered"
+      return question.userAnswer === question.correctAnswer ? "correct" : "incorrect"
+    } else if ("userAnswers" in question) {
+      if (question.userAnswers.length === 0) return "unanswered"
+      const isCorrect = question.userAnswers.every((answer) => question.correctAnswers.includes(answer))
+      return isCorrect ? "correct" : "incorrect"
     }
+    return "unanswered"
   }
 
   const getFontSizeValue = () => {
@@ -132,90 +213,42 @@ export default function TestResult() {
     }
   }
 
-  const getQuestionHeaderFontSize = () => {
-    switch (fontSize) {
-      case "small":
-        return "lg"
-      case "large":
-        return "2xl"
-      default:
-        return "xl"
-    }
-  }
-
-  const getQuestionBoxSize = () => {
-    switch (fontSize) {
-      case "small":
-        return { minW: "40px", h: "40px" }
-      case "large":
-        return { minW: "60px", h: "60px" }
-      default:
-        return { minW: "50px", h: "50px" }
-    }
-  }
-
-  const getAnswerTextFontSize = () => {
-    switch (fontSize) {
-      case "small":
-        return "xs"
-      case "large":
-        return "md"
-      default:
-        return "sm"
-    }
-  }
-
-  const getQuestionNumberFontSize = () => {
-    switch (fontSize) {
-      case "small":
-        return "xl"
-      case "large":
-        return "3xl"
-      default:
-        return "2xl"
-    }
-  }
-
   return (
     <Box minH="100vh" bg={bgColor} overflow="hidden">
+      {/* Header */}
       <Box bg={bgColor} borderColor={borderColor} px={4}>
         <Box display="grid" gridTemplateColumns="1fr auto 1fr" alignItems="center" w="full" mx="auto">
           {/* Left Section - Close Button + Tabs */}
           <HStack gap={4} height="60px">
             <Box alignItems="center">
-              <IconButton aria-label="Close" variant="outline" size="sm" rounded="full"> <Icon as={MdClose} /> </IconButton>
+              <IconButton aria-label="Close" variant="outline" size="sm" rounded="full">
+                <Icon as={MdClose} />
+              </IconButton>
             </Box>
             <Box marginTop="auto">
-              <TabSelector
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-              />
+              <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
             </Box>
           </HStack>
 
           {/* Center Section - Time + Score */}
           <Box py={3}>
-            <HStack gap={2} justify="center" bg={questionBackgroundColor} px={3} py={1} borderRadius={"full"}>
+            <HStack gap={2} justify="center" bg={questionBackgroundColor} px={3} py={1} borderRadius="full">
               <HStack>
                 <Icon as={MdTimer} color={greenThemeColor} />
                 <Text fontSize={getFontSizeValue()} fontWeight="medium" color={textColor}>
                   00:10:39
                 </Text>
               </HStack>
-
-              {/* Vertical Divider */}
               <Box width="1px" height="10px" bg="#E5E5EA" />
-
               <Text fontSize={getFontSizeValue()} fontWeight="bold" color={greenThemeColor}>
                 {correctAnswers}/{totalQuestions} correct answers
               </Text>
             </HStack>
           </Box>
 
-
           {/* Right Section - Settings */}
           <HStack justify="flex-end">
-            <SettingsMenu fontSize={fontSize} onFontSizeChange={setFontSize}/>
+            <SettingsMenu fontSize={fontSize} onFontSizeChange={setFontSize} />
           </HStack>
         </Box>
       </Box>
@@ -223,23 +256,37 @@ export default function TestResult() {
       {/* Main Content */}
       <Flex h="calc(100vh - 125px)" mx="auto">
         {/* Left Panel - Reading Content */}
-        <Box width={`${leftPanelWidth}%`} borderRight="1px" borderColor={borderColor} overflow="auto" p={6} bg={contentBackgroundColor}>
+        <Box
+          width={`${leftPanelWidth}%`}
+          borderRight="1px"
+          borderColor={borderColor}
+          overflow="auto"
+          p={6}
+          bg={contentBackgroundColor}
+        >
           <VStack align="start" gap={4}>
             <Image src="/horseshoe-crab.png" alt="Horseshoe Crab" maxW="240px" borderRadius="md" mx="auto" />
-
             <Text fontSize="xl" fontWeight="bold" color={textColor}>
               [Recent Tests] - The Horseshoe Crab
             </Text>
-
             <VStack align="start" gap={4} fontSize={getFontSizeValue()} color={textColor}>
               <p>
-                <strong>A.</strong> One of the world's oldest animal species, the horseshoe crab, is found along the east coast of the
-                United States and Mexico. Fossil records indicate this creature dates back 450 million years, and it
-                has changed very little over time. This is because its anatomy has been so successful. In fact, the
-                horseshoe crab is more closely related to spiders, scorpions and ticks than it is to true crabs and
-                other crustaceans.
+                <strong>A.</strong> One of the world's oldest animal species, the horseshoe crab, is found along the
+                east coast of the United States and Mexico. Fossil records indicate this creature dates back 450 million
+                years, and it has changed very little over time. This is because its anatomy has been so successful. In
+                fact, the horseshoe crab is more closely related to spiders, scorpions and ticks than it is to true
+                crabs and other crustaceans.
               </p>
-
+              <p>
+                <strong>B.</strong> The soft body of the horseshoe crab is protected by a large oval shell with jagged,
+                point spines. The two-part body consists of a head and an abdominal region. The head region contains a
+                brain, heart, mouth, four eyes and six pairs of legs. What is significant is that horseshoe crabs
+                possess the rare ability to regrow lost limbs. They also use crawling as their primary means of
+                movement, and commonly bury themselves under the surface of the sand. However, in the water, they will
+                occasionally turn onto their backs and swim upside-down. The mouth of the horseshoe carb is located
+                between the twelve legs. They can only eat when crawling, as the motion allows them to open and close
+                their mouths. Their diet consists mainly of worms and clams.
+              </p>
               <p>
                 <strong>B.</strong> The soft body of the horseshoe crab is protected by a large oval shell with jagged, point spines. The
                 two-part body consists of a head and an abdominal region. The head region contains a brain, heart,
@@ -292,154 +339,89 @@ export default function TestResult() {
           onMouseDown={(e) => {
             const startX = e.clientX
             const startWidth = leftPanelWidth
-
             const handleMouseMove = (e: MouseEvent) => {
               const diff = e.clientX - startX
               const newWidth = Math.max(20, Math.min(80, startWidth + (diff / window.innerWidth) * 100))
               setLeftPanelWidth(newWidth)
             }
-
             const handleMouseUp = () => {
               document.removeEventListener("mousemove", handleMouseMove)
               document.removeEventListener("mouseup", handleMouseUp)
             }
-
             document.addEventListener("mousemove", handleMouseMove)
             document.addEventListener("mouseup", handleMouseUp)
           }}
         />
 
         {/* Right Panel - Questions */}
-        <Box width={`${100 - leftPanelWidth}%`} overflow="auto" p={6} bg = {contentBackgroundColor}>
-          <VStack align="start" gap={0}>
-            <Box mb={4}>
-              <Text fontSize={getQuestionHeaderFontSize()} fontWeight="bold" color={textColor}>
-                Questions 1-5
-              </Text>
-              <Text fontSize={getFontSizeValue()} color={textColor} mb={0}>
-                Reading Passage 2 has six sections, A-F. Which section contains the following information?
-              </Text>
-              <Text fontSize={getFontSizeValue()} fontStyle="italic" color={textColor}>
-                <Text as="span" fontWeight="bold">NB</Text> You may use any letter more than once.
-              </Text>
-            </Box>
+        <Box width={`${100 - leftPanelWidth}%`} overflow="auto" p={6} bg={contentBackgroundColor}>
+          <PassageMatchingQuestionComponent
+            title="Questions 1-5"
+            instruction="Reading Passage 2 has six sections, A-F. Which section contains the following information?"
+            note="You may use any letter more than once."
+            questions={passageMatchingQuestions}
+            fontSize={fontSize}
+            onLocate={handleLocate}
+            onExplain={toggleExplanation}
+            expandedExplanations={expandedExplanations}
+          />
 
-            {questions.map((question) => (
-              <Box key={question.id} w="full" mb={6}>
-                {/* Question Header */}
-                <HStack align="center" gap={4} mb={4}>
-                  {/* Question Number */}
-                  <Box
-                    bg={questionBackgroundColor}
-                    borderRadius="lg"
-                    p={3}
-                    {...getQuestionBoxSize()}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    shadow={"md"}
-                  >
-                    <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
-                      {question.id}
-                    </Text>
-                  </Box>
-
-                  {/* User Answer Badge */}
-                  <Box
-                    bg={getUserAnswerBgColor(question)}
-                    color="white"
-                    px={4}
-                    py={2}
-                    borderRadius="full"
-                    height="35px"
-                    width="125px"
-                    textAlign="center"
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    border="1px solid"
-                    borderColor="gray.500"
-                  >
-                    <Text fontWeight="bold" fontSize={getAnswerTextFontSize()}>
-                      {question.userAnswer || "—"}
-                    </Text>
-                    <Icon as={FiChevronDown} height="24px" color="white" />
-                  </Box>
-
-                  {/* Question Text */}
-                  <Text fontSize={getFontSizeValue()} color={textColor} flex={1}>
-                    {question.text}
-                  </Text>
-                </HStack>
-
-                {/* Answer Section */}
-                <Flex justify="space-between" align="center">
-                  <Box bg="gray.200" px={4} py={2} borderRadius="md">
-                    <Text fontSize={getAnswerTextFontSize()} color="gray.700">
-                      {question.id}. Answer:{" "}
-                      <Text as="span" fontWeight="bold">
-                        {question.correctAnswer}
-                      </Text>
-                    </Text>
-                  </Box>
-
-                  <HStack gap={2}>
-                    <Button
-                      size="sm"
-                      colorPalette="green"
-                      variant="outline"
-                      onClick={() => handleLocate(question.id)}
-                      borderRadius="full"
-                    >
-                      <Icon as={PiMapPin} /> <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="solid"
-                      colorPalette="green"
-                      onClick={() => toggleExplanation(question.id)}
-                      borderRadius="full"
-                    >
-                      <Icon as={TbNotes} /> Explain
-                    </Button>
-                  </HStack>
-                </Flex>
-
-                {/* Explanation */}
-                {expandedExplanations.has(question.id) && (
-                  <Box mt={4} p={4} bg={explanationBgColor} borderRadius="md">
-                    <Text fontSize="sm" fontWeight="bold" mb={2} color={mutedColor}>
-                      Bước 1: Hiểu câu hỏi:
-                    </Text>
-                    <Text fontSize="sm" color={mutedColor}>
-                      Mô tả về sự sinh sản của sam biển 🤔.
-                    </Text>
-                    <Text fontSize="sm" fontWeight="bold" mt={2} mb={2} color={mutedColor}>
-                      Bước 2: Tìm các keywords được paraphrase trong câu hỏi:
-                    </Text>
-                    <Text fontSize="sm" color={mutedColor}>
-                      • female horseshoe crabs communicate → horseshoe crab reproduction
-                    </Text>
-                    <Text fontSize="sm" color={mutedColor}>
-                      • crab eggs by digging holes → reproduction
-                    </Text>
-                  </Box>
-                )}
-              </Box>
-            ))}
-          </VStack>
+          {/* Multiple Choice Questions */}
+          <MultipleChoiceQuestionComponent
+            title="Questions 6-7"
+            instruction="Choose TWO letters, A-E."
+            questionRange="6 - 7"
+            questionText="Which TWO of the following are true about the characteristics of horseshoe crabs?"
+            options={multipleChoiceOptions}
+            questions={multipleChoiceQuestions}
+            fontSize={fontSize}
+            onLocate={handleLocate}
+            onExplain={toggleExplanation}
+            expandedExplanations={expandedExplanations}
+          />
+          {/* Gap Fill Questions */}
+          <GapFillQuestionComponent
+            title="Questions 10-13"
+            instruction="Complete the summary below."
+            questionRange="10 - 13"
+            additionalInstruction="Choose ONE WORD ONLY from the passage for each answer."
+            summaryTitle="The horseshoe crab in Florida"
+            summaryContent={gapFillSummaryContent}
+            questions={gapFillQuestions}
+            fontSize={fontSize}
+            onLocate={handleLocate}
+            onExplain={toggleExplanation}
+            expandedExplanations={expandedExplanations}
+          />
         </Box>
       </Flex>
 
       {/* Question Navigation */}
-      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} display="flex" alignItems="center" justifyContent="center" height="65px">
+      <Box
+        bg={bgColor}
+        borderTop="1px"
+        borderColor={borderColor}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="65px"
+      >
         <Flex justify="center">
-          <SimpleGrid columns={13} gap={1} bg={contentBackgroundColor} px={2} py={1} borderRadius="md" border="1px solid" borderColor="green.600">
+          <SimpleGrid
+            columns={13}
+            gap={1}
+            bg={contentBackgroundColor}
+            px={2}
+            py={1}
+            borderRadius="md"
+            border="1px solid"
+            borderColor="green.600"
+          >
             {Array.from({ length: totalQuestions }, (_, i) => {
               const questionNum = i + 1
-              const question = questions.find((q) => q.id === questionNum)
+              const question = passageMatchingQuestions.find((q) => q.id === questionNum)
               const status = question ? getQuestionStatus(question) : "unanswered"
-              console.log(`Question ${questionNum} status: ${status}`)
+
               return (
                 <IconButton
                   key={questionNum}
@@ -447,7 +429,13 @@ export default function TestResult() {
                   variant="solid"
                   color="white"
                   background={status === "correct" ? "green.600" : status === "incorrect" ? "#DC2626" : "gray.500"}
-                  _hover={status === "correct" ? { background: "green.700" } : status === "incorrect" ? { background: "#B91C1C" } : {}}
+                  _hover={
+                    status === "correct"
+                      ? { background: "green.700" }
+                      : status === "incorrect"
+                        ? { background: "#B91C1C" }
+                        : {}
+                  }
                   minW="35px"
                   h="35px"
                   borderRadius="full"
