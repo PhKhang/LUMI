@@ -1,5 +1,6 @@
 "use client";
 
+import CheckBox from "@/components/ui/CheckBox";
 import FilterOptions from "@/components/ui/filter-component";
 import TestBlock from "@/components/ui/test-block";
 import {
@@ -13,7 +14,7 @@ import {
   Badge,
   HStack,
   VStack,
-  Input
+  Input,
 } from "@chakra-ui/react";
 import { useState } from "react";
 // import Link from "next/link";
@@ -22,7 +23,7 @@ export default function FullTestPage() {
   const [tests, setTests] = useState([
     {
       id: "reading-cam-01-p1",
-      title: "[Cambridge] - Academic Reading Test 1",
+      title: "Academic Reading Test 1",
       attempts: 123,
       skills: ["Reading"],
       section: "Passage 1",
@@ -37,7 +38,7 @@ export default function FullTestPage() {
     },
     {
       id: "reading-cam-01-p2",
-      title: "[Cambridge] - Academic Reading Test 1",
+      title: "Academic Reading Test 1",
       attempts: 123,
       skills: ["Reading"],
       section: "Passage 2",
@@ -48,7 +49,7 @@ export default function FullTestPage() {
     },
     {
       id: "reading-cam-01-p3",
-      title: "[Cambridge] - Academic Reading Test 1",
+      title: "Academic Reading Test 1",
       attempts: 123,
       skills: ["Reading"],
       section: "Passage 3",
@@ -63,7 +64,7 @@ export default function FullTestPage() {
     },
     {
       id: "writing-cam-02-t1",
-      title: "[Cambridge] - General Writing Test 2",
+      title: "General Writing Test 2",
       attempts: 123,
       skills: ["Writing"],
       section: "Task 1",
@@ -74,7 +75,7 @@ export default function FullTestPage() {
     },
     {
       id: "writing-cam-02-t2",
-      title: "[Cambridge] - General Writing Test 2",
+      title: "General Writing Test 2",
       attempts: 123,
       skills: ["Writing"],
       section: "Task 2",
@@ -85,7 +86,7 @@ export default function FullTestPage() {
     },
     {
       id: "listening-cam-03-s1",
-      title: "[Cambridge] - Listening Test 3",
+      title: "Listening Test 3",
       attempts: 123,
       skills: ["Listening"],
       section: "Section 1",
@@ -96,7 +97,7 @@ export default function FullTestPage() {
     },
     {
       id: "listening-cam-03-s2",
-      title: "[Cambridge] - Listening Test 3",
+      title: "Listening Test 3",
       attempts: 123,
       skills: ["Listening"],
       section: "Section 2",
@@ -107,7 +108,7 @@ export default function FullTestPage() {
     },
     {
       id: "speaking-cam-04-p1",
-      title: "[Cambridge] - Speaking Test 4",
+      title: "Speaking Test 4",
       attempts: 123,
       skills: ["Speaking"],
       section: "Part 1",
@@ -118,7 +119,7 @@ export default function FullTestPage() {
     },
     {
       id: "speaking-cam-04-p2",
-      title: "[Cambridge] - Speaking Test 4",
+      title: "Speaking Test 4",
       attempts: 123,
       skills: ["Speaking"],
       section: "Part 2",
@@ -129,7 +130,7 @@ export default function FullTestPage() {
     },
     {
       id: "speaking-cam-04-p3",
-      title: "[Cambridge] - Speaking Test 4",
+      title: "Speaking Test 4",
       attempts: 123,
       skills: ["Speaking"],
       section: "Part 3",
@@ -140,6 +141,29 @@ export default function FullTestPage() {
     },
   ]);
 
+  const [sourceList, setSourceList] = useState([
+    "Cambridge",
+    "British Council",
+  ]);
+
+  const [sectionList, setSectionList] = useState([
+    "Passage 1",
+    "Passage 2",
+    "Passage 3",
+  ]);
+
+  const [typeList, setTypeList] = useState([
+    "Gap Filling",
+    "Multiple Choice (One anwser)",
+    "Multiple Choice (Many answers)",
+    "True/False/Not Given",
+    "Yes/No/Not Given",
+    "Matching Names",
+    "Matching Information",
+    "Map, Plan, Diagram Label",
+    "Other Types",
+  ]);
+  
   return (
     <>
       <Text fontSize="lg" fontWeight={"bold"} color="text.primary">
@@ -150,15 +174,68 @@ export default function FullTestPage() {
       </Text>
 
       <div className="flex">
-        <VStack className="filter-bar w-[40rem]" m={2} alignItems={"flex-start"}>
-          <Text fontSize="md" fontWeight="bolder" color="text.primary" mb={2}>Search</Text>
-          <Input id="search" placeholder="Enter to search..." border={"0"} bg={"gray.100"} outline={"bottom"} borderBottom="2px solid"></Input>
-          
-          
-          <Text fontSize="md" fontWeight="bolder" color="text.primary" mb={2} mt={4}>Filter</Text>
+        <VStack
+          className="filter-bar w-[40rem]"
+          m={2}
+          alignItems={"flex-start"}
+        >
+          <Text fontSize="md" fontWeight="bolder" color="text.primary" mb={2}>
+            Search
+          </Text>
+          <Input
+            id="search"
+            placeholder="Enter to search..."
+            border={"0"}
+            bg={"gray.100"}
+            outline={"bottom"}
+            borderBottom="2px solid"
+          ></Input>
+
+          <Text
+            fontSize="md"
+            fontWeight="bolder"
+            color="text.primary"
+            mb={2}
+            mt={4}
+          >
+            Filter
+          </Text>
           <FilterOptions />
+
+          <Text
+            fontSize="md"
+            fontWeight="bolder"
+            color="text.primary"
+            mb={2}
+            mt={4}
+          >
+            Source
+          </Text>
+          <CheckBox options={sourceList} />
+
+          <Text
+            fontSize="md"
+            fontWeight="bolder"
+            color="text.primary"
+            mb={2}
+            mt={4}
+          >
+            Section
+          </Text>
+          <CheckBox options={sectionList} />
+
+          <Text
+            fontSize="md"
+            fontWeight="bolder"
+            color="text.primary"
+            mb={2}
+            mt={4}
+          >
+            Type
+          </Text>
+          <CheckBox options={typeList} />
         </VStack>
-        
+
         <div className="tests flex flex-wrap gap-4">
           {tests.map((test) => (
             <TestBlock
