@@ -27,7 +27,7 @@ export default function FilterOptions() {
         colorPalette={"green"}
         w={"100%"}
       >
-        <VStack align={"start"}>
+        <VStack align={"start"} w={"100%"}>
           {skills.map((skill) => (
             <Radio
               keyValue={skill.skill}
@@ -54,7 +54,7 @@ const Radio = ({
   label: string;
   options: string[];
 }) => (
-  <div className="">
+  <div className="w-full">
     <RadioGroup.Item
       key={keyValue}
       value={value}
