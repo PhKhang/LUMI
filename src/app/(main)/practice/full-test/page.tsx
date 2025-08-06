@@ -1,6 +1,6 @@
 "use client";
 
-import CheckBox from "@/components/ui/CheckBox";
+import CheckBox from "@/components/ui/checkbox";
 import FilterOptions from "@/components/ui/filter-component";
 import TestBlock from "@/components/ui/test-block";
 import {
