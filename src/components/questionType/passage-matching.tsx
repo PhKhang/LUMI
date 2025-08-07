@@ -217,37 +217,12 @@ export default function PassageMatchingQuestionComponent({
             </HStack>
           </Flex>
 
-          {/* Explanation */}
-          {expandedExplanations.has(question.id) && question.explanation && (
-            <Box mt={4} p={4} bg={explanationBgColor} borderRadius="md">
-              <Text fontSize="sm" fontWeight="bold" mb={2} color={mutedColor}>
-                Bước 1: Hiểu câu hỏi:
+          {/* Explanation for this specific question */}
+          {question.explanation && expandedExplanations.has(question.id) && (
+            <Box mt={2} mb={4} p={4} bg={explanationBgColor} borderRadius="md" w="full">
+              <Text fontSize="sm" color={mutedColor} lineHeight="1.6">
+                {question.explanation}
               </Text>
-              <Text fontSize="sm" color={mutedColor} mb={2}>
-                {question.explanation.split("Bước 2:")[0].replace("Bước 1: Hiểu câu hỏi:", "").trim()}
-              </Text>
-
-              {question.explanation.includes("Bước 2:") && (
-                <>
-                  <Text fontSize="sm" fontWeight="bold" mt={2} mb={2} color={mutedColor}>
-                    Bước 2: Tìm các keywords được paraphrase trong câu hỏi:
-                  </Text>
-                  <VStack align="start" gap={1}>
-                    {question.explanation
-                      .split("Bước 2:")[1]
-                      ?.split("→")
-                      .map((part, index, array) => {
-                        if (index === array.length - 1) return null
-                        const [before, after] = part.split("→")
-                        return (
-                          <Text key={index} fontSize="sm" color={mutedColor}>
-                            • {before?.trim()} → {after?.trim()}
-                          </Text>
-                        )
-                      })}
-                  </VStack>
-                </>
-              )}
             </Box>
           )}
         </Box>

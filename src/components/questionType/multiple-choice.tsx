@@ -142,15 +142,6 @@ export default function MultipleChoiceQuestionComponent({
 
       {/* Question Box */}
       <Box w="full" p={4} bg={questionBackgroundColor} borderRadius="lg" shadow="md">
-        {/* <HStack mb={4} align="center">
-          <Box bg="yellow.400" color="white" px={4} py={2} borderRadius="lg" fontWeight="bold" fontSize="xl">
-            {questionRange}
-          </Box>
-          <Text fontSize={getFontSizeValue()} color={textColor}>
-            {questionText}
-          </Text>
-        </HStack> */}
-
         {/* Options */}
         <VStack align="start" gap={3}>
           {options.map((option) => {
@@ -185,73 +176,50 @@ export default function MultipleChoiceQuestionComponent({
 
       {/* Answer Sections */}
       {questions.map((question) => (
-        <Flex key={question.id} justify="space-between" align="center" w="full">
-          <Box bg="gray.200" px={4} py={2} borderRadius="md">
-            <Text fontSize={getAnswerTextFontSize()} color="gray.700">
-              {question.id}. Answer:{" "}
-              <Text as="span" fontWeight="bold">
-                {question.correctAnswers.join(", ")}
+        <Box key={question.id} w="full">
+          <Flex justify="space-between" align="center" w="full" mb={2}>
+            <Box bg="gray.200" px={4} py={2} borderRadius="md">
+              <Text fontSize={getAnswerTextFontSize()} color="gray.700">
+                {question.id}. Answer:{" "}
+                <Text as="span" fontWeight="bold">
+                  {question.correctAnswers.join(", ")}
+                </Text>
               </Text>
-            </Text>
-          </Box>
+            </Box>
 
-          <HStack gap={2}>
-            <Button
-              size="sm"
-              colorPalette="green"
-              variant="outline"
-              onClick={() => onLocate(question.id)}
-              borderRadius="full"
-            >
-              <Icon as={PiMapPin} />
-              <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
-            </Button>
-            <Button
-              size="sm"
-              variant="solid"
-              colorPalette="green"
-              onClick={() => onExplain(question.id)}
-              borderRadius="full"
-            >
-              <Icon as={TbNotes} /> Explain
-            </Button>
-          </HStack>
-        </Flex>
-      ))}
+            <HStack gap={2}>
+              <Button
+                size="sm"
+                colorPalette="green"
+                variant="outline"
+                onClick={() => onLocate(question.id)}
+                borderRadius="full"
+              >
+                <Icon as={PiMapPin} />
+                <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
+              </Button>
+              <Button
+                size="sm"
+                variant="solid"
+                colorPalette="green"
+                onClick={() => onExplain(question.id)}
+                borderRadius="full"
+              >
+                <Icon as={TbNotes} /> Explain
+              </Button>
+            </HStack>
+          </Flex>
 
-      {/* Explanation */}
-      {firstQuestion.explanation && expandedExplanations.has(firstQuestion.id) && (
-        <Box mt={4} p={4} bg={explanationBgColor} borderRadius="md" w="full">
-          <Text fontSize="sm" fontWeight="bold" mb={2} color={mutedColor}>
-            Bước 1: Hiểu câu hỏi:
-          </Text>
-          <Text fontSize="sm" color={mutedColor} mb={2}>
-            {firstQuestion.explanation.split("Bước 2:")[0].replace("Bước 1: Hiểu câu hỏi:", "").trim()}
-          </Text>
-
-          {firstQuestion.explanation.includes("Bước 2:") && (
-            <>
-              <Text fontSize="sm" fontWeight="bold" mt={2} mb={2} color={mutedColor}>
-                Bước 2: Tìm các keywords được paraphrase trong câu hỏi:
+          {/* Explanation for this specific question */}
+          {question.explanation && expandedExplanations.has(question.id) && (
+            <Box mt={2} mb={4} p={4} bg={explanationBgColor} borderRadius="md" w="full">
+              <Text fontSize="sm" color={mutedColor} lineHeight="1.6">
+                {question.explanation}
               </Text>
-              <VStack align="start" gap={1}>
-                {firstQuestion.explanation
-                  .split("Bước 2:")[1]
-                  ?.split("→")
-                  .map((part, index, array) => {
-                    if (index === array.length - 1) return null
-                    const [before, after] = part.split("→")
-                    return (
-                      <Text key={index} fontSize="sm" color={mutedColor}>
-                        • {before?.trim()} → {after?.trim()}
-                      </Text>
-                    )
-                  })}
-              </VStack>
-            </>
+            </Box>
           )}
         </Box>
-      )}
+      ))}
     </VStack>
   )
 }

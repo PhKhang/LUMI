@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useParams } from "next/navigation"
-import { Box, Flex, HStack, VStack, Text, IconButton, Image, SimpleGrid, Icon } from "@chakra-ui/react"
+import { Box, Flex, HStack, Button, VStack, Text, IconButton, Image, SimpleGrid, Icon } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
 import SettingsMenu from "@/components/ui/settings-menu"
 import TabSelector from "@/components/ui/tab-selector"
@@ -70,6 +70,7 @@ export default function TestResult() {
       options: ["A", "B", "C", "D", "E", "F"],
       correctAnswer: "B",
       userAnswer: "B",
+      explanation: "Explantion"
     },
     {
       id: 3,
@@ -77,6 +78,7 @@ export default function TestResult() {
       options: ["A", "B", "C", "D", "E", "F"],
       correctAnswer: "D",
       userAnswer: "D",
+      explanation: "Explantion"
     },
     {
       id: 4,
@@ -84,6 +86,7 @@ export default function TestResult() {
       options: ["A", "B", "C", "D", "E", "F"],
       correctAnswer: "A",
       userAnswer: "D",
+      explanation: "Explantion"
     },
     {
       id: 5,
@@ -91,6 +94,7 @@ export default function TestResult() {
       options: ["A", "B", "C", "D", "E", "F"],
       correctAnswer: "E",
       userAnswer: null,
+      explanation: "Explantion"
     },
   ]
 
@@ -107,6 +111,7 @@ export default function TestResult() {
       id: 7,
       correctAnswers: ["A", "D"],
       userAnswers: ["A", "E"],
+      explanation: "Explaination 7"
     },
   ]
 
@@ -137,13 +142,37 @@ export default function TestResult() {
       id: 12,
       correctAnswer: "biodiversity",
       userAnswer: "biodiversity",
+      explanation: "Explaination"
     },
     {
       id: 13,
       correctAnswer: "bait",
       userAnswer: "bait",
+      explanation: "Explaination"
     },
   ]
+
+  const getQuestionButtonColor = (status: number) => {
+    switch (status) {
+      case 1:
+        return "green.600" // correct
+      case -1:
+        return "#DC2626" // incorrect
+      default:
+        return "gray.500" // unanswered
+    }
+  }
+
+  const getQuestionButtonHoverColor = (status: number) => {
+    switch (status) {
+      case 1:
+        return "green.700"
+      case -1:
+        return "#B91C1C"
+      default:
+        return "gray.600"
+    }
+  }
 
   // Summary content for gap fill
   const gapFillSummaryContent = (
@@ -172,8 +201,53 @@ export default function TestResult() {
     </Text>
   )
 
-  const correctAnswers = passageMatchingQuestions.filter((q) => q.userAnswer === q.correctAnswer).length
+  // General question status calculation
+  const questionStatuses = useMemo(() => {
+    const statuses: number[] = []
+    
+    // Process passage matching questions (1-5)
+    passageMatchingQuestions.forEach((question) => {
+      if (question.userAnswer === null) {
+        statuses[question.id - 1] = 0 // unanswered
+      } else if (question.userAnswer === question.correctAnswer) {
+        statuses[question.id - 1] = 1 // correct
+      } else {
+        statuses[question.id - 1] = -1 // incorrect
+      }
+    })
+
+    // Process multiple choice questions (6-9)
+    multipleChoiceQuestions.forEach((question) => {
+      if (!question.userAnswers || question.userAnswers.length === 0) {
+        statuses[question.id - 1] = 0 // unanswered
+      } else {
+        // Check if all correct answers are selected and no incorrect ones
+        const hasAllCorrect = question.correctAnswers.every(answer => question.userAnswers?.includes(answer))
+        const hasOnlyCorrect = question.userAnswers.every(answer => question.correctAnswers.includes(answer))
+        const isCorrect = hasAllCorrect && hasOnlyCorrect && question.correctAnswers.length === question.userAnswers.length
+        
+        statuses[question.id - 1] = isCorrect ? 1 : -1
+      }
+    })
+
+    // Process gap fill questions (10-13)
+    gapFillQuestions.forEach((blank) => {
+      if (blank.userAnswer === null) {
+        statuses[blank.id - 1] = 0 // unanswered
+      } else {
+        statuses[blank.id - 1] = blank.userAnswer === blank.correctAnswer ? 1 : -1
+      }
+    })
+
+    return statuses
+  }, [passageMatchingQuestions, multipleChoiceQuestions, gapFillQuestions])
+
+  const handleLocate = (questionId: number) => {
+    setHighlightedText(questionId)
+    // Scroll to relevant text in left panel
+  }
   const totalQuestions = 13
+  const correctAnswers = questionStatuses.filter(status => status === 1).length
 
   const toggleExplanation = (questionId: number) => {
     const newExpanded = new Set(expandedExplanations)
@@ -183,11 +257,6 @@ export default function TestResult() {
       newExpanded.add(questionId)
     }
     setExpandedExplanations(newExpanded)
-  }
-
-  const handleLocate = (questionId: number) => {
-    setHighlightedText(questionId)
-    // Scroll to relevant text in left panel
   }
 
   const getQuestionStatus = (question: Question | MultipleChoiceQuestion) => {
@@ -397,55 +466,27 @@ export default function TestResult() {
       </Flex>
 
       {/* Question Navigation */}
-      <Box
-        bg={bgColor}
-        borderTop="1px"
-        borderColor={borderColor}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        height="65px"
-      >
-        <Flex justify="center">
-          <SimpleGrid
-            columns={13}
-            gap={1}
-            bg={contentBackgroundColor}
-            px={2}
-            py={1}
-            borderRadius="md"
-            border="1px solid"
-            borderColor="green.600"
-          >
+      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} p={4}>
+        <Flex justify="center" maxW="1400px" mx="auto">
+          <SimpleGrid columns={13} gap={2}>
             {Array.from({ length: totalQuestions }, (_, i) => {
               const questionNum = i + 1
-              const question = passageMatchingQuestions.find((q) => q.id === questionNum)
-              const status = question ? getQuestionStatus(question) : "unanswered"
+              const status = questionStatuses[i] || 0
 
               return (
-                <IconButton
+                <Button
                   key={questionNum}
                   size="sm"
                   variant="solid"
                   color="white"
-                  background={status === "correct" ? "green.600" : status === "incorrect" ? "#DC2626" : "gray.500"}
-                  _hover={
-                    status === "correct"
-                      ? { background: "green.700" }
-                      : status === "incorrect"
-                        ? { background: "#B91C1C" }
-                        : {}
-                  }
-                  minW="35px"
-                  h="35px"
+                  bg={getQuestionButtonColor(status)}
+                  _hover={{ bg: getQuestionButtonHoverColor(status) }}
+                  minW="40px"
+                  h="40px"
                   borderRadius="full"
-                  border="1px solid"
-                  borderColor={borderColor}
                 >
-                  <Text fontSize="md" fontWeight="bold">
-                    {questionNum}
-                  </Text>
-                </IconButton>
+                  {questionNum}
+                </Button>
               )
             })}
           </SimpleGrid>
