@@ -2,6 +2,7 @@
 
 import CheckBox from "@/components/ui/checkbox";
 import FilterOptions from "@/components/ui/filter-component";
+import FilterTest from "@/components/ui/filter-test";
 import TestBlock from "@/components/ui/test-block";
 import {
   Box,
@@ -201,7 +202,8 @@ export default function MiniTestPage() {
           >
             Filter
           </Text>
-          <FilterOptions />
+          {/* <FilterOptions /> */}
+          <FilterTest />
 
           <Text
             fontSize="md"

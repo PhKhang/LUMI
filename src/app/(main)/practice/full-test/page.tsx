@@ -172,7 +172,7 @@ export default function FullTestPage() {
         Practice
       </Text>
       <Text fontSize="lg" fontWeight={"bold"} color="orange.500">
-        Mini Test
+        Full Test
       </Text>
 
       <div className="flex">
