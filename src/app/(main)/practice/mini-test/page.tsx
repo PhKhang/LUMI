@@ -4,6 +4,7 @@ import CheckBox from "@/components/ui/checkbox";
 import FilterOptions from "@/components/ui/filter-component";
 import FilterTest from "@/components/ui/filter-test";
 import TestBlock from "@/components/ui/test-block";
+import TestDialog from "@/components/ui/test-overlay";
 import {
   Box,
   Container,
@@ -258,6 +259,8 @@ export default function FullTestPage() {
             ))}
           </Flex>
         </Box>
+        
+        <TestDialog.Viewport />
       </div>
     </>
   );

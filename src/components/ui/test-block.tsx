@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Text, Button, Box, HStack, VStack, Flex } from "@chakra-ui/react";
+import TestDialog from "./test-overlay";
 
 interface TestBlockProps {
   id: string;
@@ -95,6 +96,12 @@ export default function TestBlock({
               color={"green.400"}
               rounded={"full"}
               py={0}
+              onClick={() => {
+                TestDialog.open("a", {
+                  title: "Dialog Title",
+                  description: "Dialog Description",
+                });
+              }}
             >
               Practice test
             </Button>
@@ -110,6 +117,8 @@ export default function TestBlock({
           </HStack>
         </Flex>
       </Box>
+
+      <TestDialog.Viewport />
     </Box>
   );
 }
