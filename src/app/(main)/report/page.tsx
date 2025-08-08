@@ -12,7 +12,8 @@ import {
   Badge,
   Button,
   Progress,
-  Pagination
+  Pagination,
+  Image
 } from "@chakra-ui/react"
 import { MdShare, MdOpenInNew, MdCalendarToday, MdLaunch, MdHeadphones, MdMenuBook, MdEdit, MdRecordVoiceOver } from "react-icons/md"
 import { 
@@ -24,6 +25,7 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts'
+import { TbTargetArrow, TbCalendarMonthFilled, TbPencilMinus } from "react-icons/tb"
 import { useState, useEffect } from 'react'
 
 export default function ReportPage() {
@@ -602,11 +604,6 @@ export default function ReportPage() {
 
   return (
     <Box p={6} bg={bgColor}>
-      {/* Title */}
-      <Text fontSize="3xl" fontWeight="bold" color="green.500" mb={6}>
-        Study Report
-      </Text>
-      
       <Flex gap={8} maxW="1400px" mx="auto" direction={{ base: "column", lg: "row" }}>
         {/* Left Section - Your Score (30%) */}
         <Box 
@@ -615,19 +612,25 @@ export default function ReportPage() {
           bg={cardBgColor} 
           borderRadius="lg" 
           boxShadow="md" 
-          p={6}
           borderWidth="1px"
           borderColor={borderColor}
         >
-            <HStack justify="space-between" mb={3}>
-              <Text fontSize="xl" fontWeight="bold" color={textColor}>
-                🎯 Your Score
-              </Text>
-              <Icon as={MdShare} color={mutedColor} boxSize={5} cursor="pointer" />
+            <HStack justify="space-between" 
+              py={3}
+              px={6}>
+              <HStack>
+                <Icon as={TbTargetArrow} color={"black"} boxSize={5}/>
+                <Text fontSize="lg" fontWeight="bold" color={textColor}>
+                  Your Score
+                </Text>
+              </HStack>
+              <Icon as={TbPencilMinus} color={mutedColor} boxSize={5} cursor="pointer" />
             </HStack>
             <Box height="1px" bg={borderColor} mb={6} />
 
-            <Box height="400px">
+            <Box height="400px"
+                          py={3}
+              px={6}>
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={radarData}>
                   <PolarGrid />
@@ -663,21 +666,40 @@ export default function ReportPage() {
           flex="1"
           bg={cardBgColor} 
           borderRadius="lg" 
-          boxShadow="md" 
           p={6}
           borderWidth="1px"
-          borderColor={borderColor}
+          borderColor="transparent"
         >
           <HStack mb={3}>
-            <Text fontSize="24px">🦉</Text>
-            <Text fontSize="xl" fontWeight="bold" color={textColor}>
+            <Image 
+              src="/favicon.png" 
+              alt="LUMI Logo" 
+              width="45px" 
+              height="25px"
+            />
+            <Text fontSize="lg" fontWeight="bold" color={textColor}>
               LUMI Assistant
             </Text>
           </HStack>
-          <Box height="1px" bg={borderColor} mb={6} />
+          <Box height="1px" bg={borderColor} mb={2} />
 
-          <Text fontSize="lg" color="green.500" fontWeight="medium" mb={4}>
-            Hello Uyên Nhi, here is your study report:
+          <Text mb={1}>
+            <Text 
+              as="span"
+              fontSize="xl"
+              fontWeight="bold"
+              background="radial-gradient(3200% 100% at 0% 50%, var(--yellow-500, #EAB308) 0%, var(--green-500, #22C55E) 77.4%)"
+              backgroundClip="text"
+              style={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent"
+              }}
+            >
+              Hello Uyển Nhi
+            </Text>
+            <Text as="span" fontSize="lg" fontWeight="normal" color={textColor}>
+              , here is your study report:
+            </Text>
           </Text>
 
           <Flex gap={6} direction={{ base: "column", md: "row" }} align="start">
@@ -685,7 +707,7 @@ export default function ReportPage() {
             <VStack align="start" gap={1} flex="1" minW="250px">
               {/* Reading Analysis */}
               <Box>
-                <Text fontSize="sm" color={textColor} mb={2}>
+                <Text fontSize="md" color={textColor} mb={2}>
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">📖 </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Reading: </Text>
@@ -697,7 +719,7 @@ export default function ReportPage() {
 
               {/* Listening Analysis */}
               <Box>
-                <Text fontSize="sm" color={textColor} mb={2}>
+                <Text fontSize="md" color={textColor} mb={2}>
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">🎧 </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Listening: </Text>
@@ -708,7 +730,7 @@ export default function ReportPage() {
 
               {/* Writing Analysis */}
               <Box>
-                <Text fontSize="sm" color={textColor} mb={2}>
+                <Text fontSize="md" color={textColor} mb={2}>
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">✍️ </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Writing: </Text>
@@ -720,7 +742,7 @@ export default function ReportPage() {
 
               {/* Speaking Analysis */}
               <Box>
-                <Text fontSize="sm" color={textColor} mb={2}>
+                <Text fontSize="md" color={textColor} mb={2}>
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">🗣️ </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Speaking: </Text>
@@ -781,12 +803,12 @@ export default function ReportPage() {
         >
           <HStack justify="space-between" mb={3}>
             <HStack>
-              <Icon as={MdCalendarToday} color="green.500" boxSize={5} />
-              <Text fontSize="xl" fontWeight="bold" color={textColor}>
+              <Icon as={TbCalendarMonthFilled} color="black" boxSize={5} />
+              <Text fontSize="lg" fontWeight="bold" color={textColor}>
                 Exam Schedule
               </Text>
             </HStack>
-            <Icon as={MdLaunch} color={mutedColor} boxSize={4} cursor="pointer" />
+            <Icon as={TbPencilMinus} color={mutedColor} boxSize={5} cursor="pointer" />
           </HStack>
           <Box height="1px" bg={borderColor} mb={6} />
 
@@ -827,7 +849,7 @@ export default function ReportPage() {
           borderWidth="1px"
           borderColor={borderColor}
         >
-          <Text fontSize="xl" fontWeight="bold" color={textColor} mb={3}>
+          <Text fontSize="lg" fontWeight="bold" color={textColor} mb={3}>
             Learning Performance Statistics
           </Text>
           <Box height="1px" bg={borderColor} mb={6} />
@@ -957,7 +979,7 @@ export default function ReportPage() {
           borderColor={borderColor}
         >
           <Text fontSize="2xl" fontWeight="bold" color={textColor} mb={6}>
-            Lịch sử làm bài
+            Exam History
           </Text>
 
           {/* Skill Tabs */}
@@ -992,7 +1014,7 @@ export default function ReportPage() {
           {/* Filter Tabs */}
           <HStack gap={6} mb={6}>
             {selectedTab === 'Listening' || selectedTab === 'Reading' ? (
-              ['Theo thời gian', 'Theo tên bài', 'Theo kết quả', 'Theo độ khó'].map((filter, index) => (
+              ['By Time', 'By Test Name', 'By Results', 'By Difficulty'].map((filter, index) => (
                 <Text
                   key={filter}
                   fontSize="sm"
@@ -1009,7 +1031,7 @@ export default function ReportPage() {
                 </Text>
               ))
             ) : selectedTab === 'Writing' ? (
-              ['Theo dạng câu hỏi', 'Theo thời gian', 'Theo section', 'Theo kết quả'].map((filter, index) => (
+              ['By Question Type', 'By Time', 'By Section', 'By Results'].map((filter, index) => (
                 <Text
                   key={filter}
                   fontSize="sm"
@@ -1026,7 +1048,7 @@ export default function ReportPage() {
                 </Text>
               ))
             ) : selectedTab === 'Speaking' ? (
-              ['Theo câu hỏi', 'Theo section', 'Theo thời gian', 'Theo kết quả'].map((filter, index) => (
+              ['By Question', 'By Section', 'By Time', 'By Results'].map((filter, index) => (
                 <Text
                   key={filter}
                   fontSize="sm"
@@ -1071,7 +1093,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="25%"
                       >
-                        Tên bài
+                        Test Name
                       </Box>
                       <Box 
                         as="th" 
@@ -1086,7 +1108,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="12%"
                       >
-                        Thời gian nộp bài
+                        Submission Time
                       </Box>
                       <Box 
                         as="th" 
@@ -1101,7 +1123,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="10%"
                       >
-                        Thời gian làm bài
+                        Test Duration
                       </Box>
                       <Box 
                         as="th" 
@@ -1116,7 +1138,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="8%"
                       >
-                        Tổng số câu
+                        Total Questions
                       </Box>
                       <Box 
                         as="th" 
@@ -1132,7 +1154,7 @@ export default function ReportPage() {
                         bg="green.100"
                         w="6%"
                       >
-                        Đúng
+                        Correct
                       </Box>
                       <Box 
                         as="th" 
@@ -1148,7 +1170,7 @@ export default function ReportPage() {
                         bg="red.100"
                         w="6%"
                       >
-                        Sai
+                        Incorrect
                       </Box>
                       <Box 
                         as="th" 
@@ -1164,7 +1186,7 @@ export default function ReportPage() {
                         bg="gray.100"
                         w="6%"
                       >
-                        Bỏ qua
+                        Skipped
                       </Box>
                       <Box 
                         as="th" 
@@ -1179,7 +1201,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="12%"
                       >
-                        Tỷ lệ đúng
+                        Accuracy Rate
                       </Box>
                       <Box 
                         as="th" 
@@ -1194,7 +1216,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="7.5%"
                       >
-                        Làm lại
+                        Retake
                       </Box>
                       <Box 
                         as="th" 
@@ -1207,7 +1229,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="7.5%"
                       >
-                        Xem lại
+                        Review
                       </Box>
                     </>
                   ) : selectedTab === 'Writing' ? (
@@ -1225,7 +1247,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="35%"
                       >
-                        Tên bài
+                        Test Name
                       </Box>
                       <Box 
                         as="th" 
@@ -1255,7 +1277,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="15%"
                       >
-                        Dạng đề
+                        Question Type
                       </Box>
                       <Box 
                         as="th" 
@@ -1270,7 +1292,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="12%"
                       >
-                        Thời gian nộp bài
+                        Submission Time
                       </Box>
                       <Box 
                         as="th" 
@@ -1285,7 +1307,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="10%"
                       >
-                        Thời gian làm bài
+                        Test Duration
                       </Box>
                       <Box 
                         as="th" 
@@ -1301,7 +1323,7 @@ export default function ReportPage() {
                         bg="green.100"
                         w="8%"
                       >
-                        Kết quả
+                        Result
                       </Box>
                       <Box 
                         as="th" 
@@ -1316,7 +1338,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="5%"
                       >
-                        Làm lại
+                        Retake
                       </Box>
                       <Box 
                         as="th" 
@@ -1329,7 +1351,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="5%"
                       >
-                        Xem lại
+                        Review
                       </Box>
                     </>
                   ) : selectedTab === 'Speaking' ? (
@@ -1362,7 +1384,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="45%"
                       >
-                        Câu hỏi
+                        Question
                       </Box>
                       <Box 
                         as="th" 
@@ -1392,7 +1414,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="12%"
                       >
-                        Thời gian nộp bài
+                        Submission Time
                       </Box>
                       <Box 
                         as="th" 
@@ -1408,7 +1430,7 @@ export default function ReportPage() {
                         bg="green.100"
                         w="10%"
                       >
-                        Kết quả
+                        Result
                       </Box>
                       <Box 
                         as="th" 
@@ -1423,7 +1445,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="5%"
                       >
-                        Làm lại
+                        Retake
                       </Box>
                       <Box 
                         as="th" 
@@ -1436,7 +1458,7 @@ export default function ReportPage() {
                         color="text.primary"
                         w="5%"
                       >
-                        Xem lại
+                        Review
                       </Box>
                     </>
                   ) : null}
@@ -1600,7 +1622,7 @@ export default function ReportPage() {
                             </Box>
                           </Box>
 
-                          {/* Làm lại */}
+                          {/* Retake */}
                           <Box 
                             as="td" 
                             p={4} 
@@ -1612,11 +1634,11 @@ export default function ReportPage() {
                             verticalAlign="middle"
                           >
                             <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                              Làm lại
+                              Retake
                             </Link>
                           </Box>
 
-                          {/* Xem lại */}
+                          {/* Review */}
                           <Box 
                             as="td" 
                             p={4}
@@ -1626,7 +1648,7 @@ export default function ReportPage() {
                             verticalAlign="middle"
                           >
                             <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                              Xem lại
+                              Review
                             </Link>
                           </Box>
                         </>
@@ -1730,7 +1752,7 @@ export default function ReportPage() {
                             </Text>
                           </Box>
 
-                          {/* Làm lại */}
+                          {/* Retake */}
                           <Box 
                             as="td" 
                             p={4} 
@@ -1742,11 +1764,11 @@ export default function ReportPage() {
                             verticalAlign="middle"
                           >
                             <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                              Làm lại
+                              Retake
                             </Link>
                           </Box>
 
-                          {/* Xem lại */}
+                          {/* Review */}
                           <Box 
                             as="td" 
                             p={4}
@@ -1756,7 +1778,7 @@ export default function ReportPage() {
                             verticalAlign="middle"
                           >
                             <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                              Xem lại
+                              Review
                             </Link>
                           </Box>
                         </>
@@ -1843,7 +1865,7 @@ export default function ReportPage() {
                             </Text>
                           </Box>
 
-                          {/* Làm lại */}
+                          {/* Retake */}
                           <Box 
                             as="td" 
                             p={4} 
@@ -1855,11 +1877,11 @@ export default function ReportPage() {
                             verticalAlign="middle"
                           >
                             <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                              Làm lại
+                              Retake
                             </Link>
                           </Box>
 
-                          {/* Xem lại */}
+                          {/* Review */}
                           <Box 
                             as="td" 
                             p={4}
@@ -1869,7 +1891,7 @@ export default function ReportPage() {
                             verticalAlign="middle"
                           >
                             <Link color="blue.500" fontSize="sm" fontWeight="medium">
-                              Xem lại
+                              Review
                             </Link>
                           </Box>
                         </>

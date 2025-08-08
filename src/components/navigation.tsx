@@ -14,6 +14,7 @@ import { MenuButton, MenuList, Menu, MenuItem } from "@chakra-ui/menu"
 import { Dispatch, SetStateAction } from "react"
 import { BiDownArrow } from "react-icons/bi"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { NAVIGATION_ITEMS } from "@/lib/routes"
 
 interface NavigationProps {
@@ -30,6 +31,12 @@ const pickPalette = (name: string) => {
 
 export default function Navigation({ currentLanguage, onLanguageChange }: NavigationProps) {
   const navigationItems = NAVIGATION_ITEMS.MAIN
+  const pathname = usePathname()
+
+  const isActive = (href: string) => {
+    if (href === "/home") return pathname === "/" || pathname === "/home"
+    return pathname === href || pathname.startsWith(href + "/")
+  }
 
   return (
     <Box bg="primary" px={5} py={1}>
@@ -41,23 +48,38 @@ export default function Navigation({ currentLanguage, onLanguageChange }: Naviga
         </Link>
 
         <HStack gap={8}>
-          {navigationItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              <Box
-                paddingY={5}  
-                paddingX={3}
-                color="text.primary"
-                _hover={{ bg: "hover_background_yellow" }} 
-                borderRadius="full"
-                fontSize={"md"}
-                className="font-semibold"
-                py={0}
-                cursor="pointer"
-              >
-                {item.label}
-              </Box>
-            </Link>
-          ))}
+          {navigationItems.map((item) => {
+            const active = isActive(item.href)
+            return (
+              <Link key={item.href} href={item.href}>
+                <Box
+                  paddingY={1}  
+                  paddingX={4}
+                  color={active ? "black" : "text.secondary"}
+                  bg={active ? "yellow.300" : "transparent"}
+                  _hover={{ 
+                    bg: active ? "yellow.300" : "hover_background_yellow",
+                    color: active ? "black" : "text.primary"
+                  }}
+                  borderRadius="full"
+                  fontSize={"sm"}
+                  fontWeight={active ? "bold" : "semibold"}
+                  cursor="pointer"
+                  transition="all 0.2s ease-in-out"
+                  _focus={{
+                    boxShadow: "none",
+                  }}
+                  _focusVisible={{
+                    outline: "2px solid",
+                    outlineColor: "accent",
+                    outlineOffset: "2px",
+                  }}
+                >
+                  {item.label}
+                </Box>
+              </Link>
+            )
+          })}
 
             {/* <Menu>
                 <MenuButton
