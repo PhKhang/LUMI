@@ -2,7 +2,9 @@
 
 import CheckBox from "@/components/ui/checkbox";
 import FilterOptions from "@/components/ui/filter-component";
+import FilterTest from "@/components/ui/filter-test";
 import TestBlock from "@/components/ui/test-block";
+import TestDialog from "@/components/ui/test-overlay";
 import {
   Box,
   Container,
@@ -15,11 +17,12 @@ import {
   HStack,
   VStack,
   Input,
+  Flex,
 } from "@chakra-ui/react";
 import { useState } from "react";
 // import Link from "next/link";
 
-export default function MiniTestPage() {
+export default function FullTestPage() {
   const [tests, setTests] = useState([
     {
       id: "reading-cam-01-p1",
@@ -163,7 +166,7 @@ export default function MiniTestPage() {
     "Map, Plan, Diagram Label",
     "Other Types",
   ]);
-  
+
   return (
     <>
       <Text fontSize="lg" fontWeight={"bold"} color="text.primary">
@@ -180,7 +183,7 @@ export default function MiniTestPage() {
           alignItems={"flex-start"}
         >
           <Text fontSize="md" fontWeight="bolder" color="text.primary" mb={2}>
-            Search
+            Tìm kiếm
           </Text>
           <Input
             id="search"
@@ -189,6 +192,7 @@ export default function MiniTestPage() {
             bg={"gray.100"}
             outline={"bottom"}
             borderBottom="2px solid"
+            color={"text.primary"}
           ></Input>
 
           <Text
@@ -198,9 +202,10 @@ export default function MiniTestPage() {
             mb={2}
             mt={4}
           >
-            Filter
+            Bộ lọc
           </Text>
-          <FilterOptions />
+          {/* <FilterOptions /> */}
+          <FilterTest />
 
           <Text
             fontSize="md"
@@ -209,7 +214,7 @@ export default function MiniTestPage() {
             mb={2}
             mt={4}
           >
-            Source
+            Nguồn tài liệu
           </Text>
           <CheckBox options={sourceList} />
 
@@ -231,27 +236,31 @@ export default function MiniTestPage() {
             mb={2}
             mt={4}
           >
-            Type
+            Dạng bài
           </Text>
           <CheckBox options={typeList} />
         </VStack>
 
-        <div className="tests flex flex-wrap gap-4">
-          {tests.map((test) => (
-            <TestBlock
-              key={test.id}
-              id={test.id}
-              title={test.title}
-              attempts={test.attempts}
-              skills={test.skills}
-              section={test.section}
-              questions={test.questions}
-              source={test.source}
-              isCompleted={test.isCompleted}
-              imageSrc={test.imageSrc}
-            />
-          ))}
-        </div>
+        <Box w="full">
+          <Flex wrap={"wrap"} align={"flex-end"} gap={4}>
+            {tests.map((test) => (
+              <TestBlock
+                key={test.id}
+                id={test.id}
+                title={test.title}
+                attempts={test.attempts}
+                skills={test.skills}
+                section={test.section}
+                questions={test.questions}
+                source={test.source}
+                isCompleted={test.isCompleted}
+                imageSrc={test.imageSrc}
+              />
+            ))}
+          </Flex>
+        </Box>
+        
+        <TestDialog.Viewport />
       </div>
     </>
   );
