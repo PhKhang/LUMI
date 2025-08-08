@@ -23,9 +23,10 @@ import {
   PolarRadiusAxis, 
   Radar, 
   ResponsiveContainer,
-  Legend
+  Legend,
+  Tooltip
 } from 'recharts'
-import { TbTargetArrow, TbCalendarMonthFilled, TbPencilMinus } from "react-icons/tb"
+import { TbTargetArrow, TbCalendarMonthFilled, TbPencilMinus, TbChartRadar } from "react-icons/tb"
 import { useState, useEffect } from 'react'
 
 export default function ReportPage() {
@@ -33,7 +34,7 @@ export default function ReportPage() {
   const [selectedTab, setSelectedTab] = useState('Reading')
   const [currentPage, setCurrentPage] = useState(1)
   const [mounted, setMounted] = useState(false)
-  const [selectedFilter, setSelectedFilter] = useState('Theo tên bài')
+  const [selectedFilter, setSelectedFilter] = useState('By Time')
   const pageSize = 5
 
   useEffect(() => {
@@ -43,11 +44,11 @@ export default function ReportPage() {
   // Reset filter and page when tab changes
   useEffect(() => {
     if (selectedTab === 'Speaking') {
-      setSelectedFilter('Theo câu hỏi')
+      setSelectedFilter('By Question')
     } else if (selectedTab === 'Writing') {
-      setSelectedFilter('Theo dạng câu hỏi')
+      setSelectedFilter('By Question Type')
     } else {
-      setSelectedFilter('Theo thời gian')
+      setSelectedFilter('By Time')
     }
     setCurrentPage(1)
   }, [selectedTab])
@@ -63,7 +64,7 @@ export default function ReportPage() {
   const mutedColor = "text.muted"
   const cardBgColor = "background.primary"
   const borderColor = "border.primary"
-  const tableBorderColor = "border.secondary"
+  const tableBorderColor = "gray.200"
 
   // Prevent hydration mismatch
   if (!mounted) {
@@ -420,7 +421,7 @@ export default function ReportPage() {
     let sortedData = [...currentData]
 
     switch(selectedFilter) {
-      case 'Theo tên bài':
+      case 'By Test Name':
         sortedData.sort((a: any, b: any) => {
           const nameA = a["Tên bài"] || ""
           const nameB = b["Tên bài"] || ""
@@ -428,7 +429,7 @@ export default function ReportPage() {
         })
         break
         
-      case 'Theo thời gian':
+      case 'By Time':
         // Sort by submission time (newest first)
         sortedData.sort((a: any, b: any) => {
           const timeA = a["Thời gian nộp bài"] || ""
@@ -437,7 +438,7 @@ export default function ReportPage() {
         })
         break
         
-      case 'Theo kết quả':
+      case 'By Results':
         if (selectedTab === 'Listening' || selectedTab === 'Reading') {
           // Sort by accuracy percentage (highest first)
           sortedData.sort((a: any, b: any) => {
@@ -455,7 +456,7 @@ export default function ReportPage() {
         }
         break
         
-      case 'Theo dạng câu hỏi':
+      case 'By Question Type':
         if (selectedTab === 'Writing') {
           // Sort by question type (Task 1 first, then Task 2)
           sortedData.sort((a: any, b: any) => {
@@ -492,7 +493,7 @@ export default function ReportPage() {
         }
         break
         
-      case 'Theo section':
+      case 'By Section':
         if (selectedTab === 'Speaking') {
           // Sort by Part number
           sortedData.sort((a: any, b: any) => {
@@ -517,7 +518,7 @@ export default function ReportPage() {
         }
         break
         
-      case 'Theo câu hỏi':
+      case 'By Question':
         if (selectedTab === 'Speaking') {
           // Sort by question text alphabetically
           sortedData.sort((a: any, b: any) => {
@@ -528,7 +529,7 @@ export default function ReportPage() {
         }
         break
         
-      case 'Theo độ khó':
+      case 'By Difficulty':
         // Sort by difficulty based on accuracy/score
         if (selectedTab === 'Listening' || selectedTab === 'Reading') {
           // Lower accuracy = higher difficulty (show hardest first)
@@ -577,85 +578,125 @@ export default function ReportPage() {
   const radarData = [
     {
       skill: 'Overall',
-      currentScore: 7.5,
-      target: 8.0,
+      currentScore: 6.0,
+      target: 7.0,
     },
     {
       skill: 'Reading',
-      currentScore: 8,
-      target: 8.5,
+      currentScore: 5.5,
+      target: 7.5,
     },
     {
       skill: 'Listening', 
-      currentScore: 7.0,
-      target: 8.0,
+      currentScore: 6.0,
+      target: 7.5,
     },
     {
       skill: 'Writing',
-      currentScore: 6.5,
-      target: 8.5,
+      currentScore: 5.0,
+      target: 6.5,
     },
     {
       skill: 'Speaking',
-      currentScore: 6.5,
-      target: 8.0,
+      currentScore: 5.5,
+      target: 7.0,
     },
   ]
 
   return (
-    <Box p={6} bg={bgColor}>
-      <Flex gap={8} maxW="1400px" mx="auto" direction={{ base: "column", lg: "row" }}>
+    <Box p={6} bg={bgColor} paddingX="50px">
+      <Flex gap={8} mx="auto" direction={{ base: "column", lg: "row" }}>
         {/* Left Section - Your Score (30%) */}
         <Box 
           flex="0 0 30%" 
           minW="300px"
           bg={cardBgColor} 
-          borderRadius="lg" 
+          borderRadius="xl" 
           boxShadow="md" 
           borderWidth="1px"
           borderColor={borderColor}
         >
             <HStack justify="space-between" 
-              py={3}
+              py={2}
               px={6}>
               <HStack>
-                <Icon as={TbTargetArrow} color={"black"} boxSize={5}/>
+                <Icon as={TbChartRadar} color={"black"} boxSize={5}/>
                 <Text fontSize="lg" fontWeight="bold" color={textColor}>
                   Your Score
                 </Text>
               </HStack>
-              <Icon as={TbPencilMinus} color={mutedColor} boxSize={5} cursor="pointer" />
+              <Icon 
+                as={TbPencilMinus} 
+                color={mutedColor} 
+                boxSize={5} 
+                cursor="pointer"
+                transition="all 0.2s"
+                _hover={{ 
+                  color: "black.500", 
+                  transform: "scale(1.5)",
+                  bg: "blue.50",
+                  borderRadius: "md",
+                  p: 1
+                }}
+                _active={{ 
+                  transform: "scale(0.95)",
+                  color: "black",
+                  bg: "black.100"
+                }}
+                onClick={() => console.log("Edit Your Score clicked")}
+              />
             </HStack>
-            <Box height="1px" bg={borderColor} mb={6} />
+            <Box height="1px" bg={borderColor}/>
 
-            <Box height="400px"
-                          py={3}
+            <Box height="300px"
+              py={2}
               px={6}>
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={radarData}>
+                  <Tooltip 
+                    formatter={(value, name) => {
+                      const found = radarData.find(item => item.skill === name)
+                      return `${value}\n ${found ? found.target : ''}`
+                    }}
+                    labelStyle={{ color: '#000', fontWeight: 'bold', fontSize: '14px', textAlign:'center' }}
+                    itemStyle={{ fontWeight: 'bold', fontSize: '14px' }}
+                    contentStyle={{ 
+                      backgroundColor: '#ffffff', 
+                      border: '1px solid #E2E8F0',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    }}
+                  />
                   <PolarGrid />
                   <PolarAngleAxis 
                     dataKey="skill" 
-                    tick={{ fill: '#000000', fontSize: 12 }}
+                    tick={{ 
+                      fill: '#000000', 
+                      fontSize: 10, 
+                      fontWeight: 'normal',
+                      style: { fontSize: '14px' }
+                    }} 
                   />
-                  <PolarRadiusAxis angle={90} domain={[0, 9]} />
+                  <PolarRadiusAxis angle={90} domain={[0, 9]} tick={false} />
                   <Radar
                     name="Target"
-                  dataKey="target"
-                  stroke="#F6D55C"
-                  fill="#F6D55C"
-                  fillOpacity={0.1}
-                  strokeWidth={3}
+                    dataKey="target"
+                    stroke="#EAB308"
+                    fill="#EAB308"
+                    fillOpacity={0.3}
+                    strokeWidth={3}
+                  />
+                  <Radar
+                    name="Current"
+                    dataKey="currentScore"
+                    stroke="#48BB78"
+                    fill="#16A34A"
+                    fillOpacity={0.3}
+                    strokeWidth={3}
+                  />
+                <Legend 
+                  wrapperStyle={{ fontSize: '14px' }}
                 />
-                <Radar
-                  name="Current"
-                  dataKey="currentScore"
-                  stroke="#48BB78"
-                  fill="#48BB78"
-                  fillOpacity={0.2}
-                  strokeWidth={3}
-                />
-                <Legend />
               </RadarChart>
             </ResponsiveContainer>
           </Box>
@@ -665,12 +706,13 @@ export default function ReportPage() {
         <Box 
           flex="1"
           bg={cardBgColor} 
-          borderRadius="lg" 
-          p={6}
+          borderRadius="xl" 
           borderWidth="1px"
           borderColor="transparent"
         >
-          <HStack mb={3}>
+          <HStack
+          py={2}
+              px={6}>
             <Image 
               src="/favicon.png" 
               alt="LUMI Logo" 
@@ -683,12 +725,13 @@ export default function ReportPage() {
           </HStack>
           <Box height="1px" bg={borderColor} mb={2} />
 
-          <Text mb={1}>
+          <Text mb={1}
+          px={6}>
             <Text 
               as="span"
               fontSize="xl"
               fontWeight="bold"
-              background="radial-gradient(3200% 100% at 0% 50%, var(--yellow-500, #EAB308) 0%, var(--green-500, #22C55E) 77.4%)"
+              background="linear-gradient(-90deg, var(--yellow-500, #EAB308) 0%, var(--green-500, #22C55E) 77.4%)"
               backgroundClip="text"
               style={{
                 WebkitBackgroundClip: "text",
@@ -702,39 +745,39 @@ export default function ReportPage() {
             </Text>
           </Text>
 
-          <Flex gap={6} direction={{ base: "column", md: "row" }} align="start">
+          <Flex px={6} gap={6} direction={{ base: "column", md: "row" }} align="start">
             {/* Left Column - Skills Analysis */}
-            <VStack align="start" gap={1} flex="1" minW="250px">
+            <VStack align="start" gap={1} flex="1">
               {/* Reading Analysis */}
               <Box>
-                <Text fontSize="md" color={textColor} mb={2}>
+                <Text fontSize="md" color={textColor}>
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">📖 </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Reading: </Text>
-                  Your <Text as="span" fontWeight="bold">strongest skill</Text> with 82% accuracy, fewer errors 
-                  in Passages 1 and 2, but <Text as="span" fontWeight="bold">often lose points in Passage 3</Text>. Strong in 
-                  <Text as="span" fontWeight="bold"> Multiple Choice</Text>, weak in <Text as="span" fontWeight="bold">Matching Headings</Text> (52%).
+                  Your <Text as="span" fontWeight="bold" color="green.600">strongest skill</Text> with 82% accuracy, fewer errors 
+                  in Passages 1 and 2, but <Text as="span" fontWeight="bold" >often lose points in Passage 3</Text>. Strong in 
+                  <Text as="span" fontWeight="bold" color="green.600"> Multiple Choice</Text>, weak in <Text as="span" fontWeight="bold" >Matching Headings</Text> (52%).
                 </Text>
               </Box>
 
               {/* Listening Analysis */}
               <Box>
-                <Text fontSize="md" color={textColor} mb={2}>
+                <Text fontSize="md" color={textColor}>
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">🎧 </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Listening: </Text>
                   Stable results with average score of 7.0/9.0, you often 
-                  struggle with <Text as="span" fontWeight="bold">Part 2, Part 4</Text>, and <Text as="span" fontWeight="bold">Map/Diagram Labelling</Text> questions.
+                  struggle with <Text as="span" fontWeight="bold" >Part 2, Part 4</Text>, and <Text as="span" fontWeight="bold" >Map/Diagram Labelling</Text> questions.
                 </Text>
               </Box>
 
               {/* Writing Analysis */}
               <Box>
-                <Text fontSize="md" color={textColor} mb={2}>
+                <Text fontSize="md" color={textColor}>
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">✍️ </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Writing: </Text>
-                  You <Text as="span" fontWeight="bold">mainly use simple sentences, repetitive vocabulary, and limited 
+                  You <Text as="span" fontWeight="bold" >mainly use simple sentences, repetitive vocabulary, and limited 
                   grammatical structures</Text>. Need to practice <Text as="span" color="orange.500" fontWeight="bold">Task 1 Overview section</Text> and 
                   <Text as="span" color="orange.500" fontWeight="bold"> conclusion arguments in Task 2</Text>.
                 </Text>
@@ -742,45 +785,57 @@ export default function ReportPage() {
 
               {/* Speaking Analysis */}
               <Box>
-                <Text fontSize="md" color={textColor} mb={2}>
+                <Text fontSize="md" color={textColor}>
                   <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">🗣️ </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Speaking: </Text>
-                  Average score, need to improve <Text as="span" fontWeight="bold">fluency and pronunciation</Text>. 
-                  Often struggle with <Text as="span" fontWeight="bold">Part 2</Text> and need to develop topic-specific vocabulary.
+                  Average score, need to improve <Text as="span" fontWeight="bold" >fluency and pronunciation</Text>. 
+                  Often struggle with <Text as="span" fontWeight="bold" >Part 2</Text>
                 </Text>
               </Box>
             </VStack>
 
             {/* Right Column - Suggestions */}
-            <Box flex="1" minW="250px">
-              <Text fontSize="lg" fontWeight="bold" color="green.500" mb={4}>
-                ✨ LUMI suggests the following exercises:
-              </Text>
+            <Box>
+              <HStack mb={1}>
+                <Text fontSize="lg" fontWeight="bold">
+                  ✨
+                </Text>
+                <Text fontSize="lg" fontWeight="bold" 
+                  background="linear-gradient(-90deg, var(--yellow-500, #EAB308) 0%, var(--green-500, #22C55E) 100%)"
+                  backgroundClip="text"
+                  style={{
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent"
+                  }}>
+                  LUMI suggests you following exercises:
+                </Text>
+              </HStack>
+
               
-              <VStack align="start" gap={3}>
-                <VStack align="start" gap={1}>
+              <VStack align="start" gap={1}>
+                <VStack align="start" gap={0}>
                   <HStack>
-                    <Text color={textColor} fontSize="16px">•</Text>
-                    <Text color={textColor} fontWeight="medium">Reading:</Text>
-                    <Link color="blue.500" textDecoration="underline" fontSize="sm">
+                    <Text color={textColor} fontSize="md">•</Text>
+                    <Text color={textColor} fontWeight="medium" fontSize="md">Reading:</Text>
+                    <Link color="blue.500" fontSize="md">
                       The Step Pyramid Of Djoser
+                      <Icon as={MdOpenInNew} color="blue.500" boxSize={4} />
                     </Link>
-                    <Icon as={MdOpenInNew} color="blue.500" boxSize={4} />
                   </HStack>
-                  <Text fontSize="sm" color={mutedColor} ml={6}>(Matching Headings, Note Completion)</Text>
+                  <Text fontSize="md" color={mutedColor}>(Matching Headings, Note Completion)</Text>
                 </VStack>
 
-                <VStack align="start" gap={1}>
+                <VStack align="start" gap={0}>
                   <HStack>
-                    <Text color={textColor} fontSize="16px">•</Text>
-                    <Text color={textColor} fontWeight="medium">Listening:</Text>
-                    <Link color="blue.500" textDecoration="underline" fontSize="sm">
+                    <Text color={textColor} fontSize="md">•</Text>
+                    <Text color={textColor} fontSize="md" fontWeight="medium">Listening:</Text>
+                    <Link color="blue.500" fontSize="md">
                       The New Housing
+                      <Icon as={MdOpenInNew} color="blue.500" boxSize={4} />
                     </Link>
-                    <Icon as={MdOpenInNew} color="blue.500" boxSize={4} />
                   </HStack>
-                  <Text fontSize="sm" color={mutedColor} ml={6}>(Multiple Choice, Map Labeling)</Text>
+                  <Text fontSize="md" color={mutedColor}>(Multiple Choice, Map Labeling)</Text>
                 </VStack>
               </VStack>
             </Box>
@@ -789,30 +844,59 @@ export default function ReportPage() {
       </Flex>
 
       {/* Bottom Section - Exam Schedule and Learning Stats */}
-      <Flex gap={8} maxW="1400px" mx="auto" mt={8} direction={{ base: "column", lg: "row" }}>
+      <Flex gap={8} mx="auto" mt={8} direction={{ base: "column", lg: "row" }}>
         {/* Left - Exam Schedule (30%) */}
         <Box 
           flex="0 0 30%" 
           minW="300px"
           bg={cardBgColor} 
-          borderRadius="lg" 
+          borderRadius="xl" 
           boxShadow="md" 
-          p={6}
           borderWidth="1px"
           borderColor={borderColor}
+          display="flex"
+          flexDirection="column"
         >
-          <HStack justify="space-between" mb={3}>
+          <HStack justify="space-between" 
+              py={2}
+              px={6}>
             <HStack>
               <Icon as={TbCalendarMonthFilled} color="black" boxSize={5} />
               <Text fontSize="lg" fontWeight="bold" color={textColor}>
                 Exam Schedule
               </Text>
             </HStack>
-            <Icon as={TbPencilMinus} color={mutedColor} boxSize={5} cursor="pointer" />
+            <Icon 
+              as={TbPencilMinus} 
+              color={mutedColor} 
+              boxSize={5} 
+              cursor="pointer"
+              transition="all 0.2s"
+              _hover={{ 
+                color: "black.500", 
+                transform: "scale(1.5)",
+                bg: "blue.50",
+                borderRadius: "md",
+                p: 1
+              }}
+              _active={{ 
+                transform: "scale(0.95)",
+                color: "black",
+                bg: "black.100"
+              }}
+              onClick={() => console.log("Edit Your Score clicked")}
+            />
           </HStack>
-          <Box height="1px" bg={borderColor} mb={6} />
+          <Box height="1px" bg={borderColor} />
 
-          <SimpleGrid columns={2} gap={4}>
+          <SimpleGrid 
+            columns={2} 
+            gap={3} 
+            paddingY={3}
+            alignItems="center"
+            paddingX="12px"
+            flex="1"
+          >
             <Box 
               p={4} 
               bg={cardBgColor} 
@@ -820,8 +904,9 @@ export default function ReportPage() {
               borderWidth="2px" 
               borderColor={borderColor}
               textAlign="center"
+              height="full"
             >
-              <Text fontSize="sm" color={mutedColor} mb={2}>Exam Date</Text>
+              <Text fontSize="sm" color={mutedColor}>Exam Date</Text>
               <Text fontSize="xl" fontWeight="bold" color={textColor}>01/01/2026</Text>
             </Box>
             
@@ -832,8 +917,9 @@ export default function ReportPage() {
               borderWidth="2px" 
               borderColor={borderColor}
               textAlign="center"
+              height="full"
             >
-              <Text fontSize="sm" color={mutedColor} mb={2}>Days Remaining</Text>
+              <Text fontSize="sm" color={mutedColor}>Days Remaining</Text>
               <Text fontSize="xl" fontWeight="bold" color={textColor}>183 days</Text>
             </Box>
           </SimpleGrid>
@@ -842,20 +928,28 @@ export default function ReportPage() {
         {/* Right - Learning Performance Statistics (70%) */}
         <Box 
           flex="1"
-          bg={cardBgColor} 
-          borderRadius="lg" 
-          boxShadow="md" 
-          p={6}
+          bg={cardBgColor}
+          borderRadius="xl" 
+          boxShadow="md"
           borderWidth="1px"
           borderColor={borderColor}
+          
         >
-          <Text fontSize="lg" fontWeight="bold" color={textColor} mb={3}>
-            Learning Performance Statistics
-          </Text>
-          <Box height="1px" bg={borderColor} mb={6} />
+          <HStack px={6}
+            py={2}>
+            <Icon as={TbTargetArrow} color={"black"} boxSize={5}/>
+            <Text fontSize="lg" fontWeight="bold" color={textColor}>
+              Learning Performance
+            </Text>
+          </HStack>
+          
+          <Box height="1px" bg={borderColor} />
 
           {/* Skill Selector and Performance Metrics in same row */}
-          <SimpleGrid columns={{ base: 2, md: 6 }} gap={4}>
+          <SimpleGrid columns={{ base: 2, md: 6 }} gap={3}             
+            paddingY={3}
+            alignItems="center"
+            paddingX="12px">
             {/* Skill Selector - 2x2 Grid */}
             <Box 
               gridColumn={{ base: "1 / -1", md: "1 / 2" }}
@@ -866,7 +960,7 @@ export default function ReportPage() {
                 {['Reading', 'Listening', 'Writing', 'Speaking'].map((skill, index) => (
                   <Box
                     key={skill}
-                    p={4}
+                    p={2}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
@@ -894,7 +988,7 @@ export default function ReportPage() {
                       fontWeight="medium"
                       fontSize="xs"
                       _hover={{
-                        bg: selectedSkill === skill ? "yellow.500" : "gray.100"
+                        bg: selectedSkill === skill ? "yellow.300" : "gray.200"
                       }}
                     >
                       {skill}
@@ -906,6 +1000,7 @@ export default function ReportPage() {
             
             {/* Performance Metrics */}
             <Box 
+              height="full"
               p={4} 
               bg={cardBgColor} 
               borderRadius="md" 
@@ -918,6 +1013,7 @@ export default function ReportPage() {
             </Box>
             
             <Box 
+              height="full"
               p={4} 
               bg={cardBgColor} 
               borderRadius="md" 
@@ -930,6 +1026,7 @@ export default function ReportPage() {
             </Box>
             
             <Box 
+              height="full"
               p={4} 
               bg={cardBgColor} 
               borderRadius="md" 
@@ -942,6 +1039,7 @@ export default function ReportPage() {
             </Box>
             
             <Box 
+              height="full"
               p={4} 
               bg={cardBgColor} 
               borderRadius="md" 
@@ -954,6 +1052,7 @@ export default function ReportPage() {
             </Box>
             
             <Box 
+              height="full"
               p={4} 
               bg={cardBgColor} 
               borderRadius="md" 
@@ -968,22 +1067,22 @@ export default function ReportPage() {
         </Box>
       </Flex>
 
+      <Text fontSize="2xl" fontWeight="bold" color={textColor} mt={6}>
+        Exam History
+      </Text>
+
       {/* Lịch sử làm bài Section */}
-      <Box maxW="1400px" mx="auto" mt={8}>
+      <Box mt={2}>
         <Box 
           bg={cardBgColor} 
-          borderRadius="lg" 
+          borderRadius="xl" 
           boxShadow="md" 
-          p={6}
           borderWidth="1px"
           borderColor={borderColor}
         >
-          <Text fontSize="2xl" fontWeight="bold" color={textColor} mb={6}>
-            Exam History
-          </Text>
 
           {/* Skill Tabs */}
-          <HStack gap={0} mb={4}>
+          <HStack gap={2} p="18px">
             {[
               { name: 'Listening', icon: MdHeadphones },
               { name: 'Reading', icon: MdMenuBook },
@@ -995,13 +1094,16 @@ export default function ReportPage() {
                 px={4}
                 py={2}
                 cursor="pointer"
-                borderBottomWidth="2px"
-                borderBottomColor={selectedTab === skill.name ? "blue.500" : "transparent"}
-                color={selectedTab === skill.name ? "blue.500" : mutedColor}
-                fontWeight={selectedTab === skill.name ? "bold" : "normal"}
+                bg={selectedTab === skill.name ? "yellow.400" : "transparent"}
+                color={selectedTab === skill.name ? "black" : mutedColor}
+                fontWeight="bold"
+                borderRadius="full"
                 onClick={() => setSelectedTab(skill.name)}
                 transition="all 0.2s"
-                _hover={{ color: "blue.500" }}
+                _hover={{ 
+                  bg: selectedTab === skill.name ? "yellow.300" : "gray.100",
+                  color: selectedTab === skill.name ? "black" : "gray.700"
+                }}
               >
                 <HStack gap={2}>
                   <Icon as={skill.icon} boxSize={4} />
@@ -1012,66 +1114,96 @@ export default function ReportPage() {
           </HStack>
 
           {/* Filter Tabs */}
-          <HStack gap={6} mb={6}>
+          <HStack gap={6} paddingX="18px">
             {selectedTab === 'Listening' || selectedTab === 'Reading' ? (
               ['By Time', 'By Test Name', 'By Results', 'By Difficulty'].map((filter, index) => (
-                <Text
-                  key={filter}
-                  fontSize="sm"
-                  color={selectedFilter === filter ? "green.500" : mutedColor}
-                  fontWeight={selectedFilter === filter ? "bold" : "normal"}
-                  borderBottom={selectedFilter === filter ? "2px solid" : "none"}
-                  borderBottomColor="green.500"
-                  pb={1}
-                  cursor="pointer"
-                  onClick={() => setSelectedFilter(filter)}
-                  _hover={{ color: "green.500" }}
-                >
-                  {filter}
-                </Text>
+                <Box key={filter} position="relative">
+                  <Text
+                    fontSize="sm"
+                    color={selectedFilter === filter ? "green.500" : mutedColor}
+                    fontWeight="bold"
+                    pb={2}
+                    cursor="pointer"
+                    onClick={() => setSelectedFilter(filter)}
+                    _hover={{ color: "green.500" }}
+                  >
+                    {filter}
+                  </Text>
+                  {selectedFilter === filter && (
+                    <Box
+                      position="absolute"
+                      bottom="0"
+                      left="0"
+                      right="0"
+                      height="4px"
+                      bg="green.500"
+                      borderRadius="full"
+                    />
+                  )}
+                </Box>
               ))
             ) : selectedTab === 'Writing' ? (
               ['By Question Type', 'By Time', 'By Section', 'By Results'].map((filter, index) => (
-                <Text
-                  key={filter}
-                  fontSize="sm"
-                  color={selectedFilter === filter ? "green.500" : mutedColor}
-                  fontWeight={selectedFilter === filter ? "bold" : "normal"}
-                  borderBottom={selectedFilter === filter ? "2px solid" : "none"}
-                  borderBottomColor="green.500"
-                  pb={1}
-                  cursor="pointer"
-                  onClick={() => setSelectedFilter(filter)}
-                  _hover={{ color: "green.500" }}
-                >
-                  {filter}
-                </Text>
+                <Box key={filter} position="relative">
+                  <Text
+                    fontSize="sm"
+                    color={selectedFilter === filter ? "green.500" : mutedColor}
+                    fontWeight="bold"
+                    pb={2}
+                    cursor="pointer"
+                    onClick={() => setSelectedFilter(filter)}
+                    _hover={{ color: "green.500" }}
+                  >
+                    {filter}
+                  </Text>
+                  {selectedFilter === filter && (
+                    <Box
+                      position="absolute"
+                      bottom="0"
+                      left="0"
+                      right="0"
+                      height="4px"
+                      bg="green.500"
+                      borderRadius="full"
+                    />
+                  )}
+                </Box>
               ))
             ) : selectedTab === 'Speaking' ? (
               ['By Question', 'By Section', 'By Time', 'By Results'].map((filter, index) => (
-                <Text
-                  key={filter}
-                  fontSize="sm"
-                  color={selectedFilter === filter ? "green.500" : mutedColor}
-                  fontWeight={selectedFilter === filter ? "bold" : "normal"}
-                  borderBottom={selectedFilter === filter ? "2px solid" : "none"}
-                  borderBottomColor="green.500"
-                  pb={1}
-                  cursor="pointer"
-                  onClick={() => setSelectedFilter(filter)}
-                  _hover={{ color: "green.500" }}
-                >
-                  {filter}
-                </Text>
+                <Box key={filter} position="relative">
+                  <Text
+                    fontSize="sm"
+                    color={selectedFilter === filter ? "green.500" : mutedColor}
+                    fontWeight="bold"
+                    pb={2}
+                    cursor="pointer"
+                    onClick={() => setSelectedFilter(filter)}
+                    _hover={{ color: "green.500" }}
+                  >
+                    {filter}
+                  </Text>
+                  {selectedFilter === filter && (
+                    <Box
+                      position="absolute"
+                      bottom="0"
+                      left="0"
+                      right="0"
+                      height="4px"
+                      bg="green.500"
+                      borderRadius="full"
+                    />
+                  )}
+                </Box>
               ))
             ) : null}
           </HStack>
 
           {/* Table Container using HTML table */}
           <Box 
-            borderWidth="1px" 
-            borderColor={tableBorderColor} 
-            borderRadius="lg" 
+            borderXWidth="0" 
+            borderYWidth="0"
+            borderColor={tableBorderColor}
             overflow="hidden"
           >
             <Box as="table" w="full" borderCollapse="collapse">
