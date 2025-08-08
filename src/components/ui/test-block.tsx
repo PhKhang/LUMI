@@ -30,15 +30,27 @@ export default function TestBlock({
       w={"250px"}
       shadow={"sm"}
       // overflow={"hidden"}
-      rounded={"3xl"}
+      rounded={"2xl"}
       _hover={{ shadow: "xs" }}
       transition={"all 0.2s ease-in-out"}
       position={"relative"}
       overflow={"hidden"}
     >
-      {/* <div className="w-[250px] h-[250px] flex flex-col justify-between shadow-lg hover:shadow-2xl transition rounded-2xl overflow-hidden"> */}
       <Box h={"130px"} position="relative">
-        {/* <div className="w-[250px] h-[130px] bg-amber-400 relative"> */}
+        <Box
+          position={"absolute"}
+          top={0}
+          left={0}
+          p={1}
+          px={3}
+          bg={"#3C3C4399"}
+          zIndex={2}
+          roundedBottomRight={"md"}
+        >
+          <Text fontWeight={"bold"} fontSize={"sm"}>
+            {attempts} attempts
+          </Text>
+        </Box>
         <Image
           src={imageSrc}
           alt="Test thumbnail"
@@ -46,17 +58,30 @@ export default function TestBlock({
           style={{ objectFit: "cover" }}
           className="h-full w-full"
         />
-        {/* </div> */}
+
+        <Box
+          position={"absolute"}
+          bottom={0}
+          left={0}
+          p={1}
+          px={3}
+          roundedRight={"full"}
+          bg={"orange"}
+          zIndex={1}
+        >
+          <Text fontWeight={"bold"} fontSize={"sm"} color={"white"}>
+            {section}
+          </Text>
+        </Box>
       </Box>
 
       <Box p={"2.5"} pt={1} h={"150px"}>
-        {/* <VStack gap={0} justify={"space-between"}> */}
         <Flex flexDir={"column"} justify={"space-between"} h={"100%"}>
           <Box>
             <Text
               color={"text.primary"}
               fontWeight={"bold"}
-              fontSize=""
+              lineHeight={1.1}
             >{`${source} - ${title}`}</Text>
             <Text color={"text.secondary"} fontSize="xs">
               {questions.join(", ")}
@@ -64,6 +89,15 @@ export default function TestBlock({
           </Box>
 
           <HStack justify={"end"} w={"100%"}>
+            <Button
+              variant={"outline"}
+              colorPalette={"green"}
+              color={"green.400"}
+              rounded={"full"}
+              py={0}
+            >
+              Practice test
+            </Button>
             <Button
               variant={"outline"}
               colorPalette={"yellow"}
@@ -74,10 +108,8 @@ export default function TestBlock({
               Mock Test
             </Button>
           </HStack>
-          {/* </VStack> */}
         </Flex>
       </Box>
-      {/* </div> */}
     </Box>
   );
 }

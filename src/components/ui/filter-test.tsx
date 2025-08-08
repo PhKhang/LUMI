@@ -104,7 +104,7 @@ export default function FilterTest() {
                     <Icon color={"gray.600"}>
                       <IconSymbol className="w-5 h-5" />
                     </Icon>
-                    <Text color={"gray.600"} fontWeight={"bold"}>
+                    <Text color={"gray.600"} fontWeight={"bold"} fontSize={"md"}>
                       {label}
                     </Text>
                   </HStack>
@@ -121,7 +121,7 @@ export default function FilterTest() {
                     onChange={() => setSectionType(skill, "single")}
                     className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500"
                   />
-                  <Text color={"gray.500"}>Single section</Text>
+                  <Text color={"gray.500"} fontSize={"md"}>Single section</Text>
                   {/* <span className="text-gray-600">Single section</span> */}
                 </label>
 
@@ -134,7 +134,7 @@ export default function FilterTest() {
                     className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500"
                   />
                   {/* <span className="text-gray-600">Full section</span> */}
-                  <Text color={"gray.500"}>Full section</Text>
+                  <Text color={"gray.500"} fontSize={"md"}>Full section</Text>
                 </label>
               </div>
             </div>

@@ -146,6 +146,9 @@ export default function FullTestPage() {
   const [sourceList, setSourceList] = useState([
     "Cambridge",
     "British Council",
+    "Forecast 2025",
+    "Recent Actual Tests",
+    "Trainer - Practice Tests",
   ]);
 
   const [sectionList, setSectionList] = useState([
@@ -182,7 +185,7 @@ export default function FullTestPage() {
           alignItems={"flex-start"}
         >
           <Text fontSize="md" fontWeight="bolder" color="text.primary" mb={2}>
-            Search
+            Tìm kiếm
           </Text>
           <Input
             id="search"
@@ -191,6 +194,7 @@ export default function FullTestPage() {
             bg={"gray.100"}
             outline={"bottom"}
             borderBottom="2px solid"
+            color={"text.primary"}
           ></Input>
 
           <Text
@@ -200,43 +204,21 @@ export default function FullTestPage() {
             mb={2}
             mt={4}
           >
-            Filter
+            Bộ lọc
           </Text>
           {/* <FilterOptions /> */}
-          <FilterTest />
+          {/* <FilterTest /> */}
 
           <Text
             fontSize="md"
             fontWeight="bolder"
             color="text.primary"
             mb={2}
-            mt={4}
           >
-            Source
+            Nguồn tài liệu
           </Text>
           <CheckBox options={sourceList} />
 
-          <Text
-            fontSize="md"
-            fontWeight="bolder"
-            color="text.primary"
-            mb={2}
-            mt={4}
-          >
-            Section
-          </Text>
-          <CheckBox options={sectionList} />
-
-          <Text
-            fontSize="md"
-            fontWeight="bolder"
-            color="text.primary"
-            mb={2}
-            mt={4}
-          >
-            Type
-          </Text>
-          <CheckBox options={typeList} />
         </VStack>
 
         <Box w="full">

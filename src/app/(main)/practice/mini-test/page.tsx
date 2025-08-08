@@ -21,7 +21,7 @@ import {
 import { useState } from "react";
 // import Link from "next/link";
 
-export default function MiniTestPage() {
+export default function FullTestPage() {
   const [tests, setTests] = useState([
     {
       id: "reading-cam-01-p1",
@@ -182,7 +182,7 @@ export default function MiniTestPage() {
           alignItems={"flex-start"}
         >
           <Text fontSize="md" fontWeight="bolder" color="text.primary" mb={2}>
-            Search
+            Tìm kiếm
           </Text>
           <Input
             id="search"
@@ -191,6 +191,7 @@ export default function MiniTestPage() {
             bg={"gray.100"}
             outline={"bottom"}
             borderBottom="2px solid"
+            color={"text.primary"}
           ></Input>
 
           <Text
@@ -200,7 +201,7 @@ export default function MiniTestPage() {
             mb={2}
             mt={4}
           >
-            Filter
+            Bộ lọc
           </Text>
           {/* <FilterOptions /> */}
           <FilterTest />
@@ -212,7 +213,7 @@ export default function MiniTestPage() {
             mb={2}
             mt={4}
           >
-            Source
+            Nguồn tài liệu
           </Text>
           <CheckBox options={sourceList} />
 
@@ -234,7 +235,7 @@ export default function MiniTestPage() {
             mb={2}
             mt={4}
           >
-            Type
+            Dạng bài
           </Text>
           <CheckBox options={typeList} />
         </VStack>

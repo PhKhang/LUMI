@@ -12,7 +12,7 @@ export default function CheckBox({
       {options.map((option) => (
         <Checkbox.Root key={option} colorPalette={"green"}>
           <Checkbox.HiddenInput />
-          <Checkbox.Control>
+          <Checkbox.Control rounded={"md"}>
             <Checkbox.Indicator />
           </Checkbox.Control>
           <Checkbox.Label>
