@@ -15,6 +15,7 @@ import {
   HStack,
   VStack,
   Input,
+  Flex,
 } from "@chakra-ui/react";
 import { useState } from "react";
 // import Link from "next/link";
@@ -163,7 +164,7 @@ export default function MiniTestPage() {
     "Map, Plan, Diagram Label",
     "Other Types",
   ]);
-  
+
   return (
     <>
       <Text fontSize="lg" fontWeight={"bold"} color="text.primary">
@@ -236,22 +237,24 @@ export default function MiniTestPage() {
           <CheckBox options={typeList} />
         </VStack>
 
-        <div className="tests flex flex-wrap gap-4">
-          {tests.map((test) => (
-            <TestBlock
-              key={test.id}
-              id={test.id}
-              title={test.title}
-              attempts={test.attempts}
-              skills={test.skills}
-              section={test.section}
-              questions={test.questions}
-              source={test.source}
-              isCompleted={test.isCompleted}
-              imageSrc={test.imageSrc}
-            />
-          ))}
-        </div>
+        <Box w="full">
+          <Flex wrap={"wrap"} align={"flex-end"} gap={4}>
+            {tests.map((test) => (
+              <TestBlock
+                key={test.id}
+                id={test.id}
+                title={test.title}
+                attempts={test.attempts}
+                skills={test.skills}
+                section={test.section}
+                questions={test.questions}
+                source={test.source}
+                isCompleted={test.isCompleted}
+                imageSrc={test.imageSrc}
+              />
+            ))}
+          </Flex>
+        </Box>
       </div>
     </>
   );
