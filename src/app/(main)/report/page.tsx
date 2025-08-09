@@ -28,6 +28,9 @@ import {
 } from 'recharts'
 import { TbTargetArrow, TbCalendarMonthFilled, TbPencilMinus, TbChartRadar } from "react-icons/tb"
 import { useState, useEffect } from 'react'
+import { FaHeadphones, FaBookOpen } from "react-icons/fa"
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { BiSolidPencil, BiSolidMicrophone } from "react-icons/bi"
 
 export default function ReportPage() {
   const [selectedSkill, setSelectedSkill] = useState('Listening')
@@ -944,131 +947,163 @@ export default function ReportPage() {
           </HStack>
           
           <Box height="1px" bg={borderColor} />
+          <HStack gap={0}>
+            {/* Skill Selector - Separate Section */}
+              <Box marginLeft="12px" py={0}>
+                <Box 
+                  maxW="300px"
+                  bg={cardBgColor} 
+                  borderRadius="md"
+                >
+                  <SimpleGrid columns={2} gap={0} h="full">
+                    {['Reading', 'Listening', 'Writing', 'Speaking'].map((skill, index) => (
+                      <Box
+                        key={skill}
+                        p={2}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        textAlign="center"
+                        cursor="pointer"
+                        fontWeight="medium"
+                        fontSize="xs"
+                        transition="all 0.2s"
+                        borderRightWidth={index % 2 === 0 ? "1px" : "0"}
+                        borderBottomWidth={index < 2 ? "1px" : "0"}
+                        borderColor={borderColor}
+                        borderTopLeftRadius={index === 0 ? "md" : "0"}
+                        borderTopRightRadius={index === 1 ? "md" : "0"}
+                        borderBottomLeftRadius={index === 2 ? "md" : "0"}
+                        borderBottomRightRadius={index === 3 ? "md" : "0"}
+                        onClick={() => setSelectedSkill(skill)}
+                      >
+                        <Box
+                          px={1}
+                          py={0}
+                          bg={selectedSkill === skill ? "yellow.400" : "transparent"}
+                          color={selectedSkill === skill ? "black" : textColor}
+                          borderRadius="full"
+                          transition="all 0.2s"
+                          fontWeight="medium"
+                          fontSize="sm"
+                          minW="70px"
+                          _hover={{
+                            bg: selectedSkill === skill ? "yellow.300" : "gray.200"
+                          }}
+                        >
+                          {skill}
+                        </Box>
+                      </Box>
+                    ))}
+                  </SimpleGrid>
+                </Box>
+              </Box>
 
-          {/* Skill Selector and Performance Metrics in same row */}
-          <SimpleGrid columns={{ base: 2, md: 6 }} gap={3}             
-            paddingY={3}
-            alignItems="center"
-            paddingX="12px">
-            {/* Skill Selector - 2x2 Grid */}
-            <Box 
-              gridColumn={{ base: "1 / -1", md: "1 / 2" }}
-              bg={cardBgColor} 
-              borderRadius="md"
-            >
-              <SimpleGrid columns={2} gap={0} h="full">
-                {['Reading', 'Listening', 'Writing', 'Speaking'].map((skill, index) => (
-                  <Box
-                    key={skill}
-                    p={2}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    textAlign="center"
-                    cursor="pointer"
-                    fontWeight="medium"
-                    fontSize="xs"
-                    transition="all 0.2s"
-                    borderRightWidth={index % 2 === 0 ? "1px" : "0"}
-                    borderBottomWidth={index < 2 ? "1px" : "0"}
-                    borderColor={borderColor}
-                    borderTopLeftRadius={index === 0 ? "md" : "0"}
-                    borderTopRightRadius={index === 1 ? "md" : "0"}
-                    borderBottomLeftRadius={index === 2 ? "md" : "0"}
-                    borderBottomRightRadius={index === 3 ? "md" : "0"}
-                    onClick={() => setSelectedSkill(skill)}
-                  >
-                    <Box
-                      px={1}
-                      py={0.25}
-                      bg={selectedSkill === skill ? "yellow.400" : "transparent"}
-                      color={selectedSkill === skill ? "black" : textColor}
-                      borderRadius="full"
-                      transition="all 0.2s"
-                      fontWeight="medium"
-                      fontSize="xs"
-                      _hover={{
-                        bg: selectedSkill === skill ? "yellow.300" : "gray.200"
-                      }}
-                    >
-                      {skill}
-                    </Box>
-                  </Box>
-                ))}
-              </SimpleGrid>
-            </Box>
-            
-            {/* Performance Metrics */}
-            <Box 
-              height="full"
-              p={4} 
-              bg={cardBgColor} 
-              borderRadius="md" 
-              borderWidth="2px" 
-              borderColor={borderColor}
-              textAlign="center"
-            >
-              <Text fontSize="xs" color={mutedColor} mb={2}>Tests Completed</Text>
-              <Text fontSize="md" fontWeight="bold" color={textColor}>9</Text>
-            </Box>
-            
-            <Box 
-              height="full"
-              p={4} 
-              bg={cardBgColor} 
-              borderRadius="md" 
-              borderWidth="2px" 
-              borderColor={borderColor}
-              textAlign="center"
-            >
-              <Text fontSize="xs" color={mutedColor} mb={2}>Accuracy</Text>
-              <Text fontSize="md" fontWeight="bold" color={textColor}>75%</Text>
-            </Box>
-            
-            <Box 
-              height="full"
-              p={4} 
-              bg={cardBgColor} 
-              borderRadius="md" 
-              borderWidth="2px" 
-              borderColor={borderColor}
-              textAlign="center"
-            >
-              <Text fontSize="xs" color={mutedColor} mb={2}>Avg. Rewind Count</Text>
-              <Text fontSize="md" fontWeight="bold" color={textColor}>2.7 times</Text>
-            </Box>
-            
-            <Box 
-              height="full"
-              p={4} 
-              bg={cardBgColor} 
-              borderRadius="md" 
-              borderWidth="2px" 
-              borderColor={borderColor}
-              textAlign="center"
-            >
-              <Text fontSize="xs" color={mutedColor} mb={2}>Average Score</Text>
-              <Text fontSize="md" fontWeight="bold" color={textColor}>7.0/9.0</Text>
-            </Box>
-            
-            <Box 
-              height="full"
-              p={4} 
-              bg={cardBgColor} 
-              borderRadius="md" 
-              borderWidth="2px" 
-              borderColor={borderColor}
-              textAlign="center"
-            >
-              <Text fontSize="xs" color={mutedColor} mb={2}>Highest Score</Text>
-              <Text fontSize="md" fontWeight="bold" color={textColor}>8.0/9.0</Text>
-            </Box>
-          </SimpleGrid>
+              {/* Performance Metrics */}
+              <Flex 
+                flex="1"
+                gap={3}             
+                paddingY={3}
+                alignItems="stretch"
+                paddingX="12px"
+                justify="space-between"
+                h="120px">
+                <Box 
+                  flex="1"
+                  minW="120px"
+                  h="full"
+                  p={2} 
+                  bg={cardBgColor} 
+                  borderRadius="md" 
+                  borderWidth="2px" 
+                  borderColor={borderColor}
+                  textAlign="center"
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <Text fontSize="xs" color={mutedColor} mb={2}>Tests Completed</Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>9</Text>
+                </Box>
+                
+                <Box 
+                  flex="1"
+                  minW="120px"
+                  h="full"
+                  p={2} 
+                  bg={cardBgColor} 
+                  borderRadius="md" 
+                  borderWidth="2px" 
+                  borderColor={borderColor}
+                  textAlign="center"
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <Text fontSize="xs" color={mutedColor} mb={2}>Accuracy</Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>75%</Text>
+                </Box>
+                
+                <Box 
+                  flex="1"
+                  h="full"
+                  p={2} 
+                  bg={cardBgColor} 
+                  borderRadius="md" 
+                  borderWidth="2px" 
+                  borderColor={borderColor}
+                  textAlign="center"
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <Text fontSize="xs" color={mutedColor} mb={2}>Avg. Rewind Count</Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>2.7 times</Text>
+                </Box>
+                
+                <Box 
+                  flex="1"
+                  minW="120px"
+                  h="full"
+                  p={2} 
+                  bg={cardBgColor} 
+                  borderRadius="md" 
+                  borderWidth="2px" 
+                  borderColor={borderColor}
+                  textAlign="center"
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <Text fontSize="xs" color={mutedColor} mb={2}>Average Score</Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>7.0/9.0</Text>
+                </Box>
+                
+                <Box 
+                  flex="1"
+                  minW="120px"
+                  h="full"
+                  p={2} 
+                  bg={cardBgColor} 
+                  borderRadius="md" 
+                  borderWidth="2px" 
+                  borderColor={borderColor}
+                  textAlign="center"
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <Text fontSize="xs" color={mutedColor} mb={2}>Highest Score</Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>8.0/9.0</Text>
+                </Box>
+              </Flex>
+          </HStack>
+          
         </Box>
       </Flex>
 
-      <Text fontSize="2xl" fontWeight="bold" color={textColor} mt={6}>
-        Exam History
+      <Text fontSize="xl" fontWeight="bold" color={textColor} mt={6}>
+        Your Practice Journey
       </Text>
 
       {/* Lịch sử làm bài Section */}
@@ -1084,10 +1119,10 @@ export default function ReportPage() {
           {/* Skill Tabs */}
           <HStack gap={2} p="18px">
             {[
-              { name: 'Listening', icon: MdHeadphones },
-              { name: 'Reading', icon: MdMenuBook },
-              { name: 'Writing', icon: MdEdit },
-              { name: 'Speaking', icon: MdRecordVoiceOver }
+              { name: 'Listening', icon: FaHeadphones },
+              { name: 'Reading', icon: FaBookOpen },
+              { name: 'Writing', icon: BiSolidPencil },
+              { name: 'Speaking', icon: BiSolidMicrophone }
             ].map((skill) => (
               <Box
                 key={skill.name}
@@ -1106,8 +1141,8 @@ export default function ReportPage() {
                 }}
               >
                 <HStack gap={2}>
-                  <Icon as={skill.icon} boxSize={4} />
-                  <Text fontSize="sm">{skill.name}</Text>
+                  <Icon as={skill.icon} boxSize={5} />
+                  <Text fontSize="md">{skill.name}</Text>
                 </HStack>
               </Box>
             ))}
@@ -1209,7 +1244,7 @@ export default function ReportPage() {
             <Box as="table" w="full" borderCollapse="collapse">
               {/* Table Header */}
               <Box as="thead">
-                <Box as="tr" bg="background.secondary">
+                <Box as="tr" bg="background.accent">
                   {selectedTab === 'Listening' || selectedTab === 'Reading' ? (
                     <>
                       <Box 
@@ -2034,9 +2069,15 @@ export default function ReportPage() {
               </Box>
             </Box>
           </Box>
+          {/* Results info below and to the right */}
+          <Flex justify="flex-end" w="full" paddingTop={2} paddingRight={4}>
+            <Text fontSize="sm" color={mutedColor}>
+              Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems} results
+            </Text>
+          </Flex>
 
           {/* Pagination */}
-          <VStack gap={2} mt={4}>
+          <VStack gap={2} mb={4}>
             {/* Pagination controls centered */}
             <Flex justify="center" w="full">
               <Pagination.Root 
@@ -2047,8 +2088,8 @@ export default function ReportPage() {
               >
                 <HStack gap={1}>
                   <Pagination.PrevTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      ←
+                    <Button variant="ghost" size="sm">
+                      <Icon as={MdChevronLeft} />
                     </Button>
                   </Pagination.PrevTrigger>
                   
@@ -2058,9 +2099,15 @@ export default function ReportPage() {
                         page.type === "page" ? (
                           <Pagination.Item key={index} {...page} asChild>
                             <Button 
-                              variant={page.value === currentPage ? "solid" : "outline"} 
+                              variant={page.value === currentPage ? "outline" : "ghost"} 
                               size="sm"
-                              colorScheme={page.value === currentPage ? "blue" : "gray"}
+                              color={page.value === currentPage ? "black" : "gray"}
+                              bgColor={page.value === currentPage ? "yellow.400" : "transparent"}
+                              _hover={{
+                                bgColor: page.value === currentPage ? "yellow.300" : "blue.50",
+                                color: page.value === currentPage ? "black" : "gray.700",
+                                scale: 0.9
+                              }}
                             >
                               {page.value}
                             </Button>
@@ -2075,19 +2122,12 @@ export default function ReportPage() {
                   </Pagination.Context>
                   
                   <Pagination.NextTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      →
+                    <Button variant="ghost" size="sm">
+                      <Icon as={MdChevronRight} />
                     </Button>
                   </Pagination.NextTrigger>
                 </HStack>
               </Pagination.Root>
-            </Flex>
-            
-            {/* Results info below and to the right */}
-            <Flex justify="flex-end" w="full">
-              <Text fontSize="sm" color={mutedColor}>
-                Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems} results
-              </Text>
             </Flex>
           </VStack>
         </Box>

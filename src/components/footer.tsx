@@ -53,7 +53,7 @@ export default function Footer({ currentLanguage }: FooterProps) {
   const content = footerContent[currentLanguage as keyof typeof footerContent]
 
   return (
-    <Box bg="primary" py={10} mt={16} borderTop="1px" borderColor="border.primary">
+    <Box bg="background.accent" py={10} mt={16} borderTop="1px" borderColor="border.primary">
       <Container maxW="1200px">
         <Flex justify="space-between" align="start" wrap="wrap" gap={8}>
           <VStack align="start" gap={4}>
@@ -114,14 +114,18 @@ export default function Footer({ currentLanguage }: FooterProps) {
             <Text fontWeight="bold" color="text.primary">
               {content.contact}
             </Text>
-            <HStack>
-              <Icon as={BiPhoneCall} color="text.secondary" />
-              <Text color="text.secondary">(+84) 123456789</Text>
-            </HStack>
-            <HStack>
-              <Icon as={MdEmail} color="text.secondary" />
-              <Text color="text.secondary">contact@lumi.com.vn</Text>
-            </HStack>
+            <Link href="tel:+84123456789" _hover={{ color: "link.hover" }}>
+              <HStack cursor="pointer">
+                <Icon as={BiPhoneCall} color="text.secondary" />
+                <Text color="text.secondary">(+84) 123456789</Text>
+              </HStack>
+            </Link>
+            <Link href="mailto:contact@lumi.com.vn" _hover={{ color: "link.hover" }}>
+              <HStack cursor="pointer">
+                <Icon as={MdEmail} color="text.secondary" />
+                <Text color="text.secondary">contact@lumi.com.vn</Text>
+              </HStack>
+            </Link>
           </VStack>
         </Flex>
       </Container>
