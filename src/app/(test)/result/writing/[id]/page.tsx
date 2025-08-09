@@ -5,8 +5,6 @@ import { Box, Flex, HStack, VStack, Text, Button, IconButton, Badge, SimpleGrid,
 import { Icon } from "@chakra-ui/react"
 import { MenuButton, MenuList, Menu, MenuItem } from "@chakra-ui/menu"
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
-import Navigation from "@/components/navigation"
-import Footer from "@/components/footer"
 import { MdClose, MdSettings, MdAccessTime, MdLightMode, MdDarkMode, MdExpandMore, MdExpandLess, MdNote } from "react-icons/md"
 import SettingsMenu from "@/components/ui/settings-menu"
 interface ScoreCriteria {
@@ -276,15 +274,11 @@ In conclusion, the transition from school to university or college can bring sev
 
   return (
     <Box minH="100vh" bg={bgColor}>
-      <Box position="sticky" top="0" zIndex="sticky" boxShadow="sm">
-        <Navigation currentLanguage={currentLanguage} onLanguageChange={setCurrentLanguage} />
-      </Box>
-
       {/* Control Bar */}
-      <Box bg={bgColor} borderBottom="1px" borderColor={borderColor} px={4}>
+      <Box bg={bgColor} borderBottom="1px" borderColor={borderColor} px={4} position="sticky" top={0} zIndex={1000}>
         <Box display="grid" gridTemplateColumns="1fr auto 1fr" alignItems="center" w="full" mx="auto">
           {/* Left Section - Close Button + Tabs */}
-            <HStack gap={4} height="100%">
+            <HStack gap={4} height="60px">
             <Box alignItems="center">
                 <IconButton aria-label="Close" variant="outline" size="sm" rounded="full"> <Icon as={MdClose} /> </IconButton>
             </Box>
@@ -325,7 +319,7 @@ In conclusion, the transition from school to university or college can bring sev
       </Box>
 
       {/* Main Content */}
-      <Flex h="calc(100vh - 130px)" mx="auto">
+      <Flex h="calc(100vh - 60px)" mx="auto">
         {/* Left Panel - Essay Content */}
         <Box width={`${leftPanelWidth}%`} borderRight="1px" borderColor={borderColor} overflow="auto" p={6} bg={contentBackgroundColor}>
           <VStack align="start" gap={6}>
@@ -639,8 +633,6 @@ In conclusion, the transition from school to university or college can bring sev
           </VStack>
         </Box>
       </Flex>
-
-      <Footer currentLanguage={currentLanguage} />
     </Box>
   )
 }

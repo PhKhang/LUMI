@@ -466,8 +466,8 @@ export default function TestResult() {
       </Flex>
 
       {/* Question Navigation */}
-      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} p={4}>
-        <Flex justify="center" maxW="1400px" mx="auto">
+      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} height="65px">
+        <Flex justify="center" mx="auto" align="center" h="100%">
           <SimpleGrid columns={13} gap={2}>
             {Array.from({ length: totalQuestions }, (_, i) => {
               const questionNum = i + 1
@@ -481,7 +481,7 @@ export default function TestResult() {
                   color="white"
                   bg={getQuestionButtonColor(status)}
                   _hover={{ bg: getQuestionButtonHoverColor(status) }}
-                  minW="40px"
+                  w="40px"
                   h="40px"
                   borderRadius="full"
                 >
