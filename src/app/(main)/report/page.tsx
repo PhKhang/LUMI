@@ -1008,6 +1008,8 @@ export default function ReportPage() {
                 paddingX="12px"
                 justify="space-between"
                 h="120px">
+                
+                {/* Tests Completed - Always shown */}
                 <Box 
                   flex="1"
                   minW="120px"
@@ -1023,9 +1025,12 @@ export default function ReportPage() {
                   justifyContent="center"
                 >
                   <Text fontSize="xs" color={mutedColor} mb={2}>Tests Completed</Text>
-                  <Text fontSize="md" fontWeight="bold" color={textColor}>9</Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>
+                    {selectedSkill === 'Speaking' ? '40' : selectedSkill === 'Writing' ? '4' : '9'}
+                  </Text>
                 </Box>
                 
+                {/* Second metric - varies by skill */}
                 <Box 
                   flex="1"
                   minW="120px"
@@ -1040,10 +1045,21 @@ export default function ReportPage() {
                   flexDirection="column"
                   justifyContent="center"
                 >
-                  <Text fontSize="xs" color={mutedColor} mb={2}>Accuracy</Text>
-                  <Text fontSize="md" fontWeight="bold" color={textColor}>75%</Text>
+                  <Text fontSize="xs" color={mutedColor} mb={2}>
+                    {selectedSkill === 'Listening' ? 'Accuracy' : 
+                     selectedSkill === 'Reading' ? 'Accuracy' : 
+                     selectedSkill === 'Speaking' ? 'Total time spent' : 
+                     selectedSkill === 'Writing' ? 'Average time spent on Task 1' : 'Accuracy'}
+                  </Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>
+                    {selectedSkill === 'Listening' ? '75%' : 
+                     selectedSkill === 'Reading' ? '75%' : 
+                     selectedSkill === 'Speaking' ? '128 min' : 
+                     selectedSkill === 'Writing' ? '20 min' : '75%'}
+                  </Text>
                 </Box>
                 
+                {/* Third metric - varies by skill */}
                 <Box 
                   flex="1"
                   h="full"
@@ -1057,10 +1073,21 @@ export default function ReportPage() {
                   flexDirection="column"
                   justifyContent="center"
                 >
-                  <Text fontSize="xs" color={mutedColor} mb={2}>Avg. Rewind Count</Text>
-                  <Text fontSize="md" fontWeight="bold" color={textColor}>2.7 times</Text>
+                  <Text fontSize="xs" color={mutedColor} mb={2}>
+                    {selectedSkill === 'Listening' ? 'Avg. Rewind Count' : 
+                     selectedSkill === 'Reading' ? 'Avg. Test Duration' : 
+                     selectedSkill === 'Speaking' ? 'Average score' : 
+                     selectedSkill === 'Writing' ? 'Average time spent on Task 2' : 'Avg. Rewind Count'}
+                  </Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>
+                    {selectedSkill === 'Listening' ? '2.7 times' : 
+                     selectedSkill === 'Reading' ? '2.7 times' : 
+                     selectedSkill === 'Speaking' ? '6.0 /9.0' : 
+                     selectedSkill === 'Writing' ? '36 min' : '2.7 times'}
+                  </Text>
                 </Box>
                 
+                {/* Fourth metric - varies by skill */}
                 <Box 
                   flex="1"
                   minW="120px"
@@ -1075,10 +1102,18 @@ export default function ReportPage() {
                   flexDirection="column"
                   justifyContent="center"
                 >
-                  <Text fontSize="xs" color={mutedColor} mb={2}>Average Score</Text>
-                  <Text fontSize="md" fontWeight="bold" color={textColor}>7.0/9.0</Text>
+                  <Text fontSize="xs" color={mutedColor} mb={2}>
+                    {selectedSkill === 'Speaking' ? 'Sentences Accuracy' : 'Average Score'}
+                  </Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>
+                    {selectedSkill === 'Listening' ? '7.0/9.0' : 
+                     selectedSkill === 'Reading' ? '7.0/9.0' : 
+                     selectedSkill === 'Speaking' ? '67%' : 
+                     selectedSkill === 'Writing' ? '7.0 /9.0' : '7.0/9.0'}
+                  </Text>
                 </Box>
                 
+                {/* Fifth metric - Always Highest Score */}
                 <Box 
                   flex="1"
                   minW="120px"
@@ -1094,7 +1129,12 @@ export default function ReportPage() {
                   justifyContent="center"
                 >
                   <Text fontSize="xs" color={mutedColor} mb={2}>Highest Score</Text>
-                  <Text fontSize="md" fontWeight="bold" color={textColor}>8.0/9.0</Text>
+                  <Text fontSize="md" fontWeight="bold" color={textColor}>
+                    {selectedSkill === 'Listening' ? '8.0/9.0' : 
+                     selectedSkill === 'Reading' ? '8.0/9.0' : 
+                     selectedSkill === 'Speaking' ? '7.0/9.0' : 
+                     selectedSkill === 'Writing' ? '7.5/9.0' : '8.0/9.0'}
+                  </Text>
                 </Box>
               </Flex>
           </HStack>
@@ -1800,7 +1840,12 @@ export default function ReportPage() {
                             textAlign="center"
                             verticalAlign="middle"
                           >
-                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                            <Link 
+                              color="blue.500" 
+                              fontSize="sm" 
+                              fontWeight="medium"
+                              href={`http://localhost:3000/practice/${selectedTab.toLowerCase()}/1`}
+                            >
                               Retake
                             </Link>
                           </Box>
@@ -1814,7 +1859,12 @@ export default function ReportPage() {
                             textAlign="center"
                             verticalAlign="middle"
                           >
-                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                            <Link 
+                              color="blue.500" 
+                              fontSize="sm" 
+                              fontWeight="medium"
+                              href={`http://localhost:3000/result/${selectedTab.toLowerCase()}/1`}
+                            >
                               Review
                             </Link>
                           </Box>
@@ -1930,7 +1980,12 @@ export default function ReportPage() {
                             textAlign="center"
                             verticalAlign="middle"
                           >
-                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                            <Link 
+                              color="blue.500" 
+                              fontSize="sm" 
+                              fontWeight="medium"
+                              href={`http://localhost:3000/practice/${selectedTab.toLowerCase()}/1`}
+                            >
                               Retake
                             </Link>
                           </Box>
@@ -1944,7 +1999,12 @@ export default function ReportPage() {
                             textAlign="center"
                             verticalAlign="middle"
                           >
-                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                            <Link 
+                              color="blue.500" 
+                              fontSize="sm" 
+                              fontWeight="medium"
+                              href={`http://localhost:3000/result/${selectedTab.toLowerCase()}/1`}
+                            >
                               Review
                             </Link>
                           </Box>
@@ -2043,7 +2103,12 @@ export default function ReportPage() {
                             textAlign="center"
                             verticalAlign="middle"
                           >
-                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                            <Link 
+                              color="blue.500" 
+                              fontSize="sm" 
+                              fontWeight="medium"
+                              href={`http://localhost:3000/practice/${selectedTab.toLowerCase()}/1`}
+                            >
                               Retake
                             </Link>
                           </Box>
@@ -2057,7 +2122,12 @@ export default function ReportPage() {
                             textAlign="center"
                             verticalAlign="middle"
                           >
-                            <Link color="blue.500" fontSize="sm" fontWeight="medium">
+                            <Link 
+                              color="blue.500" 
+                              fontSize="sm" 
+                              fontWeight="medium"
+                              href={`http://localhost:3000/result/${selectedTab.toLowerCase()}/1`}
+                            >
                               Review
                             </Link>
                           </Box>
