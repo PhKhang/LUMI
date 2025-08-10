@@ -6,6 +6,7 @@ import { MenuButton, MenuList, Menu, MenuItem } from "@chakra-ui/menu"
 import { useColorMode } from "@/components/ui/color-mode"
 import { MdSettings } from "react-icons/md"
 import { LumiSwitch } from "@/components/ui/switch"
+import { useColorModeValue } from "@/components/ui/color-mode"
 
 interface SettingsMenuProps {
   fontSize: "small" | "medium" | "large"
@@ -43,24 +44,31 @@ export default function SettingsMenu({ fontSize, onFontSizeChange }: SettingsMen
           </HStack>
         </MenuButton>
         <MenuList
-          bg={isDark ? "#292929" : "#FEFFEB"}
-          borderColor={isDark ? "gray" : "green"}
+          bg={isDark ? "#292929" : "white"}
+          borderColor={isDark ? "gray" : "#E5E7EB"}
           boxShadow="lg"
           zIndex={1000}
           borderWidth="1px"
           borderRadius="10px"
         >
-          <LumiSwitch
-            colorPalette="yellow"
-            size="lg"
-            checked={colorMode === "dark"}
-            onCheckedChange={toggleColorMode}
-            label={colorMode === "dark" ? "Dark Mode" : "Light Mode"}
-          />
+          <Box px={3} py={2}>
+            <Flex align="center" gap={3} justify="space-between">
+              <Text fontWeight="medium" fontSize="sm" color={isDark ? "white" : "black"} minW="70px">
+                Mode:
+              </Text>
+              <LumiSwitch
+                colorPalette="yellow"
+                size="lg"
+                checked={colorMode === "dark"}
+                onCheckedChange={toggleColorMode}
+                label={colorMode === "dark" ? "Dark Mode" : "Light Mode"}
+              />
+            </Flex>
+          </Box>
 
           <Box px={3} py={2}>
             <Flex align="center" gap={3}>
-              <Text fontSize="sm" color={isDark ? "white" : "black"} minW="70px">
+              <Text fontWeight="medium" fontSize="sm" color={isDark ? "white" : "black"} minW="70px">
                 Font Size:
               </Text>
               <HStack gap={1}>
