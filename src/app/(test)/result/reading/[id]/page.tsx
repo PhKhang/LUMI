@@ -9,6 +9,7 @@ import TabSelector from "@/components/ui/tab-selector"
 import PassageMatchingQuestionComponent from "@/components/questionType/passage-matching"
 import MultipleChoiceQuestionComponent from "@/components/questionType/multiple-choice"
 import { MdClose, MdTimer } from "react-icons/md"
+import { FaPen, FaBook } from "react-icons/fa"
 import GapFillQuestionComponent from "@/components/questionType/gap-fill"
 import GapFillBlank from "@/components/questionType/gap-fill-blank"
 
@@ -229,7 +230,7 @@ export default function TestResult() {
         statuses[question.id - 1] = isCorrect ? 1 : -1
       }
     })
-
+ 
     // Process gap fill questions (10-13)
     gapFillQuestions.forEach((blank) => {
       if (blank.userAnswer === null) {
@@ -282,6 +283,11 @@ export default function TestResult() {
     }
   }
 
+  const readingTabs = [
+    { value: "note", label: "Take notes Mode", icon: FaPen },
+    { value: "lookup", label: "Dictionary Mode", icon: FaBook },
+  ]
+
   return (
     <Box minH="100vh" bg={bgColor} overflow="hidden">
       {/* Header */}
@@ -295,7 +301,11 @@ export default function TestResult() {
               </IconButton>
             </Box>
             <Box marginTop="auto">
-              <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+              <TabSelector
+                activeTab={activeTab}
+                onTabChange={(tab) => setActiveTab(tab as "note" | "lookup")}
+                tabs={readingTabs}
+              />
             </Box>
           </HStack>
 
@@ -466,8 +476,8 @@ export default function TestResult() {
       </Flex>
 
       {/* Question Navigation */}
-      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} height="65px">
-        <Flex justify="center" mx="auto" align="center" h="100%">
+      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} p={4}>
+        <Flex justify="center" maxW="1400px" mx="auto">
           <SimpleGrid columns={13} gap={2}>
             {Array.from({ length: totalQuestions }, (_, i) => {
               const questionNum = i + 1
@@ -481,7 +491,7 @@ export default function TestResult() {
                   color="white"
                   bg={getQuestionButtonColor(status)}
                   _hover={{ bg: getQuestionButtonHoverColor(status) }}
-                  w="40px"
+                  minW="40px"
                   h="40px"
                   borderRadius="full"
                 >

@@ -5,7 +5,8 @@ import { Box, Flex, HStack, VStack, Text, Button, IconButton, Badge, SimpleGrid,
 import { Icon } from "@chakra-ui/react"
 import { MenuButton, MenuList, Menu, MenuItem } from "@chakra-ui/menu"
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
-import { MdClose, MdSettings, MdAccessTime, MdLightMode, MdDarkMode, MdExpandMore, MdExpandLess, MdNote } from "react-icons/md"
+import { MdClose, MdSettings, MdAccessTime, MdLightMode, MdDarkMode, MdExpandMore, MdExpandLess, MdNote, MdEdit } from "react-icons/md"
+import TabSelector from "@/components/ui/tab-selector"
 import SettingsMenu from "@/components/ui/settings-menu"
 interface ScoreCriteria {
   name: string
@@ -25,7 +26,8 @@ interface GrammarError {
 
 export default function WritingTestResult() {
   const [currentLanguage, setCurrentLanguage] = useState<"en" | "vi">("vi")
-  const [activeTab, setActiveTab] = useState<"grammar" | "coherence">("grammar")
+  const [activeTab, setActiveTab] = useState<"original" | "edited">("original")
+  const [activeRightTab, setActiveRightTab] = useState<"grammar" | "coherence">("grammar")
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("medium")
   const [leftPanelWidth, setLeftPanelWidth] = useState(50)
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["grammar", "coherence"]))
@@ -272,6 +274,11 @@ In conclusion, the transition from school to university or college can bring sev
     return highlightedText
   }
 
+  const writingTabs = [
+    { value: "original", label: "Bài gốc", icon: MdNote },
+    { value: "edited", label: "Bài sửa", icon: MdEdit },
+  ]
+
   return (
     <Box minH="100vh" bg={bgColor}>
       {/* Control Bar */}
@@ -282,22 +289,12 @@ In conclusion, the transition from school to university or college can bring sev
             <Box alignItems="center">
                 <IconButton aria-label="Close" variant="outline" size="sm" rounded="full"> <Icon as={MdClose} /> </IconButton>
             </Box>
-            <Box marginTop="auto">
-                <Tabs.Root
-                defaultValue="note"
-                variant="line"
-                >
-                <Tabs.List>
-                    <Tabs.Trigger value="note">
-
-                    Bài gốc
-                    </Tabs.Trigger>
-                    <Tabs.Trigger value="lookup">
-                    Bài sửa
-                    </Tabs.Trigger>
-                </Tabs.List>
-                </Tabs.Root>
-            </Box>
+            
+              <TabSelector
+                activeTab={activeTab}
+                onTabChange={(tab) => setActiveTab(tab as "original" | "edited")}
+                tabs={writingTabs}
+              />
             </HStack>
             {/* Center Section - Time + Score */}
           <Box py={3}>
@@ -536,20 +533,20 @@ In conclusion, the transition from school to university or college can bring sev
              {/* Tab Navigation */}
              <HStack gap={2} w="full" mb={4}>
               <Button
-                variant={activeTab === "grammar" ? "solid" : "outline"}
-                colorScheme={activeTab === "grammar" ? "green" : "gray"}
+                variant={activeRightTab === "grammar" ? "solid" : "outline"}
+                colorScheme={activeRightTab === "grammar" ? "green" : "gray"}
                 size="sm"
-                onClick={() => setActiveTab("grammar")}
+                onClick={() => setActiveRightTab("grammar")}
                 borderRadius="full"
                 flex={1}
               >
               Ngữ pháp và Từ vựng
               </Button>
               <Button
-                variant={activeTab === "coherence" ? "solid" : "outline"}
-                colorScheme={activeTab === "coherence" ? "orange" : "gray"}
+                variant={activeRightTab === "coherence" ? "solid" : "outline"}
+                colorScheme={activeRightTab === "coherence" ? "orange" : "gray"}
                 size="sm"
-                onClick={() => setActiveTab("coherence")}
+                onClick={() => setActiveRightTab("coherence")}
                 borderRadius="full"
                 flex={1}
               >
@@ -558,7 +555,7 @@ In conclusion, the transition from school to university or college can bring sev
             </HStack>
 
             {/* Tab Content */}
-            {activeTab === "grammar" && (
+            {activeRightTab === "grammar" && (
               <Box w="full">
                 <HStack justify="space-between" mb={4}>
                   <HStack gap={4}>
@@ -599,7 +596,7 @@ In conclusion, the transition from school to university or college can bring sev
               </Box>
             )}
 
-            {activeTab === "coherence" && (
+            {activeRightTab === "coherence" && (
               <Box w="full">
                 <HStack justify="space-between" mb={4}>
                   <Text fontSize="lg" fontWeight="bold" color={textColor}>
