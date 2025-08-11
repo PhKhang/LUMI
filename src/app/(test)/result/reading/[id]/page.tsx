@@ -326,6 +326,7 @@ export default function TestResult() {
   }, [passageMatchingQuestions, multipleChoiceQuestions, gapFillQuestions])
 
   const handleLocate = (questionId: number) => {
+    if (activeTab !== "note") return;
     setHighlightedQuestionId(questionId)
     
     if (leftPanelRef.current) {
@@ -465,6 +466,7 @@ export default function TestResult() {
           overflow="auto"
           p={6}
           bg={contentBackgroundColor}
+          ref={leftPanelRef}
         >
           <VStack align="start" gap={4}>
             <Image src="/horseshoe-crab.png" alt="Horseshoe Crab" maxW="240px" borderRadius="md" mx="auto" />
@@ -475,7 +477,7 @@ export default function TestResult() {
               {sectionContent.map((section, index) => {
                 // Kiểm tra xem section này có chứa text cần highlight không
                 const highlightText = highlightedQuestionId ? highlightMappings[highlightedQuestionId] : undefined
-                const shouldHighlight = highlightText && section.content.toLowerCase().includes(highlightText.toLowerCase())
+                const shouldHighlight = highlightText && section.content.toLowerCase().includes(highlightText.toLowerCase()) && activeTab === "note" // Chỉ highlight ở note mode
                 
                 return (
                   <ReadingParagraph
@@ -485,55 +487,10 @@ export default function TestResult() {
                     highlightText={highlightText}
                     isHighlighted={!!shouldHighlight}
                     fontSize={fontSize}
+                    activeTab={activeTab}
                   />
                 )
-                })}
-              {/* <p>
-                <strong>A.</strong> One of the world's oldest animal species, the horseshoe crab, is found along the
-                east coast of the United States and Mexico. Fossil records indicate this creature dates back 450 million
-                years, and it has changed very little over time. This is because its anatomy has been so successful. In
-                fact, the horseshoe crab is more closely related to spiders, scorpions and ticks than it is to true
-                crabs and other crustaceans.
-              </p>
-              <p>
-                <strong>B.</strong> The soft body of the horseshoe crab is protected by a large oval shell with jagged,
-                point spines. The two-part body consists of a head and an abdominal region. The head region contains a
-                brain, heart, mouth, four eyes and six pairs of legs. What is significant is that horseshoe crabs
-                possess the rare ability to regrow lost limbs. They also use crawling as their primary means of
-                movement, and commonly bury themselves under the surface of the sand. However, in the water, they will
-                occasionally turn onto their backs and swim upside-down. The mouth of the horseshoe crab is located
-                between the twelve legs. They can only eat when crawling, as the motion allows them to open and close
-                their mouths. Their diet consists mainly of worms and clams.
-              </p>
-
-              <p>
-                The abdominal region contains mules for movement and is for breathing. A long spine forming a tail,
-                called a telson, is located behind the abdominal region. Although this part of the body looks intimidating, it is not dangerous, poisonous or used to sting. Horseshoe crabs use it to flip over if they happen to be pushed on their backs, but this is only possible under the sea. Every year, about 10 percent of the horseshoe crab breeding population dies while on the beach, when rough surf flips the creatures onto their backs, a position from which they often cannot right themselves.
-              </p>
-
-              <p>
-                <strong>C.</strong> Another distinctive feature of horseshoe crabs is that they do not have hemoglobin (a protein that contains the mineral iron), which gives blood its red color. Hemoglobin is the basis of oxygen transport in the blood of mammals, reptiles and birds. Rather, the blood of horseshoe crabs has a copper-containing protein called hemocyanin. Hemocyanin is dark blue when it is transporting oxygen and colorless when it is not. The oxygen is also transported in a fluid on the exterior of the cell, in contrast to most animals, where oxygen molecules are transported inside red blood bacteria and fungi. In fact, there enzymes are used by astronauts in the International Space Station to test surfaces for unwanted bacteria and fungi. Another application is a protein from horseshoe crab blood that is under investigation as an antibiotic.
-              </p>
-
-              <p>
-                <strong>D.</strong> The horseshoe crab faces the greatest dangers in early life. Between April and June, adult horseshoe crabs travel from deep ocean waters to converge on beaches. Crawling out of the sea and onto the beach is especially common at high tides during full and new moons. The males arrive first and await the females for breeding. Female horseshoe crabs communicate by releasing a scent to signal to the males.
-              </p>
-
-              <p>
-                Then female horseshoe crabs crate nests by digging holes in the sand and laying between 60,000 and 120,000 eggs at a time before covering them with sand for protection. Most eggs do not survive the hatching period before being eaten, as the eggs are a food source for numerous birds, reptiles and fish.
-              </p>
-
-              <p>
-                <strong>E.</strong> If the egg does survive, the young horseshoe crab will hatch after five weeks. Referred to as larvae, they look like miniature versions of adult horseshoe crabs. When first entering the sea, they exhibit a 'swimming frenzy' similar to that of newborn sea turtles, swimming vigorously and continuously for hours. During the larval stage, which can last a year or more, newly hatched horseshoe crabs travel into the ocean water and settle on the sandy bottom in shallow waters. As they develop, they move into deeper waters.
-              </p>
-
-              <p>
-                After the larval stage, horseshoe crabs move into the juvenile period. The juvenile horseshoe crabs will slowly grow over a period of about ten years. The growing process requires shedding small exterior shells, known as exoskeletons, in exchange for larger shells. Horseshoe crabs can shed up to 17 exoskeletons during development and their entire life span can be over twenty years. Mature females can reach 45-50 centimeters from head to tail, while the males grow to approximately 35-40 centimeters.
-              </p>
-
-              <p>
-                <strong>F.</strong> Despite their long history, horseshoe crabs face increased threats in modern times. For this reason, scientists have been studying the populations of horseshoe crabs, but more investigation is needed, particularly on the coast of Florida. A widespread decline in their abundance in the last 20 years may be especially severe in the Indian River Lagoon system in Florida. While the horseshoe crab is not currently listed as threatened, there is rising concern about the fact that it is increasingly absent from the Indian River Lagoon system, where it has historically been common. Loss of the horseshoe crab would negatively impact species that feed on the animal and its eggs and would decrease the biodiversity of the lagoon. Moreover, this development might indicate serious ecological disturbance in the region. In the northeast, the use of horseshoe crabs as bait to catch fish over the past ten years is, in part, responsible for a rapidly declining population of this unique species, and it is suspected that this is also a problem in Florida. However, the extent of this has not been well documented.
-              </p> */}
+              })}
             </VStack>
           </VStack>
         </Box>
@@ -570,9 +527,10 @@ export default function TestResult() {
               note="You may use any letter more than once."
               questions={passageMatchingQuestions}
               fontSize={fontSize}
-              onLocate={handleLocate}
+              onLocate={activeTab === "note" ? handleLocate : () => {}}
               onExplain={toggleExplanation}
               expandedExplanations={expandedExplanations}
+              activeTab={activeTab}
             />
           </Box>
 
@@ -586,9 +544,10 @@ export default function TestResult() {
               options={multipleChoiceOptions}
               questions={multipleChoiceQuestions}
               fontSize={fontSize}
-              onLocate={handleLocate}
+              onLocate={activeTab === "note" ? handleLocate : () => {}}
               onExplain={toggleExplanation}
               expandedExplanations={expandedExplanations}
+              activeTab={activeTab}
             />
           </Box>
 
@@ -602,9 +561,10 @@ export default function TestResult() {
               options={multipleChoiceOptions89}
               questions={multipleChoiceQuestions89}
               fontSize={fontSize}
-              onLocate={handleLocate}
+              onLocate={activeTab === "note" ? handleLocate : () => {}}
               onExplain={toggleExplanation}
               expandedExplanations={expandedExplanations}
+              activeTab={activeTab}
             />
           </Box>
 
@@ -619,9 +579,10 @@ export default function TestResult() {
               summaryContent={gapFillSummaryContent}
               questions={gapFillQuestions}
               fontSize={fontSize}
-              onLocate={handleLocate}
+              onLocate={activeTab === "note" ? handleLocate : () => {}}
               onExplain={toggleExplanation}
               expandedExplanations={expandedExplanations}
+              activeTab={activeTab}
             />
           </Box>
         </Box>
@@ -706,57 +667,82 @@ const ReadingParagraph = ({
   content, 
   highlightText, 
   isHighlighted,
-  fontSize 
+  fontSize,
+  activeTab 
 }: { 
   leading: string
   content: string
   highlightText?: string
   isHighlighted?: boolean
   fontSize: string
+  activeTab: "note" | "lookup"
 }) => {
   const renderHighlightableContent = (text: string) => {
+    const isDictionaryMode = activeTab === "lookup";
+
     if (!highlightText || !isHighlighted) {
-      return text.split(/\s+/).map((part, index) => (
-        <span key={index} className="cursor-pointer hover:underline" onClick={() => {
-          // drawer.open("a", {
-          //   title: "Drawer Title",
-          //   description: "Drawer Description",
-          //   placement: "bottom",
-          // })
-        }
-        }>
-          {part}{" "}
-        </span>
-      ))
+      if (isDictionaryMode) {
+        return text.split(/(\s+)/).map((part, index) => 
+          part.trim() ? (
+            <span 
+              key={index} 
+              className="cursor-pointer hover:underline" 
+              onClick={() => {
+                // drawer.open("a", {
+                //   title: "Drawer Title",
+                //   description: "Drawer Description",
+                //   placement: "bottom",
+                // })
+              }}
+            >
+              {part}
+            </span>
+          ) : part
+        );
+      } else {
+        return text;
+      }
     }
 
     // Tìm và highlight text
-    const regex = new RegExp(`(${highlightText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
-    const parts = text.split(regex)
-    
+    const regex = new RegExp(`(${highlightText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const parts = text.split(regex);
+
     return parts.map((part, index) => {
-      const isHighlightPart = regex.test(part)
-      
-      if (isHighlightPart && part.trim()) {
-        return (
-          <span 
-            key={index} 
-            style={{ 
-              backgroundColor: 'rgba(22, 163, 74, 0.3)'
-            }}
-          >
-            {part}
-          </span>
-        )
-      } else {
-        return part.split(/(\s+)/).map((word, wordIndex) => 
-          word.trim() ? (
-            <span key={`${index}-${wordIndex}`} className="cursor-pointer hover:underline" onClick={() => {
-            }}>
-              {word}
+      const isHighlightPart = regex.test(part);
+
+      // Hàm helper để render words với optional underline hover và highlight
+      const renderWords = (content: string, isHighlighted: boolean) => {
+        if (isDictionaryMode) {
+          return content.split(/(\s+)/).map((word, wordIndex) => 
+            word.trim() ? (
+              <span 
+                key={`${index}-${wordIndex}`} 
+                className="cursor-pointer hover:underline"
+                style={isHighlighted ? { backgroundColor: 'rgba(22, 163, 74, 0.3)' } : undefined}
+                onClick={() => {
+                  // drawer.open...
+                }}
+              >
+                {word}
+              </span>
+            ) : word
+          );
+        } else {
+          return (
+            <span 
+              style={isHighlighted ? { backgroundColor: 'rgba(22, 163, 74, 0.3)' } : undefined}
+            >
+              {content}
             </span>
-          ) : word
-        )
+          );
+        }
+      };
+
+      if (isHighlightPart && part.trim()) {
+        return renderWords(part, true);
+      } else {
+        return renderWords(part, false);
       }
     }).flat()
   }

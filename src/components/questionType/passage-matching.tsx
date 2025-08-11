@@ -24,6 +24,7 @@ interface PassageMatchingQuestionProps {
   onLocate: (questionId: number) => void
   onExplain: (questionId: number) => void
   expandedExplanations: Set<number>
+  activeTab: "note" | "lookup"
 }
 
 export default function PassageMatchingQuestionComponent({
@@ -35,6 +36,7 @@ export default function PassageMatchingQuestionComponent({
   onLocate,
   onExplain,
   expandedExplanations,
+  activeTab,
 }: PassageMatchingQuestionProps) {
   const questionBackgroundColor = useColorModeValue("white", "gray.700")
   const textColor = useColorModeValue("gray.800", "white")
@@ -201,6 +203,7 @@ export default function PassageMatchingQuestionComponent({
                 variant="outline"
                 onClick={() => onLocate(question.id)}
                 borderRadius="full"
+                style={activeTab === "lookup" ? { display: "none" } : {}}
               >
                 <Icon as={PiMapPin} />
                 <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
