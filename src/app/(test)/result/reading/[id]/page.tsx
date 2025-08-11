@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { Box, Flex, HStack, Button, VStack, Text, IconButton, Image, SimpleGrid, Icon } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
@@ -22,15 +22,71 @@ interface Question {
   explanation?: string
 }
 
+const highlightMappings: Record<number, string> = {
+  1: "enzymes are used by astronauts in the International Space Station",
+  2: "telson, is located behind the abdominal region",
+  3: "mouth of the horseshoe crab is located between the twelve legs",
+  4: "Female horseshoe crabs communicate by releasing a scent",
+  5: "After the larval stage, horseshoe crabs move into the juvenile period. The juvenile horseshoe crabs will slowly grow over a period of about ten years. The growing process requires shedding small exterior shells, known as exoskeletons, in exchange for larger shells. Horseshoe crabs can shed up to 17 exoskeletons during development and their entire life span can be over twenty years. Mature females can reach 45-50 centimeters from head to tail, while the males grow to approximately 35-40 centimeters.",
+  6: "The mouth of the horseshoe crab is located between the twelve legs. They can only eat when crawling, as the motion allows them to open and close their mouths. Their diet consists mainly of worms and clams.",
+  7: "The head region contains a brain, heart, mouth, four eyes and six pairs of legs. What is significant is that horseshoe crabs possess the rare ability to regrow lost limbs.",
+  8: "copper-containing protein called hemocyanin",
+  9: "The oxygen is also transported in a fluid on the exterior of the cell, in contrast to most animals, where oxygen molecules are transported inside red blood bacteria and fungi.",
+  10: "widespread decline in their abundance",
+  11: "species that feed on the animal and its eggs",
+  12: "decrease the biodiversity of the lagoon",
+  13: "use of horseshoe crabs as bait"
+}
+
+const HighlightableText = ({ 
+  children, 
+  highlightText, 
+  isHighlighted,
+  fontSize 
+}: { 
+  children: string
+  highlightText?: string
+  isHighlighted?: boolean
+  fontSize: string
+}) => {
+  if (!highlightText || !isHighlighted) {
+    return <span>{children}</span>
+  }
+
+  const parts = children.split(new RegExp(`(${highlightText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'))
+  
+  return (
+    <span>
+      {parts.map((part, index) => 
+        part.toLowerCase() === highlightText.toLowerCase() ? (
+          <span 
+            key={index} 
+            style={{ 
+              backgroundColor: 'rgba(22, 163, 74, 0.2)'
+            }}
+          >
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </span>
+  )
+}
+
 export default function TestResult() {
   const params = useParams()
   const examId = params.id as string
+  const leftPanelRef = useRef<HTMLDivElement>(null)
 
   const [activeTab, setActiveTab] = useState<"note" | "lookup">("note")
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("medium")
   const [leftPanelWidth, setLeftPanelWidth] = useState(50)
   const [expandedExplanations, setExpandedExplanations] = useState<Set<number>>(new Set())
   const [highlightedText, setHighlightedText] = useState<number | null>(null)
+  const [highlightedQuestionId, setHighlightedQuestionId] = useState<number | null>(null)
+
 
   const bgColor = useColorModeValue("#F6F0E7", "gray.800")
   const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900")
@@ -270,9 +326,30 @@ export default function TestResult() {
   }, [passageMatchingQuestions, multipleChoiceQuestions, gapFillQuestions])
 
   const handleLocate = (questionId: number) => {
-    setHighlightedText(questionId)
-    // Scroll to relevant text in left panel
+    setHighlightedQuestionId(questionId)
+    
+    if (leftPanelRef.current) {
+      const textToFind = highlightMappings[questionId]
+      if (textToFind) {
+        
+        setTimeout(() => {
+          const elements = leftPanelRef.current?.querySelectorAll('p')
+          if (elements) {
+            for (let element of elements) {
+              if (element.textContent?.includes(textToFind.substring(0, 50))) {
+                element.scrollIntoView({ 
+                  behavior: 'smooth', 
+                  block: 'center' 
+                })
+                break
+              }
+            }
+          }
+        }, 100)
+      }
+    }
   }
+
   const totalQuestions = 13
   const correctAnswers = questionStatuses.filter(status => status === 1).length
 
@@ -395,13 +472,22 @@ export default function TestResult() {
               [Recent Tests] - The Horseshoe Crab
             </Text>
             <VStack align="start" gap={4} fontSize={getFontSizeValue()} color={textColor}>
-              {sectionContent.map((section, index) => (
-                <ReadingParagraph
-                  key={index}
-                  leading={section.leading}
-                  content={section.content}
-                />
-              ))}
+              {sectionContent.map((section, index) => {
+                // Kiểm tra xem section này có chứa text cần highlight không
+                const highlightText = highlightedQuestionId ? highlightMappings[highlightedQuestionId] : undefined
+                const shouldHighlight = highlightText && section.content.toLowerCase().includes(highlightText.toLowerCase())
+                
+                return (
+                  <ReadingParagraph
+                    key={index}
+                    leading={section.leading}
+                    content={section.content}
+                    highlightText={highlightText}
+                    isHighlighted={!!shouldHighlight}
+                    fontSize={fontSize}
+                  />
+                )
+                })}
               {/* <p>
                 <strong>A.</strong> One of the world's oldest animal species, the horseshoe crab, is found along the
                 east coast of the United States and Mexico. Fossil records indicate this creature dates back 450 million
@@ -415,19 +501,9 @@ export default function TestResult() {
                 brain, heart, mouth, four eyes and six pairs of legs. What is significant is that horseshoe crabs
                 possess the rare ability to regrow lost limbs. They also use crawling as their primary means of
                 movement, and commonly bury themselves under the surface of the sand. However, in the water, they will
-                occasionally turn onto their backs and swim upside-down. The mouth of the horseshoe carb is located
+                occasionally turn onto their backs and swim upside-down. The mouth of the horseshoe crab is located
                 between the twelve legs. They can only eat when crawling, as the motion allows them to open and close
                 their mouths. Their diet consists mainly of worms and clams.
-              </p>
-              <p>
-                <strong>B.</strong> The soft body of the horseshoe crab is protected by a large oval shell with jagged, point spines. The
-                two-part body consists of a head and an abdominal region. The head region contains a brain, heart,
-                mouth, four eyes and six pairs of legs. What is significant is that horseshoe crabs possess the rare
-                ability to regrow lost limbs. They also use crawling as their primary means of movement, and commonly
-                bury themselves under the surface of the sand. However, in the water, they will occasionally turn onto
-                their backs and swim upside-down. The mouth of the horseshoe carb is located between the twelve legs.
-                They can only eat when crawling, as the motion allows them to open and close their mouths. Their diet
-                consists mainly of worms and clams.
               </p>
 
               <p>
@@ -587,28 +663,15 @@ export default function TestResult() {
 const sectionContent = [
   {
     leading: "A.",
-    content: `One of the world's oldest animal species, the horseshoe crab, is found along the
-east coast of the United States and Mexico. Fossil records indicate this creature dates back 450 million
-years, and it has changed very little over time. This is because its anatomy has been so successful. In
-fact, the horseshoe crab is more closely related to spiders, scorpions and ticks than it is to true
-crabs and other crustaceans.`
+    content: `One of the world's oldest animal species, the horseshoe crab, is found along the east coast of the United States and Mexico. Fossil records indicate this creature dates back 450 million years, and it has changed very little over time. This is because its anatomy has been so successful. In fact, the horseshoe crab is more closely related to spiders, scorpions and ticks than it is to true crabs and other crustaceans.`
   },
   {
     leading: "B.",
-    content: `The soft body of the horseshoe crab is protected by a large oval shell with jagged, point spines. The
-two-part body consists of a head and an abdominal region. The head region contains a brain, heart,
-mouth, four eyes and six pairs of legs. What is significant is that horseshoe crabs possess the rare
-ability to regrow lost limbs. They also use crawling as their primary means of movement, and commonly
-bury themselves under the surface of the sand. However, in the water, they will occasionally turn onto
-their backs and swim upside-down. The mouth of the horseshoe carb is located between the twelve legs.
-They can only eat when crawling, as the motion allows them to open and close their mouths. Their diet
-consists mainly of worms and clams.`
+    content: `The soft body of the horseshoe crab is protected by a large oval shell with jagged, point spines. The two-part body consists of a head and an abdominal region. The head region contains a brain, heart, mouth, four eyes and six pairs of legs. What is significant is that horseshoe crabs possess the rare ability to regrow lost limbs. They also use crawling as their primary means of movement, and commonly bury themselves under the surface of the sand. However, in the water, they will occasionally turn onto their backs and swim upside-down. The mouth of the horseshoe crab is located between the twelve legs. They can only eat when crawling, as the motion allows them to open and close their mouths. Their diet consists mainly of worms and clams.`
   },
   {
     leading: "",
-    content: `The abdominal region contains mules for movement and is for breathing. A long spine forming a tail,
-called a telson, is located behind the abdominal region. Although this part of the body looks intimidating, it is not dangerous, poisonous or used to sting. 
-Horseshoe crabs use it to flip over if they happen to be pushed on their backs, but this is only possible under the sea. Every year, about 10 percent of the horseshoe crab breeding population dies while on the beach, when rough surf flips the creatures onto their backs, a position from which they often cannot right themselves.`
+    content: `The abdominal region contains mules for movement and is for breathing. A long spine forming a tail, called a telson, is located behind the abdominal region. Although this part of the body looks intimidating, it is not dangerous, poisonous or used to sting. Horseshoe crabs use it to flip over if they happen to be pushed on their backs, but this is only possible under the sea. Every year, about 10 percent of the horseshoe crab breeding population dies while on the beach, when rough surf flips the creatures onto their backs, a position from which they often cannot right themselves.`
   },
   {
     leading: "C.",
@@ -637,10 +700,23 @@ Horseshoe crabs use it to flip over if they happen to be pushed on their backs, 
 ]
 
 
-const ReadingParagraph = ({leading, content}: { leading: string; content: string }) => {
-  return (
-    <p>
-      <strong>{leading}</strong> {content.split(/\s+/).map((part, index) => (
+
+const ReadingParagraph = ({
+  leading, 
+  content, 
+  highlightText, 
+  isHighlighted,
+  fontSize 
+}: { 
+  leading: string
+  content: string
+  highlightText?: string
+  isHighlighted?: boolean
+  fontSize: string
+}) => {
+  const renderHighlightableContent = (text: string) => {
+    if (!highlightText || !isHighlighted) {
+      return text.split(/\s+/).map((part, index) => (
         <span key={index} className="cursor-pointer hover:underline" onClick={() => {
           // drawer.open("a", {
           //   title: "Drawer Title",
@@ -651,7 +727,52 @@ const ReadingParagraph = ({leading, content}: { leading: string; content: string
         }>
           {part}{" "}
         </span>
-      ))}
+      ))
+    }
+
+    // Tìm và highlight text
+    const regex = new RegExp(`(${highlightText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+    const parts = text.split(regex)
+    
+    return parts.map((part, index) => {
+      const isHighlightPart = regex.test(part)
+      
+      if (isHighlightPart && part.trim()) {
+        return (
+          <span 
+            key={index} 
+            style={{ 
+              backgroundColor: 'rgba(22, 163, 74, 0.3)'
+            }}
+          >
+            {part}
+          </span>
+        )
+      } else {
+        return part.split(/(\s+)/).map((word, wordIndex) => 
+          word.trim() ? (
+            <span key={`${index}-${wordIndex}`} className="cursor-pointer hover:underline" onClick={() => {
+            }}>
+              {word}
+            </span>
+          ) : word
+        )
+      }
+    }).flat()
+  }
+
+  return (
+    <p ref={isHighlighted ? (el) => {
+      if (el && highlightText) {
+        setTimeout(() => {
+          el.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          })
+        }, 100)
+      }
+    } : undefined}>
+      <strong>{leading}</strong> {renderHighlightableContent(content)}
     </p>
   )
 }
