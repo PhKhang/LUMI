@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useMemo, useRef, useEffect } from "react"
+import { useState, useMemo, useRef, useEffect, forwardRef } from "react"
 import { useParams } from "next/navigation"
-import { Box, Flex, HStack, Button, VStack, Text, IconButton, Image, SimpleGrid, Icon } from "@chakra-ui/react"
+import { Box, Flex, HStack, Button, VStack, Text, IconButton, Image, SimpleGrid, Icon, Drawer, Portal, createOverlay, StackProps } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
 import SettingsMenu from "@/components/ui/settings-menu"
 import TabSelector from "@/components/ui/tab-selector"
@@ -78,7 +78,7 @@ const HighlightableText = ({
 export default function TestResult() {
   const params = useParams()
   const examId = params.id as string
-  const leftPanelRef = useRef<HTMLDivElement>(null)
+  const leftPanelRef = useRef<HTMLElement>(null)
 
   const [activeTab, setActiveTab] = useState<"note" | "lookup">("note")
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("medium")
@@ -459,41 +459,45 @@ export default function TestResult() {
       {/* Main Content */}
       <Flex h="calc(100vh - 125px)" mx="auto">
         {/* Left Panel - Reading Content */}
-        <Box
+        <DrawerContainer
+          h={"full"}
           width={`${leftPanelWidth}%`}
           borderRight="1px"
           borderColor={borderColor}
-          overflow="auto"
-          p={6}
+          overflow="hidden"
           bg={contentBackgroundColor}
           ref={leftPanelRef}
         >
-          <VStack align="start" gap={4}>
-            <Image src="/horseshoe-crab.png" alt="Horseshoe Crab" maxW="240px" borderRadius="md" mx="auto" />
-            <Text fontSize="xl" fontWeight="bold" color={textColor}>
-              [Recent Tests] - The Horseshoe Crab
-            </Text>
-            <VStack align="start" gap={4} fontSize={getFontSizeValue()} color={textColor}>
-              {sectionContent.map((section, index) => {
-                // Kiểm tra xem section này có chứa text cần highlight không
-                const highlightText = highlightedQuestionId ? highlightMappings[highlightedQuestionId] : undefined
-                const shouldHighlight = highlightText && section.content.toLowerCase().includes(highlightText.toLowerCase()) && activeTab === "note" // Chỉ highlight ở note mode
-                
-                return (
-                  <ReadingParagraph
-                    key={index}
-                    leading={section.leading}
-                    content={section.content}
-                    highlightText={highlightText}
-                    isHighlighted={!!shouldHighlight}
-                    fontSize={fontSize}
-                    activeTab={activeTab}
-                  />
-                )
-              })}
+          <Box overflowY={"scroll"} h={"full"}>
+            <VStack align="start" gap={4}>
+              <Image src="/horseshoe-crab.png" alt="Horseshoe Crab" maxW="240px" borderRadius="md" mx="auto" />
+              <Text fontSize="xl" fontWeight="bold" color={textColor}>
+                [Recent Tests] - The Horseshoe Crab
+              </Text>
+              <VStack align="start" gap={4} fontSize={getFontSizeValue()} color={textColor}>
+                {sectionContent.map((section, index) => {
+                  // Kiểm tra xem section này có chứa text cần highlight không
+                  const highlightText = highlightedQuestionId ? highlightMappings[highlightedQuestionId] : undefined
+                  const shouldHighlight = highlightText && section.content.toLowerCase().includes(highlightText.toLowerCase()) && activeTab === "note" // Chỉ highlight ở note mode
+            
+                  return (
+                    <ReadingParagraph
+                      key={index}
+                      leading={section.leading}
+                      content={section.content}
+                      highlightText={highlightText}
+                      isHighlighted={!!shouldHighlight}
+                      fontSize={fontSize}
+                      activeTab={activeTab}
+                      containerRef={leftPanelRef}
+                    />
+                  )
+                })}
+              </VStack>
             </VStack>
-          </VStack>
-        </Box>
+          </Box>
+          <drawer.Viewport />
+        </DrawerContainer>
 
         {/* Resizer */}
         <Box
@@ -660,6 +664,54 @@ const sectionContent = [
   }
 ]
 
+const DrawerContainer = forwardRef<HTMLElement, StackProps>(
+  function DrawerContainer(props, ref) {
+    return (
+      <Box
+        pos="relative"
+        overflow="hidden"
+        layerStyle="fill.subtle"
+        outline="2px solid gray"
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+
+interface DialogProps {
+  title: string
+  description?: string
+  content?: React.ReactNode
+  placement?: Drawer.RootProps["placement"]
+  containerRef: React.RefObject<HTMLElement | null>
+}
+
+const drawer = createOverlay<DialogProps>((props) => {
+  const { title, description, content, containerRef, ...rest } = props
+  return (
+    <Drawer.Root {...rest} preventScroll={true}>
+      <Portal container={containerRef}>
+        <Drawer.Backdrop pos="absolute" boxSize="full" />
+        <Drawer.Positioner pos="absolute" boxSize="full" >
+          <Drawer.Content>
+            {title && (
+              <Drawer.Header>
+                <Drawer.Title>{title}</Drawer.Title>
+              </Drawer.Header>
+            )}
+            <Drawer.Body spaceY="4">
+              {description && (
+                <Drawer.Description>{description}</Drawer.Description>
+              )}
+              {content}
+            </Drawer.Body>
+          </Drawer.Content>
+        </Drawer.Positioner>
+      </Portal>
+    </Drawer.Root>
+  )
+})
 
 
 const ReadingParagraph = ({
@@ -668,7 +720,8 @@ const ReadingParagraph = ({
   highlightText, 
   isHighlighted,
   fontSize,
-  activeTab 
+  activeTab,
+  containerRef
 }: { 
   leading: string
   content: string
@@ -676,6 +729,7 @@ const ReadingParagraph = ({
   isHighlighted?: boolean
   fontSize: string
   activeTab: "note" | "lookup"
+  containerRef?: React.RefObject<HTMLElement | null>
 }) => {
   const renderHighlightableContent = (text: string) => {
     const isDictionaryMode = activeTab === "lookup";
@@ -688,11 +742,12 @@ const ReadingParagraph = ({
               key={index} 
               className="cursor-pointer hover:underline" 
               onClick={() => {
-                // drawer.open("a", {
-                //   title: "Drawer Title",
-                //   description: "Drawer Description",
-                //   placement: "bottom",
-                // })
+                drawer.open("a", {
+                  title: "Drawer Title",
+                  description: "Drawer Description",
+                  placement: "bottom",
+                  containerRef: containerRef!,
+                })
               }}
             >
               {part}
