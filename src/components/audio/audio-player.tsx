@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Box, Flex, Text, HStack, VStack, Slider, Stack, Button, Spacer  } from "@chakra-ui/react"
+import { Box, Flex, Text, HStack, VStack, Slider, Stack, Button, Spacer, Menu  } from "@chakra-ui/react"
 import { Icon } from "@chakra-ui/react"
 import { MdOutlinePlayArrow  , MdPause, MdVolumeUp, MdReplay5, MdForward5   } from "react-icons/md"
 import { useColorModeValue } from "@/components/ui/color-mode"
@@ -17,7 +17,7 @@ export default function AudioPlayer({ duration, currentTime }: AudioPlayerProps)
 
   const bgColor = useColorModeValue("gray.50", "gray.700")
   const textColor = useColorModeValue("gray.800", "white")
-
+  const [playSpeedValue, setPlaySpeedValue] = useState([1])
   const togglePlay = () => {
     setIsPlaying(!isPlaying)
     // Audio logic would go here
@@ -116,10 +116,37 @@ export default function AudioPlayer({ duration, currentTime }: AudioPlayerProps)
             <Icon as={MdForward5} boxSize={7} color="gray.700"  />
           </Box>
           <Spacer />
-
-          <Button variant="ghost" size="sm" colorScheme="yellow">
+          {/* Playback Speed Button */}
+          {/* <Button variant="ghost" size="sm" colorScheme="yellow">
             <Text fontSize="sm" color={textColor}>Tốc độ 1x</Text>
-          </Button>
+          </Button> */}
+    <Menu.Root>
+      <Menu.Trigger asChild>
+        <Button variant="outline" size="sm" minWidth={"120px"} rounded={"full"}>
+          Tốc độ: {playSpeedValue}x
+        </Button>
+      </Menu.Trigger>
+        <Menu.Positioner>
+          <Menu.Content>
+            <Menu.Item value="speed"> 
+            <Slider.Root width="100px" min={0.25} max={2} step={0.05} defaultValue={[1]} onValueChange={(e) => setPlaySpeedValue(e.value)}>
+              <HStack>
+              <Slider.Label> 0.25x</Slider.Label>
+              <Spacer />
+              <Slider.Label> 2x</Slider.Label>
+              {/* <Slider.ValueText/>x */}
+              </HStack>
+              <Slider.Control>
+                <Slider.Track>
+                  <Slider.Range />
+                </Slider.Track>
+                <Slider.Thumbs />
+              </Slider.Control>
+            </Slider.Root>
+            </Menu.Item>
+          </Menu.Content>
+        </Menu.Positioner>
+    </Menu.Root>
           </HStack>
         </VStack>
       </Flex>
