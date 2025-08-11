@@ -82,6 +82,28 @@ export default function MultipleChoiceQuestionComponent({
     }
   }
 
+  const getQuestionBoxSize = () => {
+    switch (fontSize) {
+      case "small":
+        return { minW: "40px", h: "40px" }
+      case "large":
+        return { minW: "60px", h: "60px" }
+      default:
+        return { minW: "50px", h: "50px" }
+    }
+  }
+
+  const getQuestionNumberFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "xl"
+      case "large":
+        return "3xl"
+      default:
+        return "2xl"
+    }
+  }
+
   const getOptionStatus = (optionLetter: string, question: MultipleChoiceQuestion) => {
     const isCorrect = question.correctAnswers.includes(optionLetter)
     const isSelected = question.userAnswers.includes(optionLetter)
@@ -129,19 +151,41 @@ export default function MultipleChoiceQuestionComponent({
   const firstQuestion = questions[0]
 
   return (
-    <VStack align="start" gap={4} w="full">
+    <VStack align="start" gap={0} w="full">
       {/* Header Section */}
-      <Box mb={4}>
+      <Box mb={5}>
         <Text fontSize={getQuestionHeaderFontSize()} fontWeight="bold" color={textColor}>
           {title}
         </Text>
-        <Text fontSize={getFontSizeValue()} color={textColor} mb={2}>
-          {instruction} {questionText}
+        <Text fontSize={getFontSizeValue()} color={textColor} mb={4}>
+          {instruction}
         </Text>
+        
+        {/* Question Number and Text */}
+        <HStack align="center" gap={4}>
+          <Box
+            bg={questionBackgroundColor}
+            borderRadius="lg"
+            p={3}
+            {...getQuestionBoxSize()}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            shadow="md"
+          >
+            <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
+              {questionRange}
+            </Text>
+          </Box>
+          
+          <Text fontSize={getFontSizeValue()} color={textColor} flex={1}>
+            {questionText}
+          </Text>
+        </HStack>
       </Box>
 
       {/* Question Box */}
-      <Box w="full" p={4} bg={questionBackgroundColor} borderRadius="lg" shadow="md">
+      <Box w="full" px={4} mb={5}>
         {/* Options */}
         <VStack align="start" gap={3}>
           {options.map((option) => {
@@ -177,7 +221,7 @@ export default function MultipleChoiceQuestionComponent({
       {/* Answer Sections */}
       {questions.map((question) => (
         <Box key={question.id} w="full">
-          <Flex justify="space-between" align="center" w="full" mb={2}>
+          <Flex justify="space-between" align="center" w="full" mb={5}>
             <Box bg="gray.200" px={4} py={2} borderRadius="md">
               <Text fontSize={getAnswerTextFontSize()} color="gray.700">
                 {question.id}. Answer:{" "}

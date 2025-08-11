@@ -97,44 +97,76 @@ export default function GapFillQuestionComponent({
     }
   }
 
+  const getQuestionBoxSize = () => {
+    switch (fontSize) {
+      case "small":
+        return { minW: "40px", h: "40px" }
+      case "large":
+        return { minW: "60px", h: "60px" }
+      default:
+        return { minW: "50px", h: "50px" }
+    }
+  }
+
+  const getQuestionNumberFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "xl"
+      case "large":
+        return "3xl"
+      default:
+        return "2xl"
+    }
+  }
+
   return (
-    <VStack align="start" gap={4} w="full">
+    <VStack align="start" gap={0} w="full">
       {/* Header Section */}
-      <Box mb={4}>
+      <Box mb={5}>
         <Text fontSize={getQuestionHeaderFontSize()} fontWeight="bold" color={textColor}>
           {title}
         </Text>
-        <Text fontSize={getFontSizeValue()} color={textColor} mb={2}>
-          {instruction} {additionalInstruction}
+        <Text fontSize={getFontSizeValue()} color={textColor} mb={4}>
+          {instruction}
         </Text>
-      </Box>
-
-      {/* Question Box */}
-      <Box w="full" p={4} bg={questionBackgroundColor} borderRadius="lg" shadow="md">
-        {/* <HStack mb={4} align="center">
-          <Box bg="yellow.400" color="white" px={4} py={2} borderRadius="lg" fontWeight="bold" fontSize="xl">
-            {questionRange}
+        
+        {/* Question Number and Additional Instruction */}
+        <HStack align="center" gap={4}>
+          <Box
+            bg={questionBackgroundColor}
+            borderRadius="lg"
+            p={3}
+            {...getQuestionBoxSize()}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            shadow="md"
+          >
+            <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
+              {questionRange}
+            </Text>
           </Box>
-          <Text fontSize={getFontSizeValue()} color={textColor}>
+          
+          <Text fontSize={getFontSizeValue()} color={textColor} flex={1}>
             {additionalInstruction}
           </Text>
-        </HStack> */}
+        </HStack>
+      </Box>
 
-        {/* Summary Title */}
-        <Text fontSize={getSummaryTitleFontSize()} fontWeight="bold" color={textColor} mb={4} textAlign="center">
-          {summaryTitle}
-        </Text>
+      {/* Summary Title */}
+      <Text fontSize={getSummaryTitleFontSize()} fontWeight="bold" color={textColor} mb={2} textAlign="center" w="full">
+        {summaryTitle}
+      </Text>
 
-        {/* Summary Content */}
-        <Box fontSize={getFontSizeValue()} color={textColor} lineHeight="1.8">
-          {summaryContent}
-        </Box>
+      {/* Summary Content - No background, no border */}
+      <Box w="full" fontSize={getFontSizeValue()} color={textColor} lineHeight="2" mb={2}>
+        {summaryContent}
       </Box>
 
       {/* Answer Sections */}
       {questions.map((question) => (
         <Box key={question.id} w="full">
-          <Flex justify="space-between" align="center" w="full" mb={2}>
+          <Flex justify="space-between" align="center" w="full" mb={5}>
             <Box bg="gray.200" px={4} py={2} borderRadius="md">
               <Text fontSize={getAnswerTextFontSize()} color="gray.700">
                 {question.id}. Answer:{" "}

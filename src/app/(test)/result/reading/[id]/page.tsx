@@ -116,7 +116,33 @@ export default function TestResult() {
     },
   ]
 
+  // Data for multiple choice questions 8-9
+  const multipleChoiceQuestions89: MultipleChoiceQuestion[] = [
+    {
+      id: 8,
+      correctAnswers: ["A", "D"],
+      userAnswers: ["A", "D"],
+      explanation:
+        "Bước 1: Hiểu yêu cầu câu hỏi: Theo hai cách nào mà máu của sam biển khác biệt so với máu của hầu hết các động vật khác? Bước 2: Tìm các keywords: different mineral composition (A) và colour changes from blue to red (D) đều được đề cập trong đoạn văn về thành phần máu đặc biệt của sam biển.",
+    },
+    {
+      id: 9,
+      correctAnswers: ["A", "D"],
+      userAnswers: ["A", "D"],
+      explanation: "Giải thích tương tự câu 8 - cả hai câu hỏi đều yêu cầu chọn TWO letters để mô tả sự khác biệt trong máu của sam biển."
+    },
+  ]
+
   const multipleChoiceOptions = [
+    { letter: "A", text: "It has a different mineral composition." },
+    { letter: "B", text: "It lacks a bacteria-fighting protein." },
+    { letter: "C", text: "Harmless fungi regularly grow in the blood." },
+    { letter: "D", text: "Its colour changes from blue to red as it circulates." },
+    { letter: "E", text: "The blood cell carries oxygen its surface." },
+  ]
+
+  // Options for questions 8-9
+  const multipleChoiceOptions89 = [
     { letter: "A", text: "It has a different mineral composition." },
     { letter: "B", text: "It lacks a bacteria-fighting protein." },
     { letter: "C", text: "Harmless fungi regularly grow in the blood." },
@@ -445,7 +471,7 @@ export default function TestResult() {
             expandedExplanations={expandedExplanations}
           />
 
-          {/* Multiple Choice Questions */}
+          {/* Multiple Choice Questions 6-7 */}
           <MultipleChoiceQuestionComponent
             title="Questions 6-7"
             instruction="Choose TWO letters, A-E."
@@ -458,6 +484,21 @@ export default function TestResult() {
             onExplain={toggleExplanation}
             expandedExplanations={expandedExplanations}
           />
+
+          {/* Multiple Choice Questions 8-9 */}
+          <MultipleChoiceQuestionComponent
+            title="Questions 8-9"
+            instruction="Choose TWO letters, A-E."
+            questionRange="8 - 9"
+            questionText="In which TWO ways is horseshoe crab blood different from that of most other animals?"
+            options={multipleChoiceOptions89}
+            questions={multipleChoiceQuestions89}
+            fontSize={fontSize}
+            onLocate={handleLocate}
+            onExplain={toggleExplanation}
+            expandedExplanations={expandedExplanations}
+          />
+
           {/* Gap Fill Questions */}
           <GapFillQuestionComponent
             title="Questions 10-13"
