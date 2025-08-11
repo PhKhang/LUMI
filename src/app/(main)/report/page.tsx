@@ -1082,7 +1082,7 @@ export default function ReportPage() {
                   <Text fontSize="md" fontWeight="bold" color={textColor}>
                     {selectedSkill === 'Listening' ? '2.7 times' : 
                      selectedSkill === 'Reading' ? '2.7 times' : 
-                     selectedSkill === 'Speaking' ? '6.0 /9.0' : 
+                     selectedSkill === 'Speaking' ? '6.0/9.0' : 
                      selectedSkill === 'Writing' ? '36 min' : '2.7 times'}
                   </Text>
                 </Box>
@@ -1109,7 +1109,7 @@ export default function ReportPage() {
                     {selectedSkill === 'Listening' ? '7.0/9.0' : 
                      selectedSkill === 'Reading' ? '7.0/9.0' : 
                      selectedSkill === 'Speaking' ? '67%' : 
-                     selectedSkill === 'Writing' ? '7.0 /9.0' : '7.0/9.0'}
+                     selectedSkill === 'Writing' ? '7.0/9.0' : '7.0/9.0'}
                   </Text>
                 </Box>
                 
