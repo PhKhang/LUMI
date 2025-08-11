@@ -296,11 +296,11 @@ export default function ExamsPage() {
   }
 
   const steps = [
-    { number: 1, title: "Thông tin bài", description: "Tên và loại bài Test" },
-    { number: 2, title: "Chọn kỹ năng", description: "Lựa chọn kỹ năng muốn cho bài Test" },
-    { number: 3, title: "Tạo câu hỏi", description: "Xây dựng nội dung và câu hỏi" },
-    { number: 4, title: "Phân loại bài", description: "Nguồn câu hỏi và loại câu hỏi" },
-    { number: 5, title: "Xem lại", description: "Kiểm tra lần cuối và đăng bài thi" }
+    { number: 1, title: "Information", description: "Name and Test type" },
+    { number: 2, title: "Select content", description: "Select skills and sections for the Test" },
+    { number: 3, title: "Create question", description: "Create test content" },
+    { number: 4, title: "Categorize test", description: "Choose test source and question type" },
+    { number: 5, title: "Review", description: "Final check and publish test" }
   ]
 
   return (
@@ -308,13 +308,13 @@ export default function ExamsPage() {
       <Container maxW="6xl" py={6}>
         {/* Header */}
         <Text fontSize="2xl" fontWeight="bold" color="text.primary" mb={8}>
-          Tạo Bài Test Mới
+          Create New Test
         </Text>
 
         {/* Progress Steps */}
         <Box mb={8}>
           <Text fontSize="sm" color="text.muted" mb={4}>
-            Bước {currentStep} trên 5
+            Step {currentStep} of 5
           </Text>
           
           <HStack gap={0} mb={6}>
@@ -381,10 +381,10 @@ export default function ExamsPage() {
             <VStack align="start" gap={6}>
               <Box>
                 <Text fontSize="xl" fontWeight="bold" color="text.primary" mb={2}>
-                  Chi tiết & Hình thức bài thi
+                  Test Information
                 </Text>
                 <Text fontSize="sm" color="text.muted">
-                  Cung cấp thông tin cơ bản và chọn định dạng bài thi
+                  Provide basic information of the Test
                 </Text>
               </Box>
 
@@ -392,10 +392,10 @@ export default function ExamsPage() {
               <Box w="full">
                 <Field.Root>
                   <Field.Label fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
-                    Tên bài thi
+                    Test name
                   </Field.Label>
                   <Input
-                    placeholder="ví dụ: [Cambridge 19] Reading Test 1"
+                    placeholder="e.g: [Cambridge 19] Reading Test 1"
                     value={testName}
                     onChange={(e) => setTestName(e.target.value)}
                     size="md"
@@ -410,9 +410,8 @@ export default function ExamsPage() {
               {/* Test Type Selection */}
               <Box w="full">
                 <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={4}>
-                  Dạng bài
+                  Test type
                 </Text>
-                
                 <VStack align="start" gap={4}>
                   {/* Full Test Option */}
                   <Box 
@@ -455,7 +454,7 @@ export default function ExamsPage() {
                           Full Test
                         </Text>
                         <Text fontSize="sm" color="text.muted">
-                          Bài thi IELTS hoàn chỉnh với đầy đủ 4 kỹ năng
+                          Complete IELTS test with all 4 skills
                         </Text>
                       </VStack>
                     </HStack>
@@ -502,7 +501,7 @@ export default function ExamsPage() {
                           Mini Test
                         </Text>
                         <Text fontSize="sm" color="text.muted">
-                          Bài thi IELTS nhỏ với 1 kỹ năng
+                          Small IELTS test with 1 skill only
                         </Text>
                       </VStack>
                     </HStack>
@@ -523,10 +522,10 @@ export default function ExamsPage() {
                   <Icon as={MdLightbulb} color="secondary" boxSize={5} mt={0.5} />
                   <Box>
                     <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={1}>
-                      Lưu ý
+                      Note
                     </Text>
                     <Text fontSize="sm" color="text.secondary">
-                      Mini Test có thể bao gồm tất cả section của một kỹ năng hoặc chỉ một phần section trong kỹ năng đó.
+                      A Mini Test can include all sections of a skill or only one section within that skill.
                     </Text>
                   </Box>
                 </HStack>
@@ -539,25 +538,24 @@ export default function ExamsPage() {
             <VStack align="start" gap={6}>
               <Box>
                 <Text fontSize="xl" fontWeight="bold" color="text.primary" mb={2}>
-                  Chọn Nội dung
+                  Select content
                 </Text>
                 <Text fontSize="sm" color="text.muted">
-                  Chọn nội dung cho bài Mini Test
+                  Select content for Mini Test
                 </Text>
               </Box>
 
               {/* Skill Selection */}
               <Box w="full">
                 <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={4}>
-                  Chọn kỹ năng
+                  Select skill
                 </Text>
-                
                 <VStack align="start" gap={3}>
                   {/* Row 1: Listening and Reading */}
                   <HStack w="full" gap={4}>
                     {[
-                      { key: "listening", label: "Listening", description: "Bài thi IELTS hoàn chỉnh với đầy đủ 4 kỹ năng", icon: MdHeadphones },
-                      { key: "reading", label: "Reading", description: "Bài thi IELTS hoàn chỉnh với đầy đủ 4 kỹ năng", icon: MdMenuBook }
+                      { key: "listening", label: "Listening", description: "Section: Part 1, Part 2, Part 3, Part 4", icon: MdHeadphones },
+                      { key: "reading", label: "Reading", description: "Section: Passage 1, Passage 2, Passage 3", icon: MdMenuBook }
                     ].map((skill) => (
                       <Box 
                         key={skill.key}
@@ -622,8 +620,8 @@ export default function ExamsPage() {
                   {/* Row 2: Writing and Speaking */}
                   <HStack w="full" gap={4}>
                     {[
-                      { key: "writing", label: "Writing", description: "Bài thi IELTS nhỏ với 1 kỹ năng", icon: MdEdit },
-                      { key: "speaking", label: "Speaking", description: "Bài thi IELTS nhỏ với 1 kỹ năng", icon: MdMic }
+                      { key: "writing", label: "Writing", description: "Section: Task 1, Task 2", icon: MdEdit },
+                      { key: "speaking", label: "Speaking", description: "Section: Part 1, Part 2, Part 3", icon: MdMic }
                     ].map((skill) => (
                       <Box 
                         key={skill.key}
@@ -691,19 +689,18 @@ export default function ExamsPage() {
               {selectedSkill && (
                 <Box w="full">
                   <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={4}>
-                    {selectedSkill === "reading" ? "Chọn Section" : 
-                     selectedSkill === "listening" ? "Chọn Part" :
-                     selectedSkill === "writing" ? "Chọn Task" :
-                     "Chọn Part"}
+                    {selectedSkill === "reading" ? "Select Section" : 
+                     selectedSkill === "listening" ? "Select Part" :
+                     selectedSkill === "writing" ? "Select Task" :
+                     "Select Part"}
                   </Text>
-                  
                   <HStack w="full" gap={3}>
                     {/* Reading Sections */}
                     {selectedSkill === "reading" && [
-                      { key: "full", label: "Full Section", description: "Bao gồm tất cả các phần" },
-                      { key: "passage1", label: "Passage 1", description: "Chỉ tạo cho section này" },
-                      { key: "passage2", label: "Passage 2", description: "Chỉ tạo cho section này" },
-                      { key: "passage3", label: "Passage 3", description: "Chỉ tạo cho section này" }
+                      { key: "full", label: "Full Section", description: "All sections in this skill" },
+                      { key: "passage1", label: "Passage 1", description: "Only this section" },
+                      { key: "passage2", label: "Passage 2", description: "Only this section" },
+                      { key: "passage3", label: "Passage 3", description: "Only this section" }
                     ].map((section) => (
                       <Box 
                         key={section.key}
@@ -931,10 +928,10 @@ export default function ExamsPage() {
             <VStack align="start" gap={4}>
               <Box w="full">
                 <Text fontSize="xl" fontWeight="bold" color="text.primary" mb={2}>
-                  Tạo câu hỏi
+                  Create Questions
                 </Text>
                 <Text fontSize="sm" color="text.muted" mb={3}>
-                  Nhấn chọn vào các nhóm câu hỏi để xem và chỉnh sửa các câu hỏi bên trong
+                  Click on a question group to view and edit the questions inside
                 </Text>
                 {/* Divider line - stays within container */}
                 <Box 
@@ -1117,34 +1114,34 @@ export default function ExamsPage() {
                           <>
                             {/* Image Upload Area */}
                             <Box 
-                              w="full" 
-                              h="200px" 
-                              borderWidth="2px" 
-                              borderStyle="dashed" 
-                              borderColor="border.secondary" 
-                              borderRadius="lg" 
-                              display="flex" 
-                              flexDirection="column"
-                              justifyContent="center" 
-                              alignItems="center" 
-                              mb={6}
-                              cursor="pointer"
-                              _hover={{ borderColor: "accent" }}
-                            >
-                              <Icon as={MdImage} color="text.muted" boxSize={12} mb={2} />
-                              <Text color="text.muted" fontSize="sm" mb={2}>
-                                Chưa có ảnh minh họa nào
-                              </Text>
-                              <HStack color="#4CAF50" fontSize="sm">
-                                <Icon as={MdAdd} boxSize={4} />
-                                <Text>Tải ảnh lên</Text>
-                              </HStack>
-                            </Box>
+                                  w="full" 
+                                  h="200px" 
+                                  borderWidth="2px" 
+                                  borderStyle="dashed" 
+                                  borderColor="border.secondary" 
+                                  borderRadius="lg" 
+                                  display="flex" 
+                                  flexDirection="column"
+                                  justifyContent="center" 
+                                  alignItems="center" 
+                                  mb={6}
+                                  cursor="pointer"
+                                  _hover={{ borderColor: "accent" }}
+                                >
+                                  <Icon as={MdImage} color="text.muted" boxSize={12} mb={2} />
+                                  <Text color="text.muted" fontSize="sm" mb={2}>
+                                    No image yet
+                                  </Text>
+                                  <HStack color="#4CAF50" fontSize="sm">
+                                    <Icon as={MdAdd} boxSize={4} />
+                                    <Text>Upload image</Text>
+                                  </HStack>
+                                </Box>
 
                             {/* Title Input */}
                             <Box mb={4}>
                               <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
-                                Tiêu đề
+                                Title
                               </Text>
                               <Input
                                 value={passageTitle}
@@ -1160,7 +1157,7 @@ export default function ExamsPage() {
                             {/* Content Editor */}
                             <Box>
                               <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
-                                Nội dung
+                                Content
                               </Text>
                               
                               {/* Editor Toolbar */}
@@ -1215,7 +1212,7 @@ export default function ExamsPage() {
                             const [passageId, groupId] = selectedQuestionGroup.split('_')
                             const groups = questionGroups[passageId as keyof typeof questionGroups]
                             const group = groups?.find(g => g.id === groupId)
-                            return group?.title || "Question Group"
+                            return group?.title || "Content Question Group 1-3"
                           })()}
                         </Text>
                       </Box>
@@ -1225,11 +1222,11 @@ export default function ExamsPage() {
                         <HStack justify="space-between" align="center" mb={expandedSections.questionGroupInfo ? 4 : 0}>
                           <Box>
                             <Text fontSize="lg" fontWeight="bold" color="text.primary">
-                              Thông Tin Nhóm Câu Hỏi
+                              Question Group Information
                             </Text>
                             {expandedSections.questionGroupInfo && (
                               <Text fontSize="sm" color="text.muted">
-                                Thiết lập câu hỏi và đáp án cho nhóm câu hỏi này
+                                Provide question type and instruction for this question group
                               </Text>
                             )}
                           </Box>
@@ -1263,18 +1260,18 @@ export default function ExamsPage() {
                             >
                               <Icon as={MdImage} color="text.muted" boxSize={8} mb={1} />
                               <Text color="text.muted" fontSize="sm" mb={1}>
-                                Chưa có ảnh minh họa nào
+                                No image yet
                               </Text>
                               <HStack color="#4CAF50" fontSize="sm">
                                 <Icon as={MdAdd} boxSize={3} />
-                                <Text>Tải ảnh lên</Text>
+                                <Text>Upload image</Text>
                               </HStack>
                             </Box>
 
                             {/* Question Type Selection */}
                             <Box mb={4}>
                               <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
-                                Loại câu hỏi
+                                Question type
                               </Text>
                               <Box position="relative">
                                 <select 
@@ -1304,7 +1301,7 @@ export default function ExamsPage() {
                             {/* Instructions */}
                             <Box>
                               <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
-                                Hướng dẫn
+                                Instruction
                               </Text>
                               
                               {/* Editor Toolbar */}
@@ -1359,11 +1356,11 @@ and NOT GIVEN if there is no information on this`}
                         <HStack justify="space-between" align="center" mb={expandedSections.questionDetails ? 4 : 0}>
                           <Box>
                             <Text fontSize="lg" fontWeight="bold" color="text.primary">
-                              Chi Tiết Câu Hỏi
+                              Question Details
                             </Text>
                             {expandedSections.questionDetails && (
                               <Text fontSize="sm" color="text.muted">
-                                Thêm đề và đáp án cho các câu hỏi trong nhóm này
+                                Add questions' description and answer in this question group
                               </Text>
                             )}
                           </Box>
@@ -1434,7 +1431,7 @@ and NOT GIVEN if there is no information on this`}
                                 {/* Question Content */}
                                 <Box mb={4}>
                                   <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
-                                    Câu hỏi
+                                    Question
                                   </Text>
                                   
                                   {/* Question Editor Toolbar */}
@@ -1482,7 +1479,7 @@ and NOT GIVEN if there is no information on this`}
                                 {/* Answer Selection */}
                                 <Box mb={4}>
                                   <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
-                                    Đáp án đúng
+                                    Correct Answer
                                   </Text>
                                   <Box position="relative">
                                     <select 
@@ -1507,7 +1504,7 @@ and NOT GIVEN if there is no information on this`}
                                 {/* Answer Explanation */}
                                 <Box mb={4}>
                                   <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={2}>
-                                    Giải thích đáp án
+                                    Explain Answer
                                   </Text>
                                   
                                   {/* Explanation Editor Toolbar */}
@@ -1542,11 +1539,11 @@ and NOT GIVEN if there is no information on this`}
                                     fontSize="sm"
                                     resize="none"
                                     overflow="hidden"
-                                    defaultValue={`Bước 1: Hiểu câu hỏi:
-Mô tả về sự sinh sản của sam biển.
-Bước 2: Tìm các keywords được paraphrase trong câu hỏi.
-Bước 3: So sánh và đối chiếu với đoạn văn.
-Bước 4: Chọn đáp án đúng.`}
+                                    defaultValue={`Step 1: Understand the question:
+Describe the reproduction of horseshoe crabs.
+Step 2: Identify the keywords that are paraphrased in the question.
+Step 3: Compare and contrast with the passage.
+Step 4: Choose the correct answer.`}
                                     _focus={{ borderColor: "accent", boxShadow: "0 0 0 1px var(--chakra-colors-accent)" }}
                                     _placeholder={{ color: "text.muted" }}
                                     onInput={(e: any) => {
@@ -1560,7 +1557,7 @@ Bước 4: Chọn đáp án đúng.`}
                                 <Box>
                                   <HStack justify="space-between" align="center">
                                     <Text fontSize="sm" fontWeight="medium" color="text.primary">
-                                      Định vị đáp án
+                                      {}
                                     </Text>
                                     <Button 
                                       size="sm" 
@@ -1603,15 +1600,15 @@ Bước 4: Chọn đáp án đúng.`}
             </VStack>
           )}
           
-          {/* Step 4 Content - Phân loại bài */}
+          {/* Step 4 Content - Categorize Test */}
           {currentStep === 4 && (
             <VStack align="start" gap={6}>
               <Box w="full">
                 <Text fontSize="xl" fontWeight="bold" color="text.primary" mb={2}>
-                  Phân loại Bài Test
+                  Categorize Test
                 </Text>
                 <Text fontSize="sm" color="text.muted" mb={6}>
-                  Cung cấp nguồn câu hỏi, loại câu hỏi của Bài Test
+                  Provide the source and question types for the test
                 </Text>
               </Box>
 
@@ -1624,13 +1621,13 @@ Bước 4: Chọn đáp án đúng.`}
                 p={6}
                 bg="background.primary"
               >
-                {/* Nguồn tài liệu */}
+                {/* Source */}
                 <Box w="full" mb={6}>
                   <Text fontSize="lg" fontWeight="bold" color="text.primary" mb={2}>
-                    Nguồn tài liệu
+                    Source
                   </Text>
                   <Text fontSize="sm" color="text.muted" mb={4}>
-                    Chọn nguồn tài liệu cho đề thi này
+                    Select the source for this test
                   </Text>
                   
                   <Box position="relative" w="300px">
@@ -1660,13 +1657,13 @@ Bước 4: Chọn đáp án đúng.`}
                   </Box>
                 </Box>
 
-                {/* Sections và Loại câu hỏi */}
+                {/* Sections and Question Types */}
                 <Box w="full">
                   <Text fontSize="lg" fontWeight="bold" color="text.primary" mb={2}>
-                    Sections và Loại câu hỏi
+                    Sections and Question Types
                   </Text>
                   <Text fontSize="sm" color="text.muted" mb={6}>
-                    Hệ thống tự động phát hiện phân loại câu hỏi dựa trên nhóm câu hỏi đã tạo
+                    Review the sections and question types you have created
                   </Text>
 
                   {/* Reading Badge - Similar to Step 3 but with green text */}
@@ -1729,7 +1726,7 @@ Bước 4: Chọn đáp án đúng.`}
                               </HStack>
                               
                               <Text fontSize="sm" color="text.muted" mb={2}>
-                                Loại câu hỏi được phát hiện:
+                                 Question types:
                               </Text>
                               
                               <HStack gap={2} flexWrap="wrap">
@@ -1739,15 +1736,15 @@ Bước 4: Chọn đáp án đúng.`}
                                   </Box>
                                 )) : (
                                   <Box bg="gray.100" color="gray.700" px={3} py={1} borderRadius="md" fontSize="sm">
-                                    Chưa có loại câu hỏi nào
+                                    No question type yet
                                   </Box>
                                 )}
                               </HStack>
                             </VStack>
                             
                             <VStack align="end" gap={1}>
-                              <Text fontSize="sm" fontWeight="bold" color="text.primary">{totalQuestions || 0} câu</Text>
-                              <Text fontSize="sm" color="text.muted">{questionTypes.length} dạng bài</Text>
+                              <Text fontSize="sm" fontWeight="bold" color="text.primary">{totalQuestions || 0} questions</Text>
+                              <Text fontSize="sm" color="text.muted">{questionTypes.length} types</Text>
                             </VStack>
                           </HStack>
                         </Box>
@@ -1759,21 +1756,21 @@ Bước 4: Chọn đáp án đúng.`}
             </VStack>
           )}
           
-          {/* Step 5 Content - Xem lại & Đăng bài */}
+          {/* Step 5 Content - Review & Publish */}
           {currentStep === 5 && (
             <VStack align="start" gap={6}>
               <Box w="full">
                 <Text fontSize="xl" fontWeight="bold" color="text.primary" mb={2}>
-                  Xem lại & Đăng bài
+                  Review & Publish
                 </Text>
                 <Text fontSize="sm" color="text.muted" mb={6}>
-                  Xem lại cấu hình bài kiểm tra của bạn trước khi đăng
+                  Review your test before publishing
                 </Text>
               </Box>
 
               {/* Review Content */}
               <VStack align="start" gap={4} w="full">
-                {/* Thông tin Bài Test */}
+                {/* Test Information */}
                 <Box 
                   w="full" 
                   bg="background.primary" 
@@ -1783,20 +1780,20 @@ Bước 4: Chọn đáp án đúng.`}
                   p={4}
                 >
                   <Text fontSize="lg" fontWeight="bold" color="text.primary" mb={4}>
-                    Thông tin Bài Test
+                    Test Information
                   </Text>
                   
                   <HStack justify="space-between" align="center" w="full">
                     <VStack align="start" gap={2}>
                       <HStack gap={8}>
                         <Box>
-                          <Text fontSize="sm" color="text.muted" mb={1}>Tên:</Text>
+                          <Text fontSize="sm" color="text.muted" mb={1}>Name:</Text>
                           <Text fontSize="sm" fontWeight="medium" color="text.primary">
                             {testName || "[Cambridge 18] Reading Test 1"}
                           </Text>
                         </Box>
                         <Box>
-                          <Text fontSize="sm" color="text.muted" mb={1}>Loại:</Text>
+                          <Text fontSize="sm" color="text.muted" mb={1}>Type:</Text>
                           <Text fontSize="sm" fontWeight="medium" color="text.primary">
                             {testType === "full" || selectedSection === "full" ? "Full Test" : "Mini Test"}
                           </Text>
@@ -1806,7 +1803,7 @@ Bước 4: Chọn đáp án đúng.`}
                   </HStack>
                 </Box>
 
-                {/* Bao gồm */}
+                {/* Includes */}
                 <Box 
                   w="full" 
                   bg="background.primary" 
@@ -1816,7 +1813,7 @@ Bước 4: Chọn đáp án đúng.`}
                   p={4}
                 >
                   <Text fontSize="lg" fontWeight="bold" color="text.primary" mb={4}>
-                    Bao gồm
+                    Includes
                   </Text>
                   
                   <VStack align="start" gap={4} w="full">
@@ -1851,7 +1848,7 @@ Bước 4: Chọn đáp án đúng.`}
 
                     {/* Source Information from Step 4 */}
                     <Box>
-                      <Text fontSize="sm" color="text.muted" mb={2}>Nguồn tài liệu:</Text>
+                      <Text fontSize="sm" color="text.muted" mb={2}>Source:</Text>
                       <Text fontSize="sm" fontWeight="medium" color="text.primary">
                         {selectedSource || "Cambridge"}
                       </Text>
@@ -1860,7 +1857,7 @@ Bước 4: Chọn đáp án đúng.`}
                     {/* Question Types from Step 3 */}
                     {passages.length > 0 && (
                       <Box w="full">
-                        <Text fontSize="sm" color="text.muted" mb={2}>Loại câu hỏi được phát hiện:</Text>
+                        <Text fontSize="sm" color="text.muted" mb={2}>Question types:</Text>
                         <VStack align="start" gap={2} w="full">
                           {passages.map((passage) => {
                             const passageGroups = questionGroups[passage.id as keyof typeof questionGroups] || []
@@ -1897,12 +1894,12 @@ Bước 4: Chọn đáp án đúng.`}
                                         </Box>
                                       )) : (
                                         <Box bg="gray.100" color="gray.700" px={2} py={1} borderRadius="sm" fontSize="xs">
-                                          Chưa có loại câu hỏi
+                                          No question type yet
                                         </Box>
                                       )}
                                     </HStack>
                                   </VStack>
-                                  <Text fontSize="xs" color="text.muted">{totalQuestions || 0} câu</Text>
+                                  <Text fontSize="xs" color="text.muted">{totalQuestions || 0} questions</Text>
                                 </HStack>
                               </Box>
                             )
@@ -1923,7 +1920,7 @@ Bước 4: Chọn đáp án đúng.`}
                   _hover={{ bg: "#218838" }}
                   px={12}
                 >
-                  Đăng bài
+                  Publish
                 </Button>
               </HStack>
             </VStack>
@@ -1945,7 +1942,7 @@ Bước 4: Chọn đáp án đúng.`}
             >
               <HStack gap={2}>
                 <Icon as={MdArrowBack} />
-                <Text>Quay lại</Text>
+                <Text>Back</Text>
               </HStack>
             </Button>
           )}
@@ -1966,7 +1963,7 @@ Bước 4: Chọn đáp án đúng.`}
               ml={currentStep === 1 ? "auto" : 0}
             >
               <HStack gap={2}>
-                <Text>Tiếp theo</Text>
+                <Text>Next</Text>
                 <Icon as={MdArrowForward} />
               </HStack>
             </Button>
