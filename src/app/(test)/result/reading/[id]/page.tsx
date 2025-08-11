@@ -8,11 +8,12 @@ import SettingsMenu from "@/components/ui/settings-menu"
 import TabSelector from "@/components/ui/tab-selector"
 import PassageMatchingQuestionComponent from "@/components/questionType/passage-matching"
 import MultipleChoiceQuestionComponent from "@/components/questionType/multiple-choice"
-import { MdClose, MdTimer } from "react-icons/md"
+import { MdClose, MdTimer, MdVolumeUp } from "react-icons/md"
 import { FaPen, FaBook } from "react-icons/fa"
 import GapFillQuestionComponent from "@/components/questionType/gap-fill"
 import GapFillBlank from "@/components/questionType/gap-fill-blank"
 import {MultipleChoiceQuestion, gapFillQuestions, multipleChoiceOptions, multipleChoiceOptions89, multipleChoiceQuestions, multipleChoiceQuestions89, passageMatchingQuestions, sectionContent} from "./data"
+import { drawer } from "@/components/ui/dictionary-bottom"
 
 interface Question {
   id: number
@@ -499,41 +500,6 @@ const DrawerContainer = forwardRef<HTMLElement, StackProps>(
     );
   }
 );
-
-interface DialogProps {
-  title: string
-  description?: string
-  content?: React.ReactNode
-  placement?: Drawer.RootProps["placement"]
-  containerRef: React.RefObject<HTMLElement | null>
-}
-
-const drawer = createOverlay<DialogProps>((props) => {
-  const { title, description, content, containerRef, ...rest } = props
-  return (
-    <Drawer.Root {...rest} preventScroll={true}>
-      <Portal container={containerRef}>
-        <Drawer.Backdrop pos="absolute" boxSize="full" />
-        <Drawer.Positioner pos="absolute" boxSize="full" >
-          <Drawer.Content>
-            {title && (
-              <Drawer.Header>
-                <Drawer.Title>{title}</Drawer.Title>
-              </Drawer.Header>
-            )}
-            <Drawer.Body spaceY="4">
-              {description && (
-                <Drawer.Description>{description}</Drawer.Description>
-              )}
-              {content}
-            </Drawer.Body>
-          </Drawer.Content>
-        </Drawer.Positioner>
-      </Portal>
-    </Drawer.Root>
-  )
-})
-
 
 const ReadingParagraph = ({
   leading, 

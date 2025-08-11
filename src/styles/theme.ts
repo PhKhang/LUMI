@@ -30,7 +30,8 @@ tokens: {
         }
     },
     fonts: {
-        body: { value: "var(--font-nunito)" },
+        body: { value: "var(--font-nunito), arial" },
+        ipa: { value: "arial" },
     },
 },
 },
