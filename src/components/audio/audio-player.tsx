@@ -123,7 +123,8 @@ export default function AudioPlayer({ duration, currentTime }: AudioPlayerProps)
     <Menu.Root>
       <Menu.Trigger asChild>
         <Button variant="outline" size="sm" minWidth={"120px"} rounded={"full"}>
-          Tốc độ: {playSpeedValue}x
+          Tốc độ: 
+          <Text> {playSpeedValue}x </Text>
         </Button>
       </Menu.Trigger>
         <Menu.Positioner>
