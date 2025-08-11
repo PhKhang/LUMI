@@ -7,6 +7,7 @@ tokens: {
         primary: { value: "#FACC15" },
         secondary: { value: "#4ADE80" },
         accent: { value: "#16A34A" },
+        highlightGreen: { value: "rgba(22, 163, 74, 0.2)" },
         text: { 
           primary: { value: "#242424" },
           secondary: { value: "#4A5568" },

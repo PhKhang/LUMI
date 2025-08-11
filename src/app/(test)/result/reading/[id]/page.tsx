@@ -286,6 +286,26 @@ export default function TestResult() {
     setExpandedExplanations(newExpanded)
   }
 
+  const scrollToQuestion = (questionNumber: number) => {
+    let targetId = '';
+    if (questionNumber >= 1 && questionNumber <= 5) {
+      targetId = `question-${questionNumber}`;
+    } else if (questionNumber >= 6 && questionNumber <= 7) {
+      targetId = 'questions-6-7';
+    } else if (questionNumber >= 8 && questionNumber <= 9) {
+      targetId = 'questions-8-9';
+    } else if (questionNumber >= 10 && questionNumber <= 13) {
+      targetId = 'questions-10-13';
+    }
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }
+
   const getQuestionStatus = (question: Question | MultipleChoiceQuestion) => {
     if ("userAnswer" in question) {
       if (question.userAnswer === null) return "unanswered"
@@ -460,84 +480,94 @@ export default function TestResult() {
 
         {/* Right Panel - Questions */}
         <Box width={`${100 - leftPanelWidth}%`} overflow="auto" p={6} bg={contentBackgroundColor}>
-          <PassageMatchingQuestionComponent
-            title="Questions 1-5"
-            instruction="Reading Passage 2 has six sections, A-F. Which section contains the following information?"
-            note="You may use any letter more than once."
-            questions={passageMatchingQuestions}
-            fontSize={fontSize}
-            onLocate={handleLocate}
-            onExplain={toggleExplanation}
-            expandedExplanations={expandedExplanations}
-          />
+          <Box id="questions-1-5">
+            <PassageMatchingQuestionComponent
+              title="Questions 1-5"
+              instruction="Reading Passage 2 has six sections, A-F. Which section contains the following information?"
+              note="You may use any letter more than once."
+              questions={passageMatchingQuestions}
+              fontSize={fontSize}
+              onLocate={handleLocate}
+              onExplain={toggleExplanation}
+              expandedExplanations={expandedExplanations}
+            />
+          </Box>
 
           {/* Multiple Choice Questions 6-7 */}
-          <MultipleChoiceQuestionComponent
-            title="Questions 6-7"
-            instruction="Choose TWO letters, A-E."
-            questionRange="6 - 7"
-            questionText="Which TWO of the following are true about the characteristics of horseshoe crabs?"
-            options={multipleChoiceOptions}
-            questions={multipleChoiceQuestions}
-            fontSize={fontSize}
-            onLocate={handleLocate}
-            onExplain={toggleExplanation}
-            expandedExplanations={expandedExplanations}
-          />
+          <Box id="questions-6-7">
+            <MultipleChoiceQuestionComponent
+              title="Questions 6-7"
+              instruction="Choose TWO letters, A-E."
+              questionRange="6 - 7"
+              questionText="Which TWO of the following are true about the characteristics of horseshoe crabs?"
+              options={multipleChoiceOptions}
+              questions={multipleChoiceQuestions}
+              fontSize={fontSize}
+              onLocate={handleLocate}
+              onExplain={toggleExplanation}
+              expandedExplanations={expandedExplanations}
+            />
+          </Box>
 
           {/* Multiple Choice Questions 8-9 */}
-          <MultipleChoiceQuestionComponent
-            title="Questions 8-9"
-            instruction="Choose TWO letters, A-E."
-            questionRange="8 - 9"
-            questionText="In which TWO ways is horseshoe crab blood different from that of most other animals?"
-            options={multipleChoiceOptions89}
-            questions={multipleChoiceQuestions89}
-            fontSize={fontSize}
-            onLocate={handleLocate}
-            onExplain={toggleExplanation}
-            expandedExplanations={expandedExplanations}
-          />
+          <Box id="questions-8-9">
+            <MultipleChoiceQuestionComponent
+              title="Questions 8-9"
+              instruction="Choose TWO letters, A-E."
+              questionRange="8 - 9"
+              questionText="In which TWO ways is horseshoe crab blood different from that of most other animals?"
+              options={multipleChoiceOptions89}
+              questions={multipleChoiceQuestions89}
+              fontSize={fontSize}
+              onLocate={handleLocate}
+              onExplain={toggleExplanation}
+              expandedExplanations={expandedExplanations}
+            />
+          </Box>
 
           {/* Gap Fill Questions */}
-          <GapFillQuestionComponent
-            title="Questions 10-13"
-            instruction="Complete the summary below."
-            questionRange="10 - 13"
-            additionalInstruction="Choose ONE WORD ONLY from the passage for each answer."
-            summaryTitle="The horseshoe crab in Florida"
-            summaryContent={gapFillSummaryContent}
-            questions={gapFillQuestions}
-            fontSize={fontSize}
-            onLocate={handleLocate}
-            onExplain={toggleExplanation}
-            expandedExplanations={expandedExplanations}
-          />
+          <Box id="questions-10-13">
+            <GapFillQuestionComponent
+              title="Questions 10-13"
+              instruction="Complete the summary below."
+              questionRange="10 - 13"
+              additionalInstruction="Choose ONE WORD ONLY from the passage for each answer."
+              summaryTitle="The horseshoe crab in Florida"
+              summaryContent={gapFillSummaryContent}
+              questions={gapFillQuestions}
+              fontSize={fontSize}
+              onLocate={handleLocate}
+              onExplain={toggleExplanation}
+              expandedExplanations={expandedExplanations}
+            />
+          </Box>
         </Box>
       </Flex>
 
       {/* Question Navigation */}
-     <Box bg={bgColor} borderTop="1px" borderColor={borderColor} height="65px">
-        <Flex justify="center" mx="auto" align="center" h="100%">
-          <SimpleGrid columns={13} gap={2}>
+      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} display="flex" alignItems="center" justifyContent="center" height="65px">
+        <Flex justify="center">
+          <SimpleGrid columns={13} gap={1} bg={contentBackgroundColor} px={2} py={1} borderRadius="md" border="1px solid" borderColor="green.600">
             {Array.from({ length: totalQuestions }, (_, i) => {
               const questionNum = i + 1
               const status = questionStatuses[i] || 0
 
               return (
-                <Button
+                <IconButton
                   key={questionNum}
                   size="sm"
                   variant="solid"
                   color="white"
                   bg={getQuestionButtonColor(status)}
                   _hover={{ bg: getQuestionButtonHoverColor(status) }}
-                  w="40px"
-                  h="40px"
+                  w="35px"
+                  h="35px"
                   borderRadius="full"
+                  onClick={() => scrollToQuestion(questionNum)}
+                  cursor="pointer"
                 >
                   {questionNum}
-                </Button>
+                </IconButton>
               )
             })}
           </SimpleGrid>

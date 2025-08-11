@@ -136,7 +136,7 @@ export default function PassageMatchingQuestionComponent({
 
       {/* Questions */}
       {questions.map((question) => (
-        <Box key={question.id} w="full" mb={6}>
+        <Box key={question.id} id={`question-${question.id}`} w="full" mb={6}>
           {/* Question Header */}
           <HStack align="center" gap={4} mb={4}>
             {/* Question Number */}
