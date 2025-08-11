@@ -18,6 +18,7 @@
     "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/input": "^2.1.2",
     "@chakra-ui/menu": "^2.2.1",
+    "@chakra-ui/modal": "^2.3.1",
     "@chakra-ui/progress": "^2.2.0",
     "@chakra-ui/radio": "^2.1.2",
     "@chakra-ui/react": "^3.22.0",

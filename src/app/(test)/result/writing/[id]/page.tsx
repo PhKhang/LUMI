@@ -5,7 +5,8 @@ import { Box, Flex, HStack, VStack, Text, Button, IconButton, Badge, SimpleGrid,
 import { Icon } from "@chakra-ui/react"
 import { MenuButton, MenuList, Menu, MenuItem } from "@chakra-ui/menu"
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
-import { MdClose, MdSettings, MdAccessTime, MdLightMode, MdDarkMode, MdExpandMore, MdExpandLess, MdNote, MdEdit } from "react-icons/md"
+import { MdSettings, MdAccessTime, MdLightMode, MdDarkMode, MdExpandMore, MdExpandLess, MdNote, MdEdit } from "react-icons/md"
+import ExitTestButton from "@/components/ui/exit-test-button"
 import TabSelector from "@/components/ui/tab-selector"
 import SettingsMenu from "@/components/ui/settings-menu"
 interface ScoreCriteria {
@@ -287,7 +288,7 @@ In conclusion, the transition from school to university or college can bring sev
           {/* Left Section - Close Button + Tabs */}
             <HStack gap={4} height="60px">
             <Box alignItems="center">
-                <IconButton aria-label="Close" variant="outline" size="sm" rounded="full"> <Icon as={MdClose} /> </IconButton>
+              <ExitTestButton />
             </Box>
             
               <TabSelector

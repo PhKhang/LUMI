@@ -4,7 +4,8 @@ import { useState } from "react"
 import { Box, Flex, HStack, VStack, Text, IconButton, Badge, Textarea } from "@chakra-ui/react"
 import { Icon } from "@chakra-ui/react"
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
-import { MdClose, MdAccessTime, MdMic, MdVolumeUp } from "react-icons/md"
+import { MdAccessTime, MdMic, MdVolumeUp } from "react-icons/md"
+import ExitTestButton from "@/components/ui/exit-test-button"
 import SettingsMenu from "@/components/ui/settings-menu"
 import AudioPlayer from "@/components/audio/audio-player"
 import TabSelector from "@/components/ui/tab-selector"
@@ -117,9 +118,7 @@ export default function SpeakingTestResult() {
           {/* Left Section - Close Button + Part Tabs */}
           <HStack gap={4} height="60px">
             <Box alignItems="center">
-              <IconButton aria-label="Close" variant="outline" size="sm" rounded="full">
-                <Icon as={MdClose} />
-              </IconButton>
+              <ExitTestButton />
             </Box>
             <TabSelector
               activeTab={activeTab}

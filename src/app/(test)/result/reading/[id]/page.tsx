@@ -8,7 +8,8 @@ import SettingsMenu from "@/components/ui/settings-menu"
 import TabSelector from "@/components/ui/tab-selector"
 import PassageMatchingQuestionComponent from "@/components/questionType/passage-matching"
 import MultipleChoiceQuestionComponent from "@/components/questionType/multiple-choice"
-import { MdClose, MdTimer } from "react-icons/md"
+import { MdTimer } from "react-icons/md"
+import ExitTestButton from "@/components/ui/exit-test-button"
 import { FaPen, FaBook } from "react-icons/fa"
 import GapFillQuestionComponent from "@/components/questionType/gap-fill"
 import GapFillBlank from "@/components/questionType/gap-fill-blank"
@@ -281,9 +282,7 @@ export default function TestResult() {
           {/* Left Section - Close Button + Tabs */}
           <HStack gap={4} height="60px">
             <Box alignItems="center">
-              <IconButton aria-label="Close" variant="outline" size="sm" rounded="full">
-                <Icon as={MdClose} />
-              </IconButton>
+              <ExitTestButton />
             </Box>
             <Box marginTop="auto">
               <TabSelector
