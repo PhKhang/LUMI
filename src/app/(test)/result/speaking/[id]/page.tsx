@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Box, Flex, HStack, VStack, Text, IconButton, Badge, Textarea } from "@chakra-ui/react"
+import { Box, Flex, HStack, VStack, Text, IconButton, Badge, Textarea, Button, Grid } from "@chakra-ui/react"
 import { Icon } from "@chakra-ui/react"
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
 import { MdAccessTime, MdMic, MdVolumeUp } from "react-icons/md"
@@ -24,6 +24,7 @@ export default function SpeakingTestResult() {
   const [leftPanelWidth, setLeftPanelWidth] = useState(50)
   const [activeSection, setActiveSection] = useState<string>("overall")
   const [userNotes, setUserNotes] = useState("")
+  const [highlightedCorrection, setHighlightedCorrection] = useState<number | null>(null)
   const { colorMode, toggleColorMode } = useColorMode()
   const bgColor = useColorModeValue("#F6F0E7", "gray.800")
   const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900")
@@ -67,23 +68,59 @@ export default function SpeakingTestResult() {
     return "gray"
   }
 
-  // Sample data for corrections
   const grammaticalCorrections = [
     {
       text: "to access toto access",
-      explanation: 'Cấu trúc "access something" không cần thêm giới từ "to" sau "access"',
+      explanation: 'The correct structure is "access something" without the preposition "to" after "access".',
+      highlightStart: "to access to",
+      highlightEnd: "to access",
     },
     {
       text: "almost because I spend almost all",
-      explanation: 'Khi nói "almost my time" cần thêm từ "all" để biểu thị "gần như tất cả thời gian"',
+      explanation: 'When saying "almost my time," you need to add "all" to express "almost all of my time."',
+      highlightStart: "because I spend almost",
+      highlightEnd: "all",
     },
-    { text: "the web. But inon", explanation: 'Cần dùng mạo từ "the" với "web" khi nói về việt lướt web nói chung' },
+    {
+      text: "the web. But inon",
+      explanation: 'Use the article "the" with "web" when referring to web browsing in general.',
+      highlightStart: "in",
+      highlightEnd: "on",
+    },
     {
       text: "environment, the atmosphere is aroundthe environment or the surrounding atmosphere",
       explanation:
-        'Cách diễn đạt này không tự nhiên và rõ ràng. Nên dùng "the environment or the surrounding atmosphere" để nghĩa hơn',
+        'This expression is unnatural and unclear. It is better to say "the environment or the surrounding atmosphere" for clearer meaning.',
+      highlightStart: "the atmosphere is around",
+      highlightEnd: "the environment or the surrounding atmosphere",
     },
   ]
+
+  const handleCorrectionClick = (index: number) => {
+    setHighlightedCorrection(highlightedCorrection === index ? null : index)
+  }
+
+  const renderTextWithHighlights = (text: string) => {
+    if (highlightedCorrection === null) {
+      return text
+    }
+
+    const correction = grammaticalCorrections[highlightedCorrection]
+    if (!correction) return text
+
+    const parts = text.split(correction.highlightStart)
+    if (parts.length === 1) return text
+
+    return (
+      <>
+        {parts[0]}
+        <Box as="span" bg="yellow.200" px={1} borderRadius="sm">
+          {correction.highlightStart}
+        </Box>
+        {parts[1]}
+      </>
+    )
+  }
 
   const pronunciationCorrections = [
     { word: "atmosphere", incorrect: "/ˈætməfɪr/", correct: "/ˈætməsfɪr/" },
@@ -209,17 +246,13 @@ export default function SpeakingTestResult() {
               <Text fontSize="lg" fontWeight="bold" color={textColor} mb={4}>
                 Sample Answer
               </Text>
-              
-                {/* <Text fontSize="sm" fontWeight="bold" color="orange.800" mb={2}>
-                  Bài nói gợi ý
-                </Text> */}
-                <Text fontSize={getFontSizeValue()} color={textColor} lineHeight="1.8" mb={4}>
-                  It really depends. If I don't have seamless connectivity, it's almost impossible to browse the web or
-                  check emails, which can be frustrating. Last week, my Wi-Fi kept dropping and I felt so annoyed. Also,
-                  in a noisy or dimly lit room, environmental distractions make it difficult to concentrate.
-                </Text>
-                <AudioPlayer duration="00:17" currentTime="00:17" />
-            
+
+              <Text fontSize={getFontSizeValue()} color={textColor} lineHeight="1.8" mb={4}>
+                It really depends. If I don't have seamless connectivity, it's almost impossible to browse the web or
+                check emails, which can be frustrating. Last week, my Wi-Fi kept dropping and I felt so annoyed. Also,
+                in a noisy or dimly lit room, environmental distractions make it difficult to concentrate.
+              </Text>
+              <AudioPlayer duration="00:17" currentTime="00:17" />
             </Box>
 
             {/* Grammatical Section */}
@@ -228,26 +261,37 @@ export default function SpeakingTestResult() {
                 Grammatical range and Accuracy
               </Text>
               <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4}>
-                Điểm Ngữ pháp: 5.0
+                Score: 5.0
               </Text>
 
               <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
-                I think it depends. If we are talking about the network conditions, I would say, if my computer can't
-                connect to the Wi-Fi, to access the Internet, it would be difficult for me to use it because I spend
-                almost all my time using it to surf the web. But in the other hand, if we are talking about the
-                environment, the surrounding atmosphere is around. I think it would be inappropriate.
+                {renderTextWithHighlights(
+                  "I think it depends. If we are talking about the network conditions, I would say, if my computer can't connect to the Wi-Fi, to access to to access the Internet, it would be difficult for me to use it because I spend almost because I spend almost all my time using it to surf the web. But in on the other hand, if we are talking about environment, the atmosphere is around the environment or the surrounding atmosphere, I think it would be inappropriate.",
+                )}
               </Text>
 
               <AudioPlayer duration="00:30" currentTime="00:00" />
 
               <VStack align="start" gap={3} mt={6}>
                 <Text fontSize="md" fontWeight="bold" color={textColor}>
-                  Sửa lỗi Ngữ pháp và Từ vựng
+                  Grammar and Vocabulary correction
                 </Text>
                 {grammaticalCorrections.map((correction, index) => (
-                  <Text key={index} fontSize="sm" color={mutedColor}>
-                    {correction.explanation}
-                  </Text>
+                  <Button
+                    key={index}
+                    variant={highlightedCorrection === index ? "solid" : "outline"}
+                    colorScheme={highlightedCorrection === index ? "yellow" : "gray"}
+                    size="sm"
+                    // onClick={() => handleCorrectionClick(index)}
+                    justifyContent="flex-start"
+                    whiteSpace="normal"
+                    height="auto"
+                    py={2}
+                    px={3}
+                    w="full"
+                  >
+                    <Text fontSize="sm">{correction.explanation}</Text>
+                  </Button>
                 ))}
               </VStack>
             </Box>
@@ -258,87 +302,95 @@ export default function SpeakingTestResult() {
                 Pronunciation
               </Text>
               <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4}>
-                Điểm Phát âm: 6.0
+                Score: 6.0
               </Text>
 
               <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
-                Think it depends. If we are talking about the network conditions, I would say, if my computer can
-                connect to the Wi-Fi, to access the Internet, It would be difficult for me to use it because I spend
-                almost my time using it to surf the web. But in the other hand, if we are talking about the environment,
-                the atmosphere is around. I think it would be inappropriate.
+                Think it depends. If we are talking about the network conditions, I{" "}
+                <Text as="span" bg="purple.200" px={1} borderRadius="sm">
+                  would
+                </Text>{" "}
+                say, if my computer can connect to the Wi-Fi,{" "}
+                <Text as="span" bg="purple.200" px={1} borderRadius="sm">
+                  to
+                </Text>{" "}
+                access the Internet, It would be difficult for me to use it because I spend almost my time using it to
+                surf web. But in the other hand, if we are talking about environment, the{" "}
+                <Text as="span" bg="purple.200" px={1} borderRadius="sm">
+                  atmosphere  
+                </Text>{" "}
+                is around. I think it would be inappropriate.
               </Text>
 
               <AudioPlayer duration="00:30" currentTime="00:00" />
 
               <VStack align="start" gap={4} mt={6}>
                 <Text fontSize="md" fontWeight="bold" color={textColor}>
-                  Sửa lỗi Phát âm
+                  Pronunciation correction
                 </Text>
 
-                <Flex gap={6} w="full">
-                  <Box flex={1}>
-                    <Text fontSize="sm" fontWeight="bold" color="red.600" mb={3} textAlign="center">
-                      Bạn nói lỗi
-                    </Text>
-                    {pronunciationCorrections.map((item, index) => (
-                      <HStack
-                        key={`incorrect-${index}`}
-                        justify="space-between"
-                        p={2}
-                        bg="red.50"
-                        borderRadius="md"
-                        mb={2}
-                      >
-                        <Text fontSize="sm" color={textColor}>
+                <Box w="full" border="1px" borderColor="gray.200" borderRadius="md" overflow="hidden">
+                  {/* Table Header */}
+                  <Grid templateColumns="1fr 2fr 2fr" gap={0}>
+                    <Box p={3} bg="gray.100" borderRight="1px" borderColor="gray.200">
+                      <Text fontSize="sm" fontWeight="bold" color="gray.600">
+                        Word
+                      </Text>
+                    </Box>
+                    <Box p={3} bg="red.50" borderRight="1px" borderColor="gray.200">
+                      <Text fontSize="sm" fontWeight="bold" color="red.600" textAlign="center">
+                        You said
+                      </Text>
+                    </Box>
+                    <Box p={3} bg="green.50">
+                      <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign="center">
+                        Correct pronunciation
+                      </Text>
+                    </Box>
+                  </Grid>
+
+                  {/* Table Rows */}
+                  {pronunciationCorrections.map((item, index) => (
+                    <Grid key={index} templateColumns="1fr 2fr 2fr" gap={0} border="3px" borderColor="black">
+                      <Box p={3} borderRight="1px" borderColor="gray.200">
+                        <Text fontSize="sm" color={textColor} fontWeight="medium">
                           {item.word}
                         </Text>
-                        <HStack>
+                      </Box>
+                      <Box p={3} bg="red.25" borderColor="black">
+                        <HStack justify="center" gap={2}>
                           <IconButton
-                            aria-label="Play pronunciation"
+                            aria-label="Play incorrect pronunciation"
                             size="xs"
                             variant="ghost"
-                          />
-                          {<Icon as={MdVolumeUp} />}
-                          <Text fontSize="sm" color="gray.600">
+                            color="red.600"
+                          >
+                            {<Icon as={MdVolumeUp}  color={"black"}/>}
+                          </IconButton>
+                          <Text fontSize="sm" color="black">
                             {item.incorrect}
                           </Text>
                         </HStack>
-                      </HStack>
-                    ))}
-                  </Box>
-
-                  <Box flex={1}>
-                    <Text fontSize="sm" fontWeight="bold" color="green.600" mb={3} textAlign="center">
-                      Cách nói đúng
-                    </Text>
-                    {pronunciationCorrections.map((item, index) => (
-                      <HStack
-                        key={`correct-${index}`}
-                        justify="space-between"
-                        p={2}
-                        bg="green.50"
-                        borderRadius="md"
-                        mb={2}
-                      >
-                        <Text fontSize="sm" color={textColor}>
-                          {item.word}
-                        </Text>
-                        <HStack>
+                      </Box>
+                      <Box p={3} bg="green.25">
+                        <HStack justify="center" gap={2}>
                           <IconButton
                             aria-label="Play correct pronunciation"
                             size="xs"
                             variant="ghost"
                             color="green.600"
-                          />
-                          {<Icon as={MdVolumeUp} />}
-                          <Text fontSize="sm" color="gray.600">
+                          >
+                            {<Icon as={MdVolumeUp}  color={"black"}/>}
+                          </IconButton>
+                          
+                          <Text fontSize="sm" color="black">
                             {item.correct}
                           </Text>
                         </HStack>
-                      </HStack>
-                    ))}
-                  </Box>
-                </Flex>
+                      </Box>
+                    </Grid>
+                  ))}
+                </Box>
               </VStack>
             </Box>
 
@@ -348,7 +400,7 @@ export default function SpeakingTestResult() {
                 Lexical Resource
               </Text>
               <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4}>
-                Điểm Từ vựng: 6.0
+                Score: 6.0
               </Text>
 
               <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
@@ -362,13 +414,13 @@ export default function SpeakingTestResult() {
 
               <VStack align="start" gap={4} mt={6}>
                 <Text fontSize="md" fontWeight="bold" color={textColor}>
-                  Gợi ý sửa từ
+                  Suggestion to improve vocabulary
                 </Text>
 
                 <Flex gap={6} w="full">
                   <Box flex={1}>
                     <Text fontSize="sm" color="gray.600" mb={3} textAlign="center">
-                      Cụm từ gốc
+                      Original phrase
                     </Text>
                     {lexicalSuggestions.map((item, index) => (
                       <Box key={`original-${index}`} p={2} bg="gray.100" borderRadius="md" mb={2}>
@@ -381,7 +433,7 @@ export default function SpeakingTestResult() {
 
                   <Box flex={1}>
                     <Text fontSize="sm" fontWeight="bold" color="green.600" mb={3} textAlign="center">
-                      Gợi ý sửa
+                      Suggested improvement
                     </Text>
                     {lexicalSuggestions.map((item, index) => (
                       <Box key={`suggestion-${index}`} p={2} bg="green.50" borderRadius="md" mb={2}>
@@ -404,14 +456,14 @@ export default function SpeakingTestResult() {
                 Fluency and Coherence
               </Text>
               <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4}>
-                Điểm Trôi chảy và Mạch lạc: 5.0
+                Score: 5.0
               </Text>
 
               <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
                 Think it depends. If we are talking about the network conditions, I would say, if my computer can't
                 connect to the Wi-Fi, to access the Internet, It would be difficult for me to use it because I spend
-                almost my time using it to surf the web. But in the other hand, if we are talking about the environment,
-                the atmosphere is around. I think it would be inappropriate.
+                almost all my time using it to surf the web. But in the other hand, if we are talking about the
+                environment, the surrounding atmosphere is around. I think it would be inappropriate.
               </Text>
 
               <AudioPlayer duration="00:30" currentTime="00:00" />
