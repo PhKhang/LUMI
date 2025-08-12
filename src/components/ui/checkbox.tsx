@@ -1,4 +1,4 @@
-import { Checkbox, HStack, Text } from "@chakra-ui/react";
+import { Checkbox, HStack, Text, VStack } from "@chakra-ui/react";
 
 export default function CheckBox({
   options,
@@ -12,7 +12,7 @@ export default function CheckBox({
   textColor?: string;
 }) {
   return (
-    <>
+    <VStack align="flex-start" gap={2}>
       {options.map((option, index) => (
         <Checkbox.Root key={option} colorPalette={"green"}>
           <Checkbox.HiddenInput />
@@ -33,6 +33,6 @@ export default function CheckBox({
           </Checkbox.Label>
         </Checkbox.Root>
       ))}
-    </>
+    </VStack>
   );
 }

@@ -28,8 +28,8 @@ export default function TestBlock({
 }: TestBlockProps) {
   return (
     <Box
-      h={"280px"}
-      w={"250px"}
+      h={"250px"}
+      w={"260px"}
       shadow={"sm"}
       // overflow={"hidden"}
       rounded={"2xl"}
@@ -61,35 +61,46 @@ export default function TestBlock({
           </Text>
         </Box>
         
-        <Box
-          position={"absolute"}
-          bottom={0}
-          left={0}
-          p={1}
-          px={3}
-          roundedRight={"full"}
-          bg={"orange"}
-        >
-          <Text fontWeight={"bold"} fontSize={"sm"} color={"white"}>
-            {section}
-          </Text>
-        </Box>
+        {section && (
+          <Box
+            position={"absolute"}
+            bottom={0}
+            left={0}
+            p={1}
+            px={3}
+            roundedRight={"full"}
+            bg={"orange"}
+            maxW={"180px"}
+          >
+            <Text
+              fontWeight={"bold"}
+              fontSize={"sm"}
+              color={"white"}
+              maxLines={1}
+              maxW={"160px"}
+            >
+              {section}
+            </Text>
+          </Box>
+        )}
       </Box>
 
-      <Box p={"2.5"} pt={1} h={"150px"}>
+      <Box p={"2.5"} pt={1} h={"120px"}>
         <Flex flexDir={"column"} justify={"space-between"} h={"100%"}>
           <Box>
             <Text
               color={"text.primary"}
               fontWeight={"bold"}
-              lineHeight={1.1}
-            >{`${source} - ${title}`}</Text>
-            <Text color={"text.secondary"} fontSize="xs">
+              fontSize={"md"}
+            >
+              {`${source} - ${title}`}
+            </Text>
+            <Text color={"text.primary"} fontSize="xs" fontWeight={"light"}>
               {questions.join(", ")}
             </Text>
           </Box>
 
-          <HStack justify={"end"} w={"100%"}>
+          <HStack align={"end"} justify={"end"} w={"100%"}>
             {/* <Button
               variant={"outline"}
               colorPalette={"green"}
@@ -107,12 +118,14 @@ export default function TestBlock({
             </Button> */}
             <PracticeTestButton/>
             <Button
-              variant={"outline"}
+              variant={"solid"}
               colorPalette={"yellow"}
-              color={"yellow.400"}
+              color={"text.primary"}
               rounded={"full"}
               py={0}
+              size={"xs"}
             >
+              <img src="/race-flag.svg" alt="mock test icon" width="16px" />
               Mock Test
             </Button>
           </HStack>

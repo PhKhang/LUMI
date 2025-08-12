@@ -54,11 +54,13 @@ export default function PracticeTestButton() {
       <Button
         variant={"outline"}
         colorPalette={"green"}
-        color={"green.400"}
+        color={"green.600"}
         rounded={"full"}
         py={0}
         onClick={onOpen}
+        size={"xs"}
       >
+        <img src="/weight-icon.svg" alt="weight icon" style={{ width: 18, height: 18, marginRight: 4 }} />
         Practice test
       </Button>
       <Modal isOpen={open} onClose={onClose} isCentered size="xs" closeOnEsc>
