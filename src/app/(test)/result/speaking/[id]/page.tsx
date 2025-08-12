@@ -1,7 +1,19 @@
 "use client"
 
 import { useState } from "react"
-import { Box, Flex, HStack, VStack, Text, IconButton, Badge, Textarea, Button, Grid } from "@chakra-ui/react"
+import {
+  Box,
+  Flex,
+  HStack,
+  VStack,
+  Text,
+  IconButton,
+  Badge,
+  Textarea,
+  Button,
+  Grid,
+  Table
+} from "@chakra-ui/react"
 import { Icon } from "@chakra-ui/react"
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
 import { MdAccessTime, MdMic, MdVolumeUp } from "react-icons/md"
@@ -132,12 +144,13 @@ export default function SpeakingTestResult() {
     {
       original: "the network condition",
       suggestion: "network conditions",
-      explanation: "tính trạng mạng gồm nhiều yếu tố → conditions tổng quát và chính xác hơn.",
+      explanation: 'network status consists of many factors → the word "conditions" is more general and accurate.',
     },
     {
       original: "atmosphere",
       suggestion: "surrounding atmosphere",
-      explanation: '"surrounding" giúp làm rõ nghĩa vật lý, môi trường xung quanh nơi đang nói đến.',
+      explanation:
+        '"surrounding" helps clarify the physical meaning, referring to the around the place being discussed.',
     },
   ]
 
@@ -317,7 +330,7 @@ export default function SpeakingTestResult() {
                 access the Internet, It would be difficult for me to use it because I spend almost my time using it to
                 surf web. But in the other hand, if we are talking about environment, the{" "}
                 <Text as="span" bg="purple.200" px={1} borderRadius="sm">
-                  atmosphere  
+                  atmosphere
                 </Text>{" "}
                 is around. I think it would be inappropriate.
               </Text>
@@ -329,68 +342,70 @@ export default function SpeakingTestResult() {
                   Pronunciation correction
                 </Text>
 
-                <Box w="full" border="1px" borderColor="gray.200" borderRadius="md" overflow="hidden">
+                <Table.Root w="full" border="1px" borderColor="gray.200" borderRadius="md" overflow="hidden" showColumnBorder={true}>
                   {/* Table Header */}
-                  <Grid templateColumns="1fr 2fr 2fr" gap={0}>
-                    <Box p={3} bg="gray.100" borderRight="1px" borderColor="gray.200">
-                      <Text fontSize="sm" fontWeight="bold" color="gray.600">
-                        Word
-                      </Text>
-                    </Box>
-                    <Box p={3} bg="red.50" borderRight="1px" borderColor="gray.200">
-                      <Text fontSize="sm" fontWeight="bold" color="red.600" textAlign="center">
-                        You said
-                      </Text>
-                    </Box>
-                    <Box p={3} bg="green.50">
-                      <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign="center">
-                        Correct pronunciation
-                      </Text>
-                    </Box>
-                  </Grid>
+                  <Table.Body gap={0}>
+                    <Table.Row>
+                      <Table.Cell p={3} bg="gray.100" borderRight="1px" borderColor="gray.200">
+                        <Text fontSize="sm" fontWeight="bold" color="gray.600">
+                          Word
+                        </Text>
+                      </Table.Cell>
+                      <Table.Cell p={3} bg="red.50" borderRight="1px" borderColor="gray.200">
+                        <Text fontSize="sm" fontWeight="bold" color="red.600" textAlign="center">
+                          You said incorrectly
+                        </Text>
+                      </Table.Cell>
+                      <Table.Cell p={3} bg="green.50">
+                        <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign="center">
+                          Correct pronunciation
+                        </Text>
+                      </Table.Cell>
+                    </Table.Row>
+                  </Table.Body>
 
                   {/* Table Rows */}
                   {pronunciationCorrections.map((item, index) => (
-                    <Grid key={index} templateColumns="1fr 2fr 2fr" gap={0} border="3px" borderColor="black">
-                      <Box p={3} borderRight="1px" borderColor="gray.200">
+                    <Table.Row key={index} gap={0} borderColor="black">
+                      <Table.Cell p={3}> 
                         <Text fontSize="sm" color={textColor} fontWeight="medium">
                           {item.word}
                         </Text>
-                      </Box>
-                      <Box p={3} bg="red.25" borderColor="black">
-                        <HStack justify="center" gap={2}>
+                      </Table.Cell>
+                      <Table.Cell p={3} bg="red.25">
+                        <HStack gap={2}>
                           <IconButton
                             aria-label="Play incorrect pronunciation"
                             size="xs"
                             variant="ghost"
                             color="red.600"
                           >
-                            {<Icon as={MdVolumeUp}  color={"black"}/>}
+                            {<Icon as={MdVolumeUp} color={"black"} />}
                           </IconButton>
                           <Text fontSize="sm" color="black">
                             {item.incorrect}
                           </Text>
                         </HStack>
-                      </Box>
-                      <Box p={3} bg="green.25">
-                        <HStack justify="center" gap={2}>
+                      </Table.Cell>
+                      <Table.Cell p={3} bg="green.25">
+                        <HStack gap={2}>
                           <IconButton
                             aria-label="Play correct pronunciation"
                             size="xs"
                             variant="ghost"
                             color="green.600"
                           >
-                            {<Icon as={MdVolumeUp}  color={"black"}/>}
+                            {<Icon as={MdVolumeUp} color={"black"} />}
                           </IconButton>
-                          
+
                           <Text fontSize="sm" color="black">
                             {item.correct}
                           </Text>
                         </HStack>
-                      </Box>
-                    </Grid>
+                      </Table.Cell>
+                    </Table.Row>
                   ))}
-                </Box>
+                </Table.Root>
               </VStack>
             </Box>
 
@@ -404,49 +419,63 @@ export default function SpeakingTestResult() {
               </Text>
 
               <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
-                I think it depends. If we are talking about network conditions, I would say, if my computer can connect
-                to the Wi-Fi, to access the Internet, It would be difficult for me to use it because I spend almost my
-                time using it to surf the web. But in the other hand, if we are talking about the environment, the
-                surrounding atmosphere is around. I think it would be inappropriate.
+                I think it depends. If we are talking about{" "}
+                <Text as="span" bg="green.100" px={1} textDecoration="line-through">
+                  the network condition
+                </Text>
+                <Text as="span" bg="green.200" px={1} ml={1}>
+                  network conditions
+                </Text>
+                , I would say, if my computer can connect to the Wi-Fi, to access the Internet, It would be difficult
+                for me to use it because I spend almost my time using it to surf the web. But in the other hand, if we
+                are talking about the environment, the{" "}
+                <Text as="span" bg="green.100" px={1} textDecoration="line-through">
+                  atmosphere
+                </Text>
+                <Text as="span" bg="green.200" px={1} ml={1}>
+                  surrounding atmosphere
+                </Text>{" "}
+                is around. I think it would be inappropriate.
               </Text>
 
               <AudioPlayer duration="00:30" currentTime="00:00" />
 
               <VStack align="start" gap={4} mt={6}>
                 <Text fontSize="md" fontWeight="bold" color={textColor}>
-                  Suggestion to improve vocabulary
+                  Vocabulary correct suggestion
                 </Text>
 
-                <Flex gap={6} w="full">
-                  <Box flex={1}>
-                    <Text fontSize="sm" color="gray.600" mb={3} textAlign="center">
-                      Original phrase
-                    </Text>
-                    {lexicalSuggestions.map((item, index) => (
-                      <Box key={`original-${index}`} p={2} bg="gray.100" borderRadius="md" mb={2}>
-                        <Text fontSize="sm" color={textColor}>
-                          {item.original}
-                        </Text>
-                      </Box>
-                    ))}
-                  </Box>
+                <Table.Root size="md" variant="outline" showColumnBorder={true} borderColor={borderColor} color={textColor}>
+                  <Table.Body> 
+                    {/* Header Row */}
+                    <Table.Row>
+                      <Table.Cell bg="gray.100" fontSize="sm" fontWeight="bold" textAlign="center" w="25%">
+                        Original word
+                      </Table.Cell>
+                      <Table.Cell bg="green.100" color="green.700" fontSize="sm" fontWeight="bold" textAlign="center" w="25%">
+                        Suggestion
+                      </Table.Cell>
+                      <Table.Cell bg="gray.50" fontSize="sm" fontWeight="bold" textAlign="center" w="50%">
+                        Explanation
+                      </Table.Cell>
+                    </Table.Row>
 
-                  <Box flex={1}>
-                    <Text fontSize="sm" fontWeight="bold" color="green.600" mb={3} textAlign="center">
-                      Suggested improvement
-                    </Text>
+                    {/* Data Rows */}
                     {lexicalSuggestions.map((item, index) => (
-                      <Box key={`suggestion-${index}`} p={2} bg="green.50" borderRadius="md" mb={2}>
-                        <Text fontSize="sm" color={textColor} fontWeight="bold">
+                      <Table.Row key={index}>
+                        <Table.Cell bg="gray.50" fontWeight="medium" fontSize={getFontSizeValue()}>
+                          {item.original}
+                        </Table.Cell>
+                        <Table.Cell bg="green.50" fontWeight="bold" color="green.700" fontSize={getFontSizeValue()}>
                           {item.suggestion}
-                        </Text>
-                        <Text fontSize="xs" color="gray.600" mt={1}>
+                        </Table.Cell>
+                        <Table.Cell fontSize="sm" color="gray.700">
                           {item.explanation}
-                        </Text>
-                      </Box>
+                        </Table.Cell>
+                      </Table.Row>
                     ))}
-                  </Box>
-                </Flex>
+                  </Table.Body>
+                </Table.Root>
               </VStack>
             </Box>
 
@@ -467,6 +496,58 @@ export default function SpeakingTestResult() {
               </Text>
 
               <AudioPlayer duration="00:30" currentTime="00:00" />
+
+{/* Feedback section with bullet points listing fluency issues */}
+<Box mt={6}>
+                <Text fontSize="lg" fontWeight="bold" color={textColor} mb={3}>
+                  Feedback
+                </Text>
+                <VStack align="start">
+                  <HStack align="start">
+                    <Text color={textColor}>•</Text>
+                    <Text fontSize={getFontSizeValue()} color={textColor}>
+                      The ideas lack clear connection: "In the other hand... the atmosphere is around..." — the two
+                      parts are unrelated.
+                    </Text>
+                  </HStack>
+                  <HStack align="start">
+                    <Text color={textColor}>•</Text>
+                    <Text fontSize={getFontSizeValue()} color={textColor}>
+                      The structure is repetitive or incomplete ("... to access to the Internet. It would be
+                      difficult...").
+                    </Text>
+                  </HStack>
+                  <HStack align="start">
+                    <Text color={textColor}>•</Text>
+                    <Text fontSize={getFontSizeValue()} color={textColor}>
+                      You have to pause to think, causing long breaks between words within a sentence, making the speech
+                      less fluent.
+                    </Text>
+                  </HStack>
+                </VStack>
+              </Box>
+
+              {/* Suggestion section with bullet points providing improvement advice */}
+              <Box mt={6}>
+                <Text fontSize="lg" fontWeight="bold" color={textColor} mb={3}>
+                  Suggestion
+                </Text>
+                <VStack align="start">
+                  <HStack align="start">
+                    <Text color={textColor}>•</Text>
+                    <Text fontSize={getFontSizeValue()} color={textColor}>
+                      Use the correct linking words: "On the other hand", "Since", "That's why".
+                    </Text>
+                  </HStack>
+                  <HStack align="start">
+                    <Text color={textColor}>•</Text>
+                    <Text fontSize={getFontSizeValue()} color={textColor}>
+                      Practice using the shadowing technique when you need to think, to avoid speaking and thinking at
+                      the same time.
+                    </Text>
+                  </HStack>
+                </VStack>
+              </Box>
             </Box>
           </VStack>
         </Box>
