@@ -38,18 +38,14 @@ export default function PracticeTestButton() {
         value: "no-time-limit",
         label: "No time limit",
       },
-      {
-        value: "45-minutes",
-        label: "45 minutes",
-      },
-      {
-        value: "60-minutes",
-        label: "60 minutes",
-      },
-      {
-        value: "90-minutes",
-        label: "90 minutes",
-      },
+      // Add 20 to 60 minutes, every 5 minutes
+      ...Array.from({ length: 9 }, (_, i) => {
+        const min = 20 + i * 5;
+        return {
+          value: `${min}-minutes`,
+          label: `${min} minutes`,
+        };
+      }),
     ],
   });
 
@@ -76,32 +72,34 @@ export default function PracticeTestButton() {
           <VStack
             mx="auto"
             my="auto"
+            height="60vh"
+            width="25vw"
             borderRadius="lg"
             bg={modalBg}
             py={4}
             px={6}
           >
-            <ModalHeader textAlign="center" bg={modalBg} w="100%">
+            <ModalHeader textAlign="center" bg={modalBg}>
               <Text color={"accent"} fontWeight="bold" fontSize="2xl">
                 Pratice Mode
               </Text>
             </ModalHeader>
-            <ModalBody bg={modalBg} mb={2}>
+            <ModalBody bg={modalBg}>
               <Text
-                textAlign="center"
-                // fontWeight="semibold"
-                // fontSize="lg"
+                textAlign="left"
+                fontWeight="light"
+                fontSize="md"
                 color={textColor}
               >
-                Suitable for enhancing your accuracy and time spent on each
-                part.
+                Suitable for enhancing your accuracy and time spent on each part.
               </Text>
-              <Box color={"accent"} fontWeight={"bold"} fontSize={"sm"}>
+              <Box color={"accent"} fontWeight={"bold"} fontSize={"md"} mt={4}>
                 1. Choose sections you want to practice:
                 <VStack align={"start"}>
                   <CheckBox
                     options={["Full section"]}
                     subtext={["(3 passages - 40 questions)"]}
+                    textColor={"text.primary"}
                   ></CheckBox>
                   <VStack ml={4}>
                     <CheckBox
@@ -111,27 +109,29 @@ export default function PracticeTestButton() {
                         "(13 questions)",
                         "(13 questions)",
                       ]}
+                      textColor={"text.primary"}
                     ></CheckBox>
                   </VStack>
                 </VStack>
               </Box>
-              <Text color={"accent"} fontWeight={"bold"} fontSize={"sm"}>
+              <Text color={"accent"} fontWeight={"bold"} fontSize={"md"} mt={4}>
                 2. Choose a time limit:
               </Text>
 
               <Select.Root
                 collection={timeLimitOptions}
                 size="sm"
-                width="320px"
+                width="100%"
                 defaultValue={[timeLimitOptions.items[0].value]}
                 color={"black"}
+                borderColor="accent"
               >
                 <Select.HiddenSelect />
                 {/* <Select.Label>Select framework</Select.Label> */}
                 <Select.Control>
                   <Select.Trigger rounded={"xl"}>
                     <Select.ValueText
-                      placeholder="Select framework"
+                      placeholder="No time limit"
                       color={"text.primary"}
                     />
                   </Select.Trigger>
@@ -156,14 +156,14 @@ export default function PracticeTestButton() {
             <ModalFooter
               display="flex"
               justifyContent="center"
-              gap={10}
               bg={modalBg}
               w="100%"
               px={0}
+              mt="auto"
             >
               <Box w={"full"}>
                 <VStack>
-                  <Separator w="full" />
+                  <Separator w="full" mb={1}/>
                   <Button
                     onClick={onClose}
                     variant="solid"

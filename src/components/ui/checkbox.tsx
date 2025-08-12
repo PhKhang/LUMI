@@ -4,10 +4,12 @@ export default function CheckBox({
   options,
   subtext,
   onChange,
+  textColor = "gray.600",
 }: {
   options: string[];
   subtext?: string[];
   onChange?: (options: string[]) => void;
+  textColor?: string;
 }) {
   return (
     <>
@@ -19,7 +21,7 @@ export default function CheckBox({
           </Checkbox.Control>
           <Checkbox.Label>
             <HStack>
-              <Text color={"gray.600"} fontWeight={"bold"}>
+              <Text color={textColor} fontWeight={"bold"}>
                 {option}
               </Text>
               {subtext && (
