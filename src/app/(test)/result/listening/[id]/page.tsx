@@ -403,6 +403,13 @@ export default function ListeningTestResult() {
     { id: "part3", label: "Part 3", startQuestion: 21, endQuestion: 30 },
     { id: "part4", label: "Part 4", startQuestion: 31, endQuestion: 40 },
   ]
+  
+  const currentPartCorrectAnswers = useMemo(() => {
+    const partQuestions = allQuestions[activePart]
+    return partQuestions.filter(q => q.userAnswer === q.correctAnswer).length
+  }, [allQuestions, activePart])
+
+  const currentPartTotalQuestions = allQuestions[activePart].length
 
   return (
     <Box minH="100vh" bg={bgColor} overflow="hidden">
@@ -434,7 +441,7 @@ export default function ListeningTestResult() {
               </HStack>
               <Box width="1px" height="10px" bg="#E5E5EA" />
               <Text fontSize={getFontSizeValue()} fontWeight="bold" color={greenThemeColor}>
-                7.5 band score
+                {currentPartCorrectAnswers}/{currentPartTotalQuestions} correct answers
               </Text>
             </HStack>
           </Box>
@@ -574,7 +581,7 @@ export default function ListeningTestResult() {
             </VStack>
           </Box>
           {/* Fixed Audio Player */}
-          <Box w="full" p={4} borderTop="1px" borderColor={borderColor} bg={contentBackgroundColor}>
+          <Box w="full" p={0} borderTop="1px" borderColor={borderColor} bg={contentBackgroundColor}>
             <AudioPlayer ref={audioPlayerRef} duration="29:23" currentTime="01:13" />
           </Box>
         </VStack>
@@ -660,60 +667,57 @@ export default function ListeningTestResult() {
       <Box bg={bgColor} borderTop="1px" borderColor={borderColor} height="65px">
         <Flex justify="center" mx="auto" align="center" h="100%" gap={4}>
           {partNavigationData.map((part) => (
-            <Button
+            <Box
               key={part.id}
               onClick={() => setActivePart(part.id as "part1" | "part2" | "part3" | "part4")}
-              variant="ghost"
-              bg={activePart === part.id ? activePartBgColor : inactivePartBgColor}
-              color={textColor}
-              px={4}
-              py={2}
-              borderRadius="lg"
-              _hover={{ bg: activePart === part.id ? "green.100" : "gray.100" }}
-              height="auto"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexDirection="row"
-              gap={2}
+              cursor="pointer"
+              bg={activePart === part.id ? contentBackgroundColor : "transparent"}
+              px={2} py={1}
+              borderRadius="md"
+              border={"1px solid"}
+              borderColor={activePart === part.id ? "green.600" : "gray.300"}
+              _hover={{ bg: activePart === part.id ? contentBackgroundColor : "gray.100" }}
             >
-              <Text fontWeight="bold" fontSize="md">
-                {part.label}
-              </Text>
-              {activePart === part.id ? (
-                <SimpleGrid columns={10} gap={1}>
-                  {Array.from({ length: 10 }, (_, i) => {
-                    const globalQuestionNum = part.startQuestion + i
-                    const status = questionStatuses[globalQuestionNum - 1] || 0
-                    return (
-                      <Box
-                        key={globalQuestionNum}
-                        // size="sm"
-                        // variant="solid"
-                        color="white"
-                        bg={getQuestionButtonColor(status)}
-                        _hover={{ bg: getQuestionButtonHoverColor(status) }}
-                        w="30px"
-                        h="30px"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center" 
-                        borderRadius="full"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                        }}
-                      >
-                        {globalQuestionNum}
-                      </Box>
-                    )
-                  })}
-                </SimpleGrid>
-              ) : (
-                <Text fontSize="sm" color={mutedColor}>
-                  10 questions
+              <HStack gap={4} alignItems="center">
+                <Text fontWeight="bold" fontSize="md" color={textColor}>
+                  {part.label}
                 </Text>
-              )}
-            </Button>
+                {activePart === part.id ? (
+                  <SimpleGrid columns={10} gap={1}>
+                    {Array.from({ length: 10 }, (_, i) => {
+                      const globalQuestionNum = part.startQuestion + i
+                      const status = questionStatuses[globalQuestionNum - 1] || 0
+                      return (
+                        <IconButton
+                          key={globalQuestionNum}
+                          size="sm"
+                          variant="solid"
+                          color="white"
+                          bg={getQuestionButtonColor(status)}
+                          _hover={{ bg: getQuestionButtonHoverColor(status) }}
+                          w="35px"
+                          h="35px"
+                          borderRadius="full"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            // Logic để scroll đến câu hỏi cụ thể
+                          }}
+                          cursor="pointer"
+                        >
+                          {globalQuestionNum}
+                        </IconButton>
+                      )
+                    })}
+                  </SimpleGrid>
+                ) : (
+                  <Flex alignItems="center" height="35px">
+                    <Text fontSize="sm" color={mutedColor}>
+                      10 questions
+                    </Text>
+                  </Flex>
+                )}
+              </HStack>
+            </Box>
           ))}
         </Flex>
       </Box>
