@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Text, Button, Box, HStack, VStack, Flex } from "@chakra-ui/react";
 import TestDialog from "./test-overlay";
+import PracticeTestButton from "./practice-test-button";
 
 interface TestBlockProps {
   id: string;
@@ -38,20 +39,6 @@ export default function TestBlock({
       overflow={"hidden"}
     >
       <Box h={"130px"} position="relative">
-        <Box
-          position={"absolute"}
-          top={0}
-          left={0}
-          p={1}
-          px={3}
-          bg={"#3C3C4399"}
-          zIndex={2}
-          roundedBottomRight={"md"}
-        >
-          <Text fontWeight={"bold"} fontSize={"sm"}>
-            {attempts} attempts
-          </Text>
-        </Box>
         <Image
           src={imageSrc}
           alt="Test thumbnail"
@@ -62,13 +49,26 @@ export default function TestBlock({
 
         <Box
           position={"absolute"}
+          top={0}
+          left={0}
+          p={1}
+          px={3}
+          bg={"#3C3C4399"}
+          roundedBottomRight={"md"}
+        >
+          <Text fontWeight={"bold"} fontSize={"sm"}>
+            {attempts} attempts
+          </Text>
+        </Box>
+        
+        <Box
+          position={"absolute"}
           bottom={0}
           left={0}
           p={1}
           px={3}
           roundedRight={"full"}
           bg={"orange"}
-          zIndex={1}
         >
           <Text fontWeight={"bold"} fontSize={"sm"} color={"white"}>
             {section}
@@ -90,7 +90,7 @@ export default function TestBlock({
           </Box>
 
           <HStack justify={"end"} w={"100%"}>
-            <Button
+            {/* <Button
               variant={"outline"}
               colorPalette={"green"}
               color={"green.400"}
@@ -104,7 +104,8 @@ export default function TestBlock({
               }}
             >
               Practice test
-            </Button>
+            </Button> */}
+            <PracticeTestButton/>
             <Button
               variant={"outline"}
               colorPalette={"yellow"}
