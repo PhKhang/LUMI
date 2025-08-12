@@ -11,6 +11,7 @@ import ListeningGapFillFormComponent from "@/components/questionType/listening-g
 import ListeningTableGapFillComponent from "@/components/questionType/listening-table-gap-fill"
 import { MdClose, MdTimer } from "react-icons/md"
 import { FaPen, FaBook } from "react-icons/fa"
+import ExitTestButton from "@/components/ui/exit-test-button"
 
 interface ListeningQuestion {
   id: number
@@ -411,9 +412,7 @@ export default function ListeningTestResult() {
           {/* Left Section - Close Button + Tabs */}
           <HStack gap={4} height="60px">
             <Box alignItems="center">
-              <IconButton aria-label="Close" variant="outline" size="sm" rounded="full">
-                <Icon as={MdClose} />
-              </IconButton>
+              <ExitTestButton />
             </Box>
             <Box marginTop="auto">
               <TabSelector
@@ -610,7 +609,7 @@ export default function ListeningTestResult() {
           align="start"
           overflowY="auto"
           p={6}
-          gap={6}
+          gap={5}
         >
           {activePart === "part1" && (
             <>

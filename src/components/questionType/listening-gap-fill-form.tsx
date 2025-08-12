@@ -4,8 +4,8 @@ import { Icon } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
 import { TbNotes } from "react-icons/tb"
 import { PiMapPin } from "react-icons/pi"
-import { MdOutlinePlayArrow } from "react-icons/md" // Import the play icon
 import GapFillBlank from "./gap-fill-blank"
+import { IoPlayCircleOutline } from "react-icons/io5";
 
 interface ListeningQuestion {
   id: number
@@ -23,8 +23,9 @@ interface ListeningGapFillFormProps {
   onLocate: (questionId: number) => void
   onExplain: (questionId: number) => void
   expandedExplanations: Set<number>
-  onPlayRange: (startTime: number) => void // New prop for playing audio range
-  playRangeStartTime: number // New prop for the start time of this question range
+  onPlayRange: (startTime: number) => void
+  playRangeStartTime: number
+  activeTab?: "note" | "lookup"
 }
 
 export default function ListeningGapFillFormComponent({
@@ -37,6 +38,7 @@ export default function ListeningGapFillFormComponent({
   expandedExplanations,
   onPlayRange,
   playRangeStartTime,
+  activeTab,
 }: ListeningGapFillFormProps) {
   const questionBackgroundColor = useColorModeValue("white", "gray.700")
   const textColor = useColorModeValue("gray.800", "white")
@@ -77,6 +79,39 @@ export default function ListeningGapFillFormComponent({
     }
   }
 
+  const getQuestionBoxSize = () => {
+    switch (fontSize) {
+      case "small":
+        return { minW: "40px", h: "40px" }
+      case "large":
+        return { minW: "60px", h: "60px" }
+      default:
+        return { minW: "50px", h: "50px" }
+    }
+  }
+
+  const getQuestionNumberFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "xl"
+      case "large":
+        return "3xl"
+      default:
+        return "2xl"
+    }
+  }
+
+  const getSummaryTitleFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "md"
+      case "large":
+        return "xl"
+      default:
+        return "lg"
+    }
+  }
+
   const getBlankStatus = (question: ListeningQuestion) => {
     return question.userAnswer === question.correctAnswer
   }
@@ -89,41 +124,60 @@ export default function ListeningGapFillFormComponent({
   const questionRangeText = title.match(/Questions (\d+\s*-\s*\d+):/)?.[1] || ""
 
   return (
-    <VStack align="start" gap={4} w="full">
+    <VStack align="start" gap={0} w="full">
       {/* Header Section */}
-      <Box mb={4}>
+      <Box mb={5}>
         <Text fontSize={getQuestionHeaderFontSize()} fontWeight="bold" color={textColor}>
           {title}
         </Text>
-        <HStack mt={2} gap={3}>
-          <Button
-            variant="outline"
-            size="md"
+        <Text fontSize={getFontSizeValue()} color={textColor} mb={4}>
+          {instruction}
+        </Text>
+        
+        {/* Question Number with Integrated Play Button */}
+        <HStack align="center" gap={4}>
+          <Box
+            bg={questionBackgroundColor}
             borderRadius="lg"
-            px={4}
-            py={2}
+            p={3}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            shadow="md"
+            cursor="pointer"
             onClick={handlePlayButtonClick}
-            _hover={{ bg: useColorModeValue("gray.100", "gray.600") }}
+            _hover={{ bg: useColorModeValue("gray.50", "gray.600") }}
+            position="relative"
+            minW={fontSize === "small" ? "60px" : fontSize === "large" ? "100px" : "80px"}
+            h={fontSize === "small" ? "40px" : fontSize === "large" ? "60px" : "50px"}
           >
-            <Icon as={MdOutlinePlayArrow} boxSize={5} color="yellow.400" mr={2} />
-            <Text fontSize={getFontSizeValue()} fontWeight="bold" color="yellow.400">
+            <Icon 
+              as={IoPlayCircleOutline} 
+              boxSize={fontSize === "small" ? 6 : fontSize === "large" ? 8 : 7} 
+              color="black" 
+              mr={2}
+            />
+            <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
               {questionRangeText}
             </Text>
-          </Button>
-          <Text fontSize={getFontSizeValue()} color={textColor}>
-            {instruction}
+          </Box>
+          
+          <Text fontSize={getFontSizeValue()} color={textColor} flex={1}>
+            Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.
           </Text>
         </HStack>
       </Box>
 
-      {/* Question Form Box */}
-      <Box w="full" p={4} bg={questionBackgroundColor} borderRadius="lg" shadow="md">
+      {/* Summary Title */}
+      <Text fontSize={getSummaryTitleFontSize()} fontWeight="bold" color={textColor} mb={2} textAlign="center" w="full">
+        Guitar Group
+      </Text>
+
+      {/* Form Content - No background, no border to match other components */}
+      <Box w="full" fontSize={getFontSizeValue()} color={textColor} lineHeight="2" mb={5}>
         <VStack align="start" gap={3}>
-          <Text fontSize={getFontSizeValue()} fontWeight="bold" color={textColor} mb={2} textAlign={"center"}  w="full">
-            Guitar Group
-          </Text>
           <HStack align="center" w="full">
-            <Text fontSize={getFontSizeValue()} color={textColor} minW="100px">
+            <Text fontSize={getFontSizeValue()} color={textColor} minW="140px">
               Coordinator:
             </Text>
             <Text fontSize={getFontSizeValue()} color={textColor} mr={2}>
@@ -137,8 +191,9 @@ export default function ListeningGapFillFormComponent({
               fontSize={fontSize}
             />
           </HStack>
+          
           <HStack align="center" w="full">
-            <Text fontSize={getFontSizeValue()} color={textColor} minW="100px">
+            <Text fontSize={getFontSizeValue()} color={textColor} minW="140px">
               Level:
             </Text>
             <GapFillBlank
@@ -149,8 +204,9 @@ export default function ListeningGapFillFormComponent({
               fontSize={fontSize}
             />
           </HStack>
+          
           <HStack align="center" w="full">
-            <Text fontSize={getFontSizeValue()} color={textColor} minW="100px">
+            <Text fontSize={getFontSizeValue()} color={textColor} minW="140px">
               Place:
             </Text>
             <Text fontSize={getFontSizeValue()} color={textColor} mr={2}>
@@ -164,8 +220,9 @@ export default function ListeningGapFillFormComponent({
               fontSize={fontSize}
             />
           </HStack>
+          
           <HStack align="center" w="full">
-            <Text fontSize={getFontSizeValue()} color={textColor} minW="100px"></Text>
+            <Text fontSize={getFontSizeValue()} color={textColor} minW="140px"></Text>
             <GapFillBlank
               questionNumber={questions[3].id}
               userAnswer={questions[3].userAnswer}
@@ -177,11 +234,15 @@ export default function ListeningGapFillFormComponent({
               Street
             </Text>
           </HStack>
-          <Text fontSize={getFontSizeValue()} color={textColor} ml="100px">
-            First floor, Room T347
-          </Text>
+          
+          <Box ml="140px">
+            <Text fontSize={getFontSizeValue()} color={textColor}>
+              First floor, Room T347
+            </Text>
+          </Box>
+          
           <HStack align="center" w="full">
-            <Text fontSize={getFontSizeValue()} color={textColor} minW="100px">
+            <Text fontSize={getFontSizeValue()} color={textColor} minW="140px">
               Time:
             </Text>
             <Text fontSize={getFontSizeValue()} color={textColor} mr={2}>
@@ -195,8 +256,9 @@ export default function ListeningGapFillFormComponent({
               fontSize={fontSize}
             />
           </HStack>
+          
           <HStack align="center" w="full">
-            <Text fontSize={getFontSizeValue()} color={textColor} minW="100px">
+            <Text fontSize={getFontSizeValue()} color={textColor} minW="140px">
               Recommended website:
             </Text>
             <Text fontSize={getFontSizeValue()} color={textColor} mr={2}>
@@ -219,7 +281,7 @@ export default function ListeningGapFillFormComponent({
       {/* Answer Sections */}
       {questions.map((question) => (
         <Box key={question.id} w="full">
-          <Flex justify="space-between" align="center" w="full" mb={2}>
+          <Flex justify="space-between" align="center" w="full" mb={5}>
             <Box bg="gray.200" px={4} py={2} borderRadius="md">
               <Text fontSize={getAnswerTextFontSize()} color="gray.700">
                 {question.id}. Answer:{" "}
@@ -236,6 +298,7 @@ export default function ListeningGapFillFormComponent({
                 variant="outline"
                 onClick={() => onLocate(question.id)}
                 borderRadius="full"
+                style={activeTab === "lookup" ? { display: "none" } : {}}
               >
                 <Icon as={PiMapPin} />
                 <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
@@ -253,13 +316,21 @@ export default function ListeningGapFillFormComponent({
           </Flex>
 
           {/* Explanation for this specific question */}
-          {question.explanation && expandedExplanations.has(question.id) && (
-            <Box mt={2} mb={4} p={4} bg={explanationBgColor} borderRadius="md" w="full">
-              <Text fontSize="sm" color={mutedColor} lineHeight="1.6">
-                {question.explanation}
-              </Text>
-            </Box>
-          )}
+          <div
+            className={`transition-all duration-300 ease-in-out overflow-hidden ${
+              question.explanation && expandedExplanations.has(question.id)
+                ? 'max-h-96 opacity-100'
+                : 'max-h-0 opacity-0'
+            }`}
+          >
+            {question.explanation && (
+              <Box mb={5} p={4} bg={explanationBgColor} borderRadius="md" w="full">
+                <Text fontSize="sm" color={textColor} lineHeight="1.6">
+                  {question.explanation}
+                </Text>
+              </Box>
+            )}
+          </div>
         </Box>
       ))}
     </VStack>

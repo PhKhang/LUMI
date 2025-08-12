@@ -4,8 +4,8 @@ import { Icon } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
 import { TbNotes } from "react-icons/tb"
 import { PiMapPin } from "react-icons/pi"
-import { MdOutlinePlayArrow } from "react-icons/md"
 import GapFillBlank from "./gap-fill-blank"
+import { IoPlayCircleOutline } from "react-icons/io5";
 
 interface ListeningQuestion {
   id: number
@@ -25,6 +25,7 @@ interface ListeningTableGapFillProps {
   expandedExplanations: Set<number>
   onPlayRange: (startTime: number) => void
   playRangeStartTime: number
+  activeTab?: "note" | "lookup"
 }
 
 export default function ListeningTableGapFillComponent({
@@ -37,6 +38,7 @@ export default function ListeningTableGapFillComponent({
   expandedExplanations,
   onPlayRange,
   playRangeStartTime,
+  activeTab,
 }: ListeningTableGapFillProps) {
   const questionBackgroundColor = useColorModeValue("white", "gray.700")
   const textColor = useColorModeValue("gray.800", "white")
@@ -77,6 +79,39 @@ export default function ListeningTableGapFillComponent({
     }
   }
 
+  const getQuestionBoxSize = () => {
+    switch (fontSize) {
+      case "small":
+        return { minW: "40px", h: "40px" }
+      case "large":
+        return { minW: "60px", h: "60px" }
+      default:
+        return { minW: "50px", h: "50px" }
+    }
+  }
+
+  const getQuestionNumberFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "xl"
+      case "large":
+        return "3xl"
+      default:
+        return "2xl"
+    }
+  }
+
+  const getSummaryTitleFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "md"
+      case "large":
+        return "xl"
+      default:
+        return "lg"
+    }
+  }
+
   const getBlankStatus = (question: ListeningQuestion) => {
     return question.userAnswer === question.correctAnswer
   }
@@ -89,57 +124,73 @@ export default function ListeningTableGapFillComponent({
   const questionRangeText = title.match(/Questions (\d+\s*-\s*\d+):/)?.[1] || ""
 
   return (
-    <VStack align="start" gap={4} w="full">
+    <VStack align="start" gap={0} w="full">
       {/* Header Section */}
-      <Box mb={4}>
+      <Box mb={5}>
         <Text fontSize={getQuestionHeaderFontSize()} fontWeight="bold" color={textColor}>
           {title}
         </Text>
-        <HStack mt={2} gap={3}>
-          <Button
-            variant="outline"
-            size="md"
+        <Text fontSize={getFontSizeValue()} color={textColor} mb={4}>
+          {instruction}
+        </Text>
+        
+        {/* Question Number with Integrated Play Button */}
+        <HStack align="center" gap={4}>
+          <Box
+            bg={questionBackgroundColor}
             borderRadius="lg"
-            px={4}
-            py={2}
+            p={3}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            shadow="md"
+            cursor="pointer"
             onClick={handlePlayButtonClick}
-            _hover={{ bg: useColorModeValue("gray.100", "gray.600") }}
+            _hover={{ bg: useColorModeValue("gray.50", "gray.600") }}
+            position="relative"
+            minW={fontSize === "small" ? "60px" : fontSize === "large" ? "100px" : "80px"}
+            h={fontSize === "small" ? "40px" : fontSize === "large" ? "60px" : "50px"}
           >
-            <Icon as={MdOutlinePlayArrow} boxSize={5} color="yellow.400" mr={2} />
-            <Text fontSize={getFontSizeValue()} fontWeight="bold" color="yellow.400">
+            <Icon 
+              as={IoPlayCircleOutline} 
+              boxSize={fontSize === "small" ? 6 : fontSize === "large" ? 8 : 7} 
+              color="black" 
+              mr={2}
+            />
+            <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
               {questionRangeText}
             </Text>
-          </Button>
-          <Text fontSize={getFontSizeValue()} color={textColor}>
-            {instruction}
+          </Box>
+          
+          <Text fontSize={getFontSizeValue()} color={textColor} flex={1}>
+            Complete the table below. Write ONE WORD ONLY for each answer.
           </Text>
         </HStack>
       </Box>
 
-        {/* Table Box */}
+      {/* Summary Title */}
+      <Text fontSize={getSummaryTitleFontSize()} fontWeight="bold" color={textColor} mb={2} textAlign="center" w="full">
+        A typical 45-minute guitar lesson
+      </Text>
+
+      {/* Table Content - No background wrapper to match other components */}
+      <Box w="full" fontSize={getFontSizeValue()} color={textColor} lineHeight="2" mb={5}>
         <Table.Root size="md" variant="outline" showColumnBorder={true} borderColor={borderColor} color={textColor}>
           <Table.Body> 
-            {/* Row 1 */}     
+            {/* Header Row */}
             <Table.Row>
-                <Table.Cell textAlign="center" fontSize={getFontSizeValue()} colSpan={3}>
-                    <Text fontSize="lg" fontWeight="bold" color={textColor} mb={4} textAlign="center">
-                        A typical 45-minute guitar lesson
-                    </Text>
-                </Table.Cell>
-            </Table.Row>   
-            {/* Row 2 */}
-            <Table.Row>
-                <Table.Cell textAlign="center" fontSize={getFontSizeValue()} w="30%">
+                <Table.Cell textAlign="center" fontSize={getFontSizeValue()} w="30%" fontWeight="bold">
                     Time
                 </Table.Cell>
-                <Table.Cell textAlign="center" fontSize={getFontSizeValue()} w="33%">
+                <Table.Cell textAlign="center" fontSize={getFontSizeValue()} w="33%" fontWeight="bold">
                     Activity
                 </Table.Cell>
-                <Table.Cell textAlign="center"fontSize={getFontSizeValue()} w="33%">
+                <Table.Cell textAlign="center" fontSize={getFontSizeValue()} w="33%" fontWeight="bold">
                     Notes
                 </Table.Cell>
             </Table.Row>
-            {/* Row 3 */}
+            
+            {/* Row 1 */}
             <Table.Row>
               <Table.Cell textAlign="center" fontSize={getFontSizeValue()}>
                 5 min
@@ -148,14 +199,16 @@ export default function ListeningTableGapFillComponent({
                 tuning guitars
               </Table.Cell>
               <Table.Cell textAlign="center" fontSize={getFontSizeValue()}>
-                <Text as="span">using an app or by </Text>
-                <GapFillBlank
-                  questionNumber={questions[0].id}
-                  userAnswer={questions[0].userAnswer}
-                  correctAnswer={questions[0].correctAnswer}
-                  isCorrect={getBlankStatus(questions[0])}
-                  fontSize={fontSize}
-                />
+                <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={1}>
+                  <Text as="span">using an app or by </Text>
+                  <GapFillBlank
+                    questionNumber={questions[0].id}
+                    userAnswer={questions[0].userAnswer}
+                    correctAnswer={questions[0].correctAnswer}
+                    isCorrect={getBlankStatus(questions[0])}
+                    fontSize={fontSize}
+                  />
+                </Box>
               </Table.Cell>
             </Table.Row>
 
@@ -168,14 +221,16 @@ export default function ListeningTableGapFillComponent({
                 strumming chords using our thumbs
               </Table.Cell>
               <Table.Cell textAlign="center" fontSize={getFontSizeValue()}>
-                <Text as="span">keeping time while the teacher is </Text>
-                <GapFillBlank
-                  questionNumber={questions[1].id}
-                  userAnswer={questions[1].userAnswer}
-                  correctAnswer={questions[1].correctAnswer}
-                  isCorrect={getBlankStatus(questions[1])}
-                  fontSize={fontSize}
-                />
+                <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={1}>
+                  <Text as="span">keeping time while the teacher is </Text>
+                  <GapFillBlank
+                    questionNumber={questions[1].id}
+                    userAnswer={questions[1].userAnswer}
+                    correctAnswer={questions[1].correctAnswer}
+                    isCorrect={getBlankStatus(questions[1])}
+                    fontSize={fontSize}
+                  />
+                </Box>
               </Table.Cell>
             </Table.Row>
 
@@ -188,15 +243,17 @@ export default function ListeningTableGapFillComponent({
                 playing songs
               </Table.Cell>
               <Table.Cell textAlign="center" fontSize={getFontSizeValue()}>
-                <Text as="span">often listening to a </Text>
-                <GapFillBlank
-                  questionNumber={questions[2].id}
-                  userAnswer={questions[2].userAnswer}
-                  correctAnswer={questions[2].correctAnswer}
-                  isCorrect={getBlankStatus(questions[2])}
-                  fontSize={fontSize}
-                />
-                <Text as="span"> of a song</Text>
+                <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={1}>
+                  <Text as="span">often listening to a </Text>
+                  <GapFillBlank
+                    questionNumber={questions[2].id}
+                    userAnswer={questions[2].userAnswer}
+                    correctAnswer={questions[2].correctAnswer}
+                    isCorrect={getBlankStatus(questions[2])}
+                    fontSize={fontSize}
+                  />
+                  <Text as="span"> of a song</Text>
+                </Box>
               </Table.Cell>
             </Table.Row>
 
@@ -209,14 +266,16 @@ export default function ListeningTableGapFillComponent({
                 playing single notes and simple tunes
               </Table.Cell>
               <Table.Cell textAlign="center" fontSize={getFontSizeValue()}>
-                <Text as="span">playing together, then </Text>
-                <GapFillBlank
-                  questionNumber={questions[3].id}
-                  userAnswer={questions[3].userAnswer}
-                  correctAnswer={questions[3].correctAnswer}
-                  isCorrect={getBlankStatus(questions[3])}
-                  fontSize={fontSize}
-                />
+                <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" gap={1}>
+                  <Text as="span">playing together, then </Text>
+                  <GapFillBlank
+                    questionNumber={questions[3].id}
+                    userAnswer={questions[3].userAnswer}
+                    correctAnswer={questions[3].correctAnswer}
+                    isCorrect={getBlankStatus(questions[3])}
+                    fontSize={fontSize}
+                  />
+                </Box>
               </Table.Cell>
             </Table.Row>
 
@@ -234,11 +293,12 @@ export default function ListeningTableGapFillComponent({
             </Table.Row>
           </Table.Body>
         </Table.Root>
+      </Box>
 
       {/* Answer Sections */}
       {questions.map((question) => (
         <Box key={question.id} w="full">
-          <Flex justify="space-between" align="center" w="full" mb={2}>
+          <Flex justify="space-between" align="center" w="full" mb={5}>
             <Box bg="gray.200" px={4} py={2} borderRadius="md">
               <Text fontSize={getAnswerTextFontSize()} color="gray.700">
                 {question.id}. Answer:{" "}
@@ -255,6 +315,7 @@ export default function ListeningTableGapFillComponent({
                 variant="outline"
                 onClick={() => onLocate(question.id)}
                 borderRadius="full"
+                style={activeTab === "lookup" ? { display: "none" } : {}}
               >
                 <Icon as={PiMapPin} />
                 <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
@@ -272,13 +333,21 @@ export default function ListeningTableGapFillComponent({
           </Flex>
 
           {/* Explanation for this specific question */}
-          {question.explanation && expandedExplanations.has(question.id) && (
-            <Box mt={2} mb={4} p={4} bg={explanationBgColor} borderRadius="md" w="full">
-              <Text fontSize="sm" color={mutedColor} lineHeight="1.6">
-                {question.explanation}
-              </Text>
-            </Box>
-          )}
+          <div
+            className={`transition-all duration-300 ease-in-out overflow-hidden ${
+              question.explanation && expandedExplanations.has(question.id)
+                ? 'max-h-96 opacity-100'
+                : 'max-h-0 opacity-0'
+            }`}
+          >
+            {question.explanation && (
+              <Box mb={5} p={4} bg={explanationBgColor} borderRadius="md" w="full">
+                <Text fontSize="sm" color={textColor} lineHeight="1.6">
+                  {question.explanation}
+                </Text>
+              </Box>
+            )}
+          </div>
         </Box>
       ))}
     </VStack>

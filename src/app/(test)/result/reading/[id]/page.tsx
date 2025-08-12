@@ -385,7 +385,7 @@ export default function TestResult() {
 
         {/* Right Panel - Questions */}
         <Box width={`${100 - leftPanelWidth}%`} overflow="auto" p={6} bg={contentBackgroundColor}>
-          <Box id="questions-1-5">
+          <Box id="questions-1-5" mb={5}>
             <PassageMatchingQuestionComponent
               title="Questions 1-5"
               instruction="Reading Passage 2 has six sections, A-F. Which section contains the following information?"
@@ -400,7 +400,7 @@ export default function TestResult() {
           </Box>
 
           {/* Multiple Choice Questions 6-7 */}
-          <Box id="questions-6-7">
+          <Box id="questions-6-7" mb={5}>
             <MultipleChoiceQuestionComponent
               title="Questions 6-7"
               instruction="Choose TWO letters, A-E."
@@ -417,7 +417,7 @@ export default function TestResult() {
           </Box>
 
           {/* Multiple Choice Questions 8-9 */}
-          <Box id="questions-8-9">
+          <Box id="questions-8-9" mb={5}>
             <MultipleChoiceQuestionComponent
               title="Questions 8-9"
               instruction="Choose TWO letters, A-E."
