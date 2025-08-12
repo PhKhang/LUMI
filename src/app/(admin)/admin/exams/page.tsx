@@ -16,7 +16,7 @@ import { MdLightbulb, MdArrowForward, MdArrowBack, MdCheck, MdHeadphones, MdMenu
 import { useState } from "react"
 
 export default function ExamsPage() {
-  const [currentStep, setCurrentStep] = useState(4)
+  const [currentStep, setCurrentStep] = useState(1)
   const [testName, setTestName] = useState("")
   const [testType, setTestType] = useState("mini")
   const [selectedSkill, setSelectedSkill] = useState("reading")
@@ -371,7 +371,7 @@ export default function ExamsPage() {
         <Box 
           bg="background.primary" 
           borderRadius="lg" 
-          boxShadow="md" 
+          shadow="md" 
           p={8}
           borderWidth="1px"
           borderColor="border.primary"

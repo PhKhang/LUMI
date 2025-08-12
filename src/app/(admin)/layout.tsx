@@ -25,10 +25,10 @@ export default function AdminLayout({
   const pathname = usePathname()
 
   const sidebarItems = [
-    { icon: FiHome, label: "Dashboard", href: "/admin", labelVi: "Trang chủ" },
-    { icon: FiFilePlus, label: "Create Exam", href: "/admin/exams", labelVi: "Tạo đề thi" },
-    { icon: FiFileText, label: "View Exams", href: "/admin/view-exams", labelVi: "Xem đề thi" },
-    { icon: FiTrendingUp, label: "Statistics", href: "/admin/statistics", labelVi: "Xem thống kê" },
+    { icon: FiHome, label: "Dashboard", href: "/admin" },
+    { icon: FiFilePlus, label: "Create Exam", href: "/admin/exams" },
+    { icon: FiFileText, label: "View Exams", href: "/admin/view-exams" },
+    { icon: FiTrendingUp, label: "Statistics", href: "/admin/statistics" },
   ]
 
   const toggleSidebar = () => {
@@ -77,18 +77,12 @@ export default function AdminLayout({
         {/* Logo */}
         <HStack mb={8} justify={isCollapsed ? "center" : "flex-start"}>
           {isCollapsed ? (
-            <Box
-              w={10}
-              h={10}
-              bg="#FFD700"
-              borderRadius="full"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Text fontWeight="bold" fontSize="sm" color="black">
-                L
-              </Text>
+            <Box w={10} h={10} display="flex" alignItems="center" justifyContent="center">
+              <img
+                src="/favicon.png"
+                alt="LUMI Logo"
+                style={{ height: "32px", width: "32px", objectFit: "contain" }}
+              />
             </Box>
           ) : (
             <HStack>
@@ -126,7 +120,7 @@ export default function AdminLayout({
                   <Icon as={item.icon} w={5} h={5} />
                   {!isCollapsed && (
                     <Text ml={3} fontWeight={isActive ? "semibold" : "medium"}>
-                      {item.labelVi}
+                      {item.label}
                     </Text>
                   )}
                 </Box>
@@ -180,8 +174,8 @@ export default function AdminLayout({
           >
             <Icon as={MdLogout} w={5} h={5} />
             {!isCollapsed && (
-              <Text ml={3} fontWeight="medium">
-                Đăng xuất
+              <Text font="lg" ml={3} fontWeight="medium">
+                Logout
               </Text>
             )}
           </Box>
