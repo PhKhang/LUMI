@@ -687,22 +687,25 @@ export default function ListeningTestResult() {
                     const globalQuestionNum = part.startQuestion + i
                     const status = questionStatuses[globalQuestionNum - 1] || 0
                     return (
-                      <Button
+                      <Box
                         key={globalQuestionNum}
-                        size="sm"
-                        variant="solid"
+                        // size="sm"
+                        // variant="solid"
                         color="white"
                         bg={getQuestionButtonColor(status)}
                         _hover={{ bg: getQuestionButtonHoverColor(status) }}
                         w="30px"
                         h="30px"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center" 
                         borderRadius="full"
                         onClick={(e) => {
                           e.stopPropagation()
                         }}
                       >
                         {globalQuestionNum}
-                      </Button>
+                      </Box>
                     )
                   })}
                 </SimpleGrid>
