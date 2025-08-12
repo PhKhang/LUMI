@@ -548,6 +548,10 @@ const ReadingParagraph = ({
     // Tìm và highlight text
     const regex = new RegExp(`(${highlightText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
     const parts = text.split(regex);
+    const highlightBg = useColorModeValue(
+      "rgba(22, 163, 74, 0.2)",
+      "rgba(22, 163, 74, 0.4)"
+    );
 
     return parts.map((part, index) => {
       const isHighlightPart = regex.test(part);
@@ -560,7 +564,7 @@ const ReadingParagraph = ({
               <span 
                 key={`${index}-${wordIndex}`} 
                 className="cursor-pointer hover:underline"
-                style={isHighlighted ? { backgroundColor: 'rgba(22, 163, 74, 0.3)' } : undefined}
+                style={isHighlighted ? { backgroundColor: highlightBg } : undefined}
                 onClick={() => {
                   // drawer.open...
                 }}
@@ -572,7 +576,7 @@ const ReadingParagraph = ({
         } else {
           return (
             <span 
-              style={isHighlighted ? { backgroundColor: 'rgba(22, 163, 74, 0.3)' } : undefined}
+              style={isHighlighted ? { backgroundColor: highlightBg } : undefined}
             >
               {content}
             </span>

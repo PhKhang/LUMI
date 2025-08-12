@@ -258,13 +258,21 @@ export default function MultipleChoiceQuestionComponent({
           </Flex>
 
           {/* Explanation for this specific question */}
-          {question.explanation && expandedExplanations.has(question.id) && (
-            <Box mt={2} mb={4} p={4} bg={explanationBgColor} borderRadius="md" w="full">
-              <Text fontSize="sm" color={mutedColor} lineHeight="1.6">
-                {question.explanation}
-              </Text>
-            </Box>
-          )}
+          <div
+            className={`transition-all duration-300 ease-in-out overflow-hidden ${
+              question.explanation && expandedExplanations.has(question.id)
+                ? 'max-h-96 opacity-100'
+                : 'max-h-0 opacity-0'
+            }`}
+          >
+            {question.explanation && (
+              <Box mb={5} p={4} bg={explanationBgColor} borderRadius="md" w="full">
+                <Text fontSize="sm" color={textColor} lineHeight="1.6">
+                  {question.explanation}
+                </Text>
+              </Box>
+            )}
+          </div>
         </Box>
       ))}
     </VStack>
