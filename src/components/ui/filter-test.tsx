@@ -1,13 +1,19 @@
 "use client";
 
-import { Text, Icon, Box, Flex, HStack } from "@chakra-ui/react";
+import {
+  Text,
+  Icon,
+  Box,
+  Flex,
+  HStack,
+  Button,
+  Center,
+} from "@chakra-ui/react";
 
 import { useState } from "react";
-import {
-  MdFilterAlt,
-} from "react-icons/md";
-import { FaHeadphones, FaBookOpen } from "react-icons/fa"
-import { BiSolidPencil, BiSolidMicrophone } from "react-icons/bi"
+import { MdFilterAlt } from "react-icons/md";
+import { FaHeadphones, FaBookOpen } from "react-icons/fa";
+import { BiSolidPencil, BiSolidMicrophone } from "react-icons/bi";
 
 type SkillType = "listening" | "reading" | "writing" | "speaking";
 type SectionType = "single" | "full";
@@ -31,13 +37,13 @@ export default function FilterTest() {
       if (prev[skill].selected) {
         return prev;
       }
-      
+
       // Nếu skill hiện tại chưa được chọn, bỏ chọn tất cả skill khác và chọn skill này
       const newSkills = { ...prev };
       Object.keys(newSkills).forEach((key) => {
         newSkills[key as SkillType].selected = false;
       });
-      
+
       return {
         ...newSkills,
         [skill]: {
@@ -55,7 +61,7 @@ export default function FilterTest() {
       Object.keys(newSkills).forEach((key) => {
         newSkills[key as SkillType].selected = false;
       });
-      
+
       return {
         ...newSkills,
         [skill]: {
@@ -84,39 +90,57 @@ export default function FilterTest() {
           return (
             <div key={skill} className="space-y-1">
               {/* Skill Toggle Button */}
-              <Box
-                borderRadius={"full"}
-                w={"full"}
-              >
-                <button
+              <Box borderRadius={"full"}>
+                <Button
                   onClick={() => toggleSkill(skill)}
-                  className={`w-full flex items-center gap-3 px-4 py-1 rounded-full border-2 transition-all ${
-                    skillState.selected
-                      ? "bg-green-100 border-green-300 text-green-800"
-                      : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100"
-                  }`}
+                  w={"full"}
+                  bg={skillState.selected ? "green.100" : ""}
+                  justifyContent={"start"}
+                  rounded={"full"}
+                  border={"solid"}
+                  borderWidth={"1.6px"}
+                  borderColor={skillState.selected ? "green.600" : "gray.300"}
+                  px={3}
+                  py={2}
                 >
-                  <div
-                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                      skillState.selected
-                        ? "border-green-500 bg-green-500"
-                        : "border-green-600"
-                    }`}
+                  <Box
+                    // Cục tròn ở giữa
+                    w={4}
+                    h={4}
+                    rounded={"full"}
+                    border={"1.8px solid"}
+                    borderWidth={"1.6px"}
+                    borderColor={"green.600"}
+                    bg={skillState.selected ? "green.600" : ""}
+                    transition={"all"}
                   >
                     {skillState.selected && (
-                      <div className="w-2 h-2 bg-white rounded-full" />
+                      <Center h={"full"} w={"full"}>
+                        <Box
+                          w={"2"}
+                          h={"2"}
+                          bg={"white"}
+                          rounded={"full"}
+                          transition={"all"}
+                        />
+                      </Center>
                     )}
-                  </div>
-
+                  </Box>
                   <HStack>
-                    <Icon color={skillState.selected ? "green.600" : "gray.600"}>
+                    <Icon
+                      color={skillState.selected ? "green.600" : "gray.600"}
+                    >
                       <IconSymbol className="w-5 h-5" />
                     </Icon>
-                    <Text color={skillState.selected ? "green.600" : "gray.600"} fontWeight={"bold"} fontSize={"sm"}>
+                    <Text
+                      color={skillState.selected ? "green.600" : "gray.600"}
+                      fontWeight={"bold"}
+                      fontSize={"sm"}
+                    >
                       {label}
                     </Text>
                   </HStack>
-                </button>
+                </Button>
               </Box>
 
               {/* Section Type Options */}
@@ -125,13 +149,15 @@ export default function FilterTest() {
                   <input
                     type="radio"
                     name="section-type" // Tất cả radio buttons dùng chung một name
-                    checked={skillState.selected && skillState.sectionType === "single"}
+                    checked={
+                      skillState.selected && skillState.sectionType === "single"
+                    }
                     onChange={() => setSectionType(skill, "single")}
                     className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500"
                   />
-                  <Text 
-                    color={skillState.selected ? "text.primary" : "gray.400"} 
-                    fontSize={"sm"} 
+                  <Text
+                    color={skillState.selected ? "text.primary" : "gray.400"}
+                    fontSize={"sm"}
                     fontWeight={"bold"}
                   >
                     Single section
@@ -142,13 +168,15 @@ export default function FilterTest() {
                   <input
                     type="radio"
                     name="section-type" // Tất cả radio buttons dùng chung một name
-                    checked={skillState.selected && skillState.sectionType === "full"}
+                    checked={
+                      skillState.selected && skillState.sectionType === "full"
+                    }
                     onChange={() => setSectionType(skill, "full")}
                     className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500"
                   />
-                  <Text 
-                    color={skillState.selected ? "text.primary" : "gray.400"} 
-                    fontSize={"sm"} 
+                  <Text
+                    color={skillState.selected ? "text.primary" : "gray.400"}
+                    fontSize={"sm"}
                     fontWeight={"bold"}
                   >
                     Full section
