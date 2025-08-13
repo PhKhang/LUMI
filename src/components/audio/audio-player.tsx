@@ -1,6 +1,5 @@
 "use client"
-
-import { useState, useRef, useEffect } from "react"
+import { forwardRef, useImperativeHandle, useRef, useState, useEffect } from "react"
 import { Box, Flex, Text, HStack, VStack, Slider, Stack, Button, Spacer, Menu  } from "@chakra-ui/react"
 import { Icon } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
@@ -12,9 +11,12 @@ interface AudioPlayerProps {
   audioSrc?: string // Make audioSrc optional with default
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ 
-  audioSrc = "/Test2 Part1.mp3" // Default to your audio file
-}) => {
+export type AudioPlayerRef = {
+  seekTo: (timeInSeconds: number) => void
+}
+
+const AudioPlayer = forwardRef<AudioPlayerRef, AudioPlayerProps>(
+({ audioSrc = "/Test2 Part1.mp3" }, ref) => { // Default to your audio file
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -181,6 +183,19 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     
     audio.currentTime = Math.min(audio.duration, audio.currentTime + 5)
   }
+  
+  const seekTo = (timeInSeconds: number) => {
+    const audio = audioRef.current
+    if (!audio || !duration) return
+    const clampedTime = Math.max(0, Math.min(timeInSeconds, duration)) // đảm bảo không vượt giới hạn
+    audio.currentTime = clampedTime
+    setCurrentTime(clampedTime)
+    setProgress((clampedTime / duration) * 100)
+  }
+
+  useImperativeHandle(ref, () => ({
+    seekTo
+  }))
 
   return (
     <Box bg={bgColor} borderRadius="lg" px={4} pb={4} w="full" position={"relative"}>
@@ -331,6 +346,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       </Flex>
     </Box>
   )
-}
+})
 
 export default AudioPlayer

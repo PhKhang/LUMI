@@ -30,7 +30,7 @@ export default function ListeningTestResult() {
   const [activePart, setActivePart] = useState<"part1" | "part2" | "part3" | "part4">("part1")
 
   const audioPlayerRef = useRef<AudioPlayerRef>(null)
-
+  
   const bgColor = useColorModeValue("#F6F0E7", "gray.800")
   const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900")
   const questionBackgroundColor = useColorModeValue("white", "gray.700")
@@ -376,9 +376,7 @@ export default function ListeningTestResult() {
   }
 
   const handlePlayRange = (startTimeInSeconds: number) => {
-    if (audioPlayerRef.current) {
-      audioPlayerRef.current.setAudioTime(startTimeInSeconds)
-    }
+    audioPlayerRef.current?.seekTo(startTimeInSeconds);
   }
 
   const getFontSizeValue = () => {
@@ -582,7 +580,7 @@ export default function ListeningTestResult() {
           </Box>
           {/* Fixed Audio Player */}
           <Box w="full" p={0} borderTop="1px" borderColor={borderColor} bg={contentBackgroundColor}>
-            <AudioPlayer ref={audioPlayerRef} duration="29:23" currentTime="01:13" />
+            <AudioPlayer ref={audioPlayerRef} />
           </Box>
         </VStack>
 
@@ -628,7 +626,7 @@ export default function ListeningTestResult() {
                 onLocate={handleLocate}
                 onExplain={toggleExplanation}
                 expandedExplanations={expandedExplanations}
-                onPlayRange={handlePlayRange}
+                onPlayRange={() => handlePlayRange(114)}
                 playRangeStartTime={10}
               />
 
@@ -640,8 +638,8 @@ export default function ListeningTestResult() {
                 onLocate={handleLocate}
                 onExplain={toggleExplanation}
                 expandedExplanations={expandedExplanations}
-                onPlayRange={handlePlayRange}
-                playRangeStartTime={45}
+                onPlayRange={() =>handlePlayRange(314)}
+                playRangeStartTime={314}
               />
             </>
           )}
