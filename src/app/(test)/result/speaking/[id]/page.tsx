@@ -162,34 +162,29 @@ export default function SpeakingTestResult() {
 
   return (
     <Box minH="100vh" bg={bgColor}>
-      {/* Control Bar */}
-      <Box bg={bgColor} borderBottom="1px" borderColor={borderColor} px={4} position="sticky" top={0} zIndex={1000}>
+      {/* Header - Unified style with reading/listening/writing */}
+      <Box bg={bgColor} borderColor={borderColor} px={4}>
         <Box display="grid" gridTemplateColumns="1fr auto 1fr" alignItems="center" w="full" mx="auto">
-          {/* Left Section - Close Button + Part Tabs */}
+          {/* Left Section - Exit + Tabs */}
           <HStack gap={4} height="60px">
             <Box alignItems="center">
               <ExitTestButton />
             </Box>
-            <TabSelector
-              activeTab={activeTab}
-              onTabChange={(tab) => setActiveTab(tab as "part1" | "part2" | "part3")}
-              tabs={speakingTabs}
-            />
-            <Box alignItems="center">
-              <HStack>
-                <Icon as={MdMic} color="gray.500" />
-                <Text fontSize="sm" color={mutedColor}>
-                  Micro check
-                </Text>
-              </HStack>
+            <Box marginTop="auto">
+              <TabSelector
+                activeTab={activeTab}
+                onTabChange={(tab) => setActiveTab(tab as "part1" | "part2" | "part3")}
+                tabs={speakingTabs}
+              />
             </Box>
+            {/* Optionally add Micro check here if you want, or move below */}
           </HStack>
 
           {/* Center Section - Time */}
           <Box py={3}>
             <HStack gap={2} justify="center" bg={questionBackgroundColor} px={3} py={1} borderRadius="full">
               <HStack>
-                <Icon as={MdAccessTime} color="accent" />
+                <Icon as={MdAccessTime} color={useColorModeValue("green.600", "green.500")}/>
                 <Text fontSize={getFontSizeValue()} fontWeight="medium" color={textColor}>
                   00:10:39
                 </Text>
@@ -497,8 +492,8 @@ export default function SpeakingTestResult() {
 
               <AudioPlayer duration="00:30" currentTime="00:00" />
 
-{/* Feedback section with bullet points listing fluency issues */}
-<Box mt={6}>
+              {/* Feedback section with bullet points listing fluency issues */}
+              <Box mt={6}>
                 <Text fontSize="lg" fontWeight="bold" color={textColor} mb={3}>
                   Feedback
                 </Text>

@@ -41,7 +41,7 @@ export default function PassageMatchingQuestionComponent({
   const questionBackgroundColor = useColorModeValue("white", "gray.700")
   const textColor = useColorModeValue("gray.800", "white")
   const mutedColor = useColorModeValue("gray.600", "gray.400")
-  const explanationBgColor = useColorModeValue("gray.50", "gray.700")
+  const explanationBgColor = useColorModeValue("gray.200", "gray.700")
   const borderColor = useColorModeValue("gray.200", "gray.600")
 
   const getQuestionStatus = (question: PassageMatchingQuestion) => {

@@ -106,3 +106,21 @@ body {
   font-weight: 900;
   font-style: italic; 
 }
+
+.error-highlight {
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+}
+.error-highlight::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  border-radius: 8px;
+  animation: fadeOut 0.5s forwards;
+}
+@keyframes fadeOut {
+  0% { opacity: 0; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
