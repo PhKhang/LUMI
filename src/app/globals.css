@@ -1,3 +1,12 @@
+/* Custom selection color for better visibility */
+::selection {
+  background: #3367D1;
+  color: #fff;
+}
+html.dark ::selection {
+  background: #3367D1;
+  color: #fff;
+}
 @import "tailwindcss";
 
 :root {

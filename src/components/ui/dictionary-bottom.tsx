@@ -12,12 +12,15 @@ import {
   Separator,
 } from "@chakra-ui/react";
 import {
-  MdVolumeUp,
   MdThumbDown,
   MdThumbUp,
   MdClose,
   MdAdd,
 } from "react-icons/md";
+import { BiLike, BiDislike } from "react-icons/bi";
+import { useState } from "react";
+import { useColorModeValue } from "@/components/ui/color-mode"
+import { FaVolumeUp } from "react-icons/fa"
 
 export interface DialogProps {
   title: string;
@@ -29,6 +32,16 @@ export interface DialogProps {
 
 export const drawer = createOverlay<DialogProps>((props) => {
   const { title, description, content, containerRef, ...rest } = props;
+  const [likeStatus, setLikeStatus] = useState<'liked' | 'disliked' | null>(null);
+
+  const handleLike = () => {
+    setLikeStatus(likeStatus === 'liked' ? null : 'liked');
+  };
+
+  const handleDislike = () => {
+    setLikeStatus(likeStatus === 'disliked' ? null : 'disliked');
+  };
+
   return (
     <Drawer.Root {...rest} size={"sm"}>
       <Portal container={containerRef}>
@@ -36,22 +49,36 @@ export const drawer = createOverlay<DialogProps>((props) => {
         <Drawer.Positioner pos="absolute" boxSize="full">
           <Drawer.Content>
             {title && (
-              <Drawer.Header p={0}>
+              <Drawer.Header py={0} px={3} gap={0}>
                 <Drawer.Title>
                   <VStack align={"start"}>
-                    <Box w={"full"} p={2}>
+                    <Box w={"full"} pt={2}>
                       <HStack justify={"space-between"} gap={0}>
                         <HStack>
-                          <Icon color={"text.muted"}>
-                            <MdVolumeUp />
+                          <Icon
+                            color={"text.muted"}
+                            cursor="pointer"
+                            transition="color 0.15s, transform 0.1s"
+                            _hover={{ color: "gray.500", transform: "scale(1.15)" }}
+                            _active={{ color: "blue.600", transform: "scale(0.95)" }}
+                            tabIndex={0}
+                            aria-label="Play pronunciation"
+                            _focus={{ boxShadow: "none", outline: "none" }}
+                            onClick={() => {
+                              const audio = new Audio("/pronunciation_en_fossil.mp3");
+                              audio.play();
+                            }}
+                          >
+                            <FaVolumeUp />
                           </Icon>
-                          <Span fontWeight={"bold"} color={"text.primary"}>
+                          <Span fontWeight={"bold"} color={"text.primary"} fontSize={"md"}>
                             Fossil{" "}
                           </Span>
                           <Span
                             color={"text.secondary"}
                             fontWeight={"normal"}
                             fontFamily={"fonts.ipa"}
+                            fontSize={"md"}
                           >
                             /ˈfɒsɪl/
                           </Span>
@@ -59,33 +86,61 @@ export const drawer = createOverlay<DialogProps>((props) => {
                             color={"text.secondary"}
                             fontWeight={"light"}
                             fontStyle={"italic"}
+                            fontSize={"md"}
                           >
                             (noun)
                           </Span>
                         </HStack>
 
                         <Drawer.CloseTrigger asChild>
-                          <Icon color={"text.secondary"} cursor={"pointer"}>
+                          <Icon
+                            color={"text.secondary"}
+                            cursor={"pointer"}
+                            transition="color 0.15s, transform 0.1s"
+                            _hover={{ color: "red.500", transform: "scale(1.15)" }}
+                            _active={{ color: "red.600", transform: "scale(0.95)" }}
+                            tabIndex={0}
+                            aria-label="Close"
+                            _focus={{ boxShadow: "none", outline: "none" }}
+                          >
                             <MdClose />
                           </Icon>
                         </Drawer.CloseTrigger>
                       </HStack>
                     </Box>
 
-                    <Box w={"full"} p={2}>
-                      <HStack justify={"space-between"} wrap={"nowrap"}>
-                        <Text color="accent">hóa thạch</Text>
+                    <Box w={"full"} py={0}>
+                      <HStack justify={"space-between"} wrap={"nowrap"} alignItems={"flex-start"}>
+                        <Text color="accent" fontSize={"md"} fontWeight={"bold"}>hóa thạch</Text>
 
                         <HStack color={"text.secondary"}>
-                          <Icon>
-                            <MdThumbUp />
+                          <Icon
+                            cursor="pointer"
+                            onClick={handleLike}
+                            color={likeStatus === 'liked' ? 'green.500' : 'text.secondary'}
+                            transition="all 0.2s"
+                            _hover={{
+                              color: likeStatus === 'liked' ? 'green.600' : 'green.400',
+                              transform: 'scale(1.1)'
+                            }}
+                          >
+                            {likeStatus === 'liked' ? <MdThumbUp /> : <BiLike />}
                           </Icon>
-                          <Icon>
-                            <MdThumbDown />
+                          <Icon
+                            cursor="pointer"
+                            onClick={handleDislike}
+                            color={likeStatus === 'disliked' ? 'red.500' : 'text.secondary'}
+                            transition="all 0.2s"
+                            _hover={{
+                              color: likeStatus === 'disliked' ? 'red.600' : 'red.400',
+                              transform: 'scale(1.1)'
+                            }}
+                          >
+                            {likeStatus === 'disliked' ? <MdThumbDown /> : <BiDislike />}
                           </Icon>
-                          <Button rounded={"full"} px={2} pr={4}>
+                          <Button size="xs" variant="outline" colorPalette={"green"} rounded={"full"} px={2} pr={4}>
                             <Icon as={MdAdd} />
-                            <Text>Lưu từ</Text>
+                            <Text>Save word</Text>
                           </Button>
                         </HStack>
                       </HStack>

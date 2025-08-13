@@ -50,9 +50,10 @@ export default function GapFillBlank({
     <Box as="span" display="inline-flex" alignItems="center" mx={1}>
       {/* Question Number - positioned to the left */}
       <Box
+        as="span"
         bg="gray.200"
         borderRadius="full"
-        display="flex"
+        display="inline-flex"
         alignItems="center"
         justifyContent="center"
         fontWeight="bold"
