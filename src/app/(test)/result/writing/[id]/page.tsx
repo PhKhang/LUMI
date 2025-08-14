@@ -30,7 +30,7 @@ export default function WritingTestResult() {
   const [activeTab, setActiveTab] = useState<"original" | "edited">("edited")
   const [activeRightTab, setActiveRightTab] = useState<"grammar" | "coherence">("grammar")
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("medium")
-  const [leftPanelWidth, setLeftPanelWidth] = useState(50)
+  const [leftPanelWidth, setLeftPanelWidth] = useState(60)
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["grammar", "coherence"]))
   const [expandedCriteria, setExpandedCriteria] = useState<Set<string>>(new Set())
   const { colorMode, toggleColorMode } = useColorMode()
@@ -502,7 +502,7 @@ In conclusion, the transition from school to university or college can bring sev
         />
 
         {/* Right Panel - Scoring */}
-        <Box width={`${100 - leftPanelWidth}%`} overflow="auto" pt={6} bg={contentBackgroundColor}>
+        <Box width={`${100 - leftPanelWidth}%`} minWidth={`30%`} overflow="auto" pt={6} bg={contentBackgroundColor}>
           <VStack align="start" gap={0}>
             {/* Overall Score */}
             <Box w="full" textAlign="center">
@@ -518,7 +518,7 @@ In conclusion, the transition from school to university or college can bring sev
                   <Box
                     bg="green.600"
                     color="white"
-                    p={9}
+                    py={9}
                     borderRadius="lg"
                     w="full"
                     h="full"
@@ -526,7 +526,7 @@ In conclusion, the transition from school to university or college can bring sev
                     flexDirection="column"
                     justifyContent="center"
                   >
-                    <Text fontSize={getFontSizeValue()} opacity={0.9}>
+                    <Text fontSize={getFontSizeValue()} opacity={0.9} px={9}>
                       Est. Band Score
                     </Text>
                     <Text fontSize="5xl" fontWeight="bold" my="1"> 

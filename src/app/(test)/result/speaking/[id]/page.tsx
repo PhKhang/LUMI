@@ -21,8 +21,8 @@ import ExitTestButton from "@/components/ui/exit-test-button"
 import SettingsMenu from "@/components/ui/settings-menu"
 import AudioPlayer from "@/components/audio/audio-player"
 import TabSelector from "@/components/ui/tab-selector"
-
 import TabSelectorContent from "@/components/ui/tab-selector-content"
+
 interface ScoreSection {
   id: string
   name: string
@@ -31,27 +31,79 @@ interface ScoreSection {
 }
 
 export default function SpeakingTestResult() {
+  // Add mounted state to prevent hydration issues
+  const [mounted, setMounted] = useState(false)
   const [currentLanguage, setCurrentLanguage] = useState<"en" | "vi">("vi")
   const [activeTab, setActiveTab] = useState<"part1" | "part2" | "part3">("part1")
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("medium")
-  const [leftPanelWidth, setLeftPanelWidth] = useState(50)
+  const [leftPanelWidth, setLeftPanelWidth] = useState(70)
   const [activeSection, setActiveSection] = useState<string>("overall")
   const [userNotes, setUserNotes] = useState("")
   const [highlightedCorrection, setHighlightedCorrection] = useState<number | null>(null)
   const [isManualTabChange, setIsManualTabChange] = useState(false)
   
   const { colorMode, toggleColorMode } = useColorMode()
-  const bgColor = useColorModeValue("#F6F0E7", "gray.800")
-  const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900")
-  const questionBackgroundColor = useColorModeValue("white", "gray.700")
-  const borderColor = useColorModeValue("gray.200", "gray.600")
-  const textColor = useColorModeValue("gray.800", "white")
-  const mutedColor = useColorModeValue("gray.600", "gray.400")
-  const cardBgColor = useColorModeValue("gray.50", "gray.700")
-  const greenThemeColor = useColorModeValue("green.600", "green.500")
+  
+  // Always call hooks - never conditionally
+  const bgColorLight = "#F6F0E7"
+  const bgColorDark = "gray.800"
+  const contentBackgroundColorLight = "#FFFAF6"
+  const contentBackgroundColorDark = "gray.900"
+  const questionBackgroundColorLight = "white"
+  const questionBackgroundColorDark = "gray.700"
+  const borderColorLight = "gray.200"
+  const borderColorDark = "gray.600"
+  const textColorLight = "gray.800"
+  const textColorDark = "white"
+  const mutedColorLight = "gray.600"
+  const mutedColorDark = "gray.400"
+  const cardBgColorLight = "gray.50"
+  const cardBgColorDark = "gray.700"
+  const greenThemeColorLight = "green.600"
+  const greenThemeColorDark = "green.500"
+  const headerBgColorLight = "#F2F2F7"
+  const headerBgColorDark = "gray.800"
+
+  // Highlight colors for criteria (light/dark)
+  const highlightYellowBgLight = "yellow.400"
+  const highlightYellowBgDark = "#665c00"
+  const highlightYellowTextLight = "#3d2c00"
+  const highlightYellowTextDark = "#fffbe6"
+  const highlightGreenBgLight = "green.100"
+  const highlightGreenBgDark = "#234d20"
+  const highlightGreenTextLight = "green.700"
+  const highlightGreenTextDark = "#b9fbc0"
+  const highlightPurpleBgLight = "purple.200"
+  const highlightPurpleBgDark = "#3a2352"
+  const highlightPurpleTextLight = "#3a2352"
+  const highlightPurpleTextDark = "#e0d6f5"
+
+  // Use effect to set mounted state
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Define color values based on mounted state and color mode
+  const bgColor = !mounted ? bgColorDark : (colorMode === 'light' ? bgColorLight : bgColorDark)
+  const contentBackgroundColor = !mounted ? contentBackgroundColorDark : (colorMode === 'light' ? contentBackgroundColorLight : contentBackgroundColorDark)
+  const questionBackgroundColor = !mounted ? questionBackgroundColorDark : (colorMode === 'light' ? questionBackgroundColorLight : questionBackgroundColorDark)
+  const borderColor = !mounted ? borderColorDark : (colorMode === 'light' ? borderColorLight : borderColorDark)
+  const textColor = !mounted ? textColorDark : (colorMode === 'light' ? textColorLight : textColorDark)
+  const mutedColor = !mounted ? mutedColorDark : (colorMode === 'light' ? mutedColorLight : mutedColorDark)
+  const cardBgColor = !mounted ? cardBgColorDark : (colorMode === 'light' ? cardBgColorLight : cardBgColorDark)
+  const greenThemeColor = !mounted ? greenThemeColorDark : (colorMode === 'light' ? greenThemeColorLight : greenThemeColorDark)
+  const headerBgColor = !mounted ? headerBgColorDark : (colorMode === 'light' ? headerBgColorLight : headerBgColorDark)
+  
+  const highlightYellowBg = !mounted ? highlightYellowBgDark : (colorMode === 'light' ? highlightYellowBgLight : highlightYellowBgDark)
+  const highlightYellowText = !mounted ? highlightYellowTextDark : (colorMode === 'light' ? highlightYellowTextLight : highlightYellowTextDark)
+  const highlightGreenBg = !mounted ? highlightGreenBgDark : (colorMode === 'light' ? highlightGreenBgLight : highlightGreenBgDark)
+  const highlightGreenText = !mounted ? highlightGreenTextDark : (colorMode === 'light' ? highlightGreenTextLight : highlightGreenTextDark)
+  const highlightPurpleBg = !mounted ? highlightPurpleBgDark : (colorMode === 'light' ? highlightPurpleBgLight : highlightPurpleBgDark)
+  const highlightPurpleText = !mounted ? highlightPurpleTextDark : (colorMode === 'light' ? highlightPurpleTextLight : highlightPurpleTextDark)
 
   // Refs for section elements
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({})
+  const questionAudioRef = useRef<HTMLAudioElement | null>(null)
 
   const overallScore = 5.5
 
@@ -65,41 +117,53 @@ export default function SpeakingTestResult() {
 
   // Set up Intersection Observer for auto tab switching
   useEffect(() => {
-    const observerOptions = {
-      root: document.querySelector('[data-scroll-container]'),
-      rootMargin: '-120px 0px -50% 0px', // Account for sticky header height
-      threshold: 0
-    }
+    if (!mounted) return
 
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      // Only auto-switch if user hasn't manually clicked a tab recently
+    const scrollContainer = document.querySelector('[data-scroll-container]') as HTMLElement
+    const stickyHeader = document.querySelector('[data-sticky-header]') as HTMLElement
+    
+    if (!scrollContainer || !stickyHeader) return
+
+    const handleScroll = () => {
       if (isManualTabChange) return
 
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const sectionId = entry.target.id
-          if (sectionId && sectionId !== activeSection) {
-            setActiveSection(sectionId)
+      const headerHeight = stickyHeader.offsetHeight
+      const scrollTop = scrollContainer.scrollTop + headerHeight + 30;
+
+      // Find which section is currently in view
+      let currentSection = scoreSections[0].id
+      
+      for (const section of scoreSections) {
+        const element = document.getElementById(section.id)
+        if (element) {
+          const elementTop = element.offsetTop
+          if (scrollTop >= elementTop) {
+            currentSection = section.id
+          } else {
+            break
           }
         }
-      })
+      }
+
+      if (currentSection !== activeSection) {
+        setActiveSection(currentSection)
+      }
     }
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions)
+    // Throttle scroll events
+    let timeoutId: NodeJS.Timeout | null = null
+    const throttledHandleScroll = () => {
+      if (timeoutId) clearTimeout(timeoutId)
+      timeoutId = setTimeout(handleScroll, 500)
+    }
 
-    // Observe all sections
-    scoreSections.forEach((section) => {
-      const element = document.getElementById(section.id)
-      if (element) {
-        sectionRefs.current[section.id] = element
-        observer.observe(element)
-      }
-    })
+    scrollContainer.addEventListener('scroll', throttledHandleScroll, { passive: true })
 
     return () => {
-      observer.disconnect()
+      scrollContainer.removeEventListener('scroll', throttledHandleScroll)
+      if (timeoutId) clearTimeout(timeoutId)
     }
-  }, [activeSection, isManualTabChange, scoreSections])
+  }, [activeSection, isManualTabChange, scoreSections, mounted])
 
   useEffect(() => {
     if (isManualTabChange) {
@@ -112,6 +176,8 @@ export default function SpeakingTestResult() {
   }, [isManualTabChange])
 
   const scrollToSection = (sectionId: string) => {
+    if (!mounted) return
+    
     setIsManualTabChange(true)
     setActiveSection(sectionId)
     const element = document.getElementById(sectionId)
@@ -124,7 +190,7 @@ export default function SpeakingTestResult() {
       
       if (scrollContainer) {
         scrollContainer.scrollTo({
-          top: elementPosition - headerHeight - 20, // 20px extra padding
+          top: elementPosition - headerHeight - 20,
           behavior: 'smooth'
         })
       }
@@ -179,28 +245,6 @@ export default function SpeakingTestResult() {
     setHighlightedCorrection(highlightedCorrection === index ? null : index)
   }
 
-  const renderTextWithHighlights = (text: string) => {
-    if (highlightedCorrection === null) {
-      return text
-    }
-
-    const correction = grammaticalCorrections[highlightedCorrection]
-    if (!correction) return text
-
-    const parts = text.split(correction.highlightStart)
-    if (parts.length === 1) return text
-
-    return (
-      <>
-        {parts[0]}
-        <Box as="span" bg="yellow.200" px={1} borderRadius="sm">
-          {correction.highlightStart}
-        </Box>
-        {parts[1]}
-      </>
-    )
-  }
-
   const pronunciationCorrections = [
     { word: "atmosphere", incorrect: "/ˈætməfɪr/", correct: "/ˈætməsfɪr/" },
     { word: "to", incorrect: "/tu:/", correct: "/tə/" },
@@ -227,6 +271,15 @@ export default function SpeakingTestResult() {
     { value: "part3", label: "Part 3" },
   ]
 
+  // Show loading or fallback UI until mounted
+  if (!mounted) {
+    return (
+      <Box minH="100vh" bg="gray.800" display="flex" alignItems="center" justifyContent="center">
+        <Text color="white">Loading...</Text>
+      </Box>
+    )
+  }
+
   return (
     <Box minH="100vh" bg={bgColor}>
       {/* Header - Unified style with reading/listening/writing */}
@@ -244,7 +297,6 @@ export default function SpeakingTestResult() {
                 tabs={speakingTabs}
               />
             </Box>
-            {/* Optionally add Micro check here if you want, or move below */}
           </HStack>
 
           {/* Center Section - Time */}
@@ -256,7 +308,6 @@ export default function SpeakingTestResult() {
                   00:30:12
                 </Text>
               </HStack>
-              {/* Add score here if you want to match reading/listening exactly */}
             </HStack>
           </Box>
 
@@ -293,7 +344,32 @@ export default function SpeakingTestResult() {
               data-sticky-header
             >
               {/* Audio Question - Now inside sticky */}
-              <HStack gap={2} w="full" py={2} bg={cardBgColor} borderRadius="lg" mb={4}> 
+              <HStack gap={2} w="full" borderRadius="lg" mb={2} pt={2}> 
+                <IconButton
+                  aria-label="Play question audio"
+                  size="sm"
+                  variant="ghost"
+                  color={greenThemeColor}
+                  onClick={() => {
+                    if (questionAudioRef.current) {
+                      questionAudioRef.current.currentTime = 0;
+                      questionAudioRef.current.play();
+                    }
+                  }}
+                  borderRadius="full"
+                  _hover={{ 
+                    bg: !mounted ? 'green.700' : (colorMode === 'light' ? 'green.100' : 'green.700'), 
+                    color: !mounted ? 'white' : (colorMode === 'light' ? 'green.700' : 'white') 
+                  }}
+                  _active={{ 
+                    bg: !mounted ? 'green.600' : (colorMode === 'light' ? 'green.200' : 'green.600'), 
+                    color: !mounted ? 'white' : (colorMode === 'light' ? 'green.800' : 'white') 
+                  }}
+                  transition="background 0.2s, color 0.2s"
+                >
+                  <Icon as={MdVolumeUp}/>
+                </IconButton>
+                <audio ref={questionAudioRef} src="/question_speaking.mp3" preload="auto" />
                 <Text fontSize={getFontSizeValue()} color={textColor} fontWeight="bold">
                   In what conditions would it be difficult for you to use a computer?
                 </Text>
@@ -313,19 +389,23 @@ export default function SpeakingTestResult() {
                 />
               </Box>
             </Box>
+            
             <Box px={6} id="overall">
               <Text fontSize="lg" fontWeight="bold" color={textColor} mb={4}>
                 Your Answer
               </Text>
 
               <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
-                Think it depends. If we are talking about the network conditions, I would say, if my computer can't
+                Think it depends. If we are talking about the network condition, I would say, if my computer can't
                 connect to the Wi-Fi, to access the Internet, It would be difficult for me to use it because I spend
                 almost all my time using it to surf the web. But in the other hand, if we are talking about the
                 environment, the surrounding atmosphere is around. I think it would be inappropriate.
               </Text>
 
-              <AudioPlayer/>
+              <Box mb={4}>
+                <AudioPlayer audioSrc="/speaking_your_speech.mp3"/>
+              </Box>
+              
               <Text fontSize="lg" fontWeight="bold" color={textColor} mb={4}>
                 Sample Answer
               </Text>
@@ -335,25 +415,51 @@ export default function SpeakingTestResult() {
                 check emails, which can be frustrating. Last week, my Wi-Fi kept dropping and I felt so annoyed. Also,
                 in a noisy or dimly lit room, environmental distractions make it difficult to concentrate.
               </Text>
-              <AudioPlayer />
+              <AudioPlayer audioSrc="/speaking_revision_speech.mp3"/>
             </Box>
 
             {/* Grammatical Section */}
-            <Box id="grammatical" w="full" px={6}>
-              <Text fontSize="xl" fontWeight="bold" color={textColor} mb={4}>
-                Grammatical Range and Accuracy
-              </Text>
-              <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4}>
+            <Box id="grammatical" w="full">
+              <Box w="100%" bg={headerBgColor} px={6} py={2} alignItems={"center"} mb={4}>
+                <Text fontSize="xl" fontWeight="bold" color={textColor}>
+                  Grammatical Range and Accuracy
+                </Text>
+              </Box>
+
+              <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4} px={6}>
                 Score: 5.0
               </Text>
 
-              <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
-                {renderTextWithHighlights(
-                  "I think it depends. If we are talking about the network conditions, I would say, if my computer can't connect to the Wi-Fi, to access to to access the Internet, it would be difficult for me to use it because I spend almost because I spend almost all my time using it to surf the web. But in on the other hand, if we are talking about environment, the atmosphere is around the environment or the surrounding atmosphere, I think it would be inappropriate.",
-                )}
+              <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8" px={6}>
+                I think it depends. If we are talking about the network conditions, I would say, if my computer can't connect to the Wi-Fi,{' '}
+                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm" textDecoration="line-through">
+                  to access to
+                </Box>{' '}
+                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm">
+                  to access
+                </Box>{' '}
+                the Internet, it would be difficult for me to use it because I spend almost{' '} because I spend almost{' '}
+                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm">
+                  all
+                </Box>{' '}
+                my time using it to surf the web. But in{' '}
+                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm" textDecoration="line-through">
+                  in
+                </Box>{' '}
+                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm">
+                  on
+                </Box>{' '}
+                the other hand, if we are talking about {' '} 
+                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm" textDecoration="line-through">
+                   environment,{' '} the atmosphere is around
+                </Box>{' '}
+                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm">
+                  the environment or the surrounding atmosphere
+                </Box>
+                , I think it would be inappropriate.
               </Text>
 
-              <VStack align="start" gap={3} mt={6}>
+              <VStack align="start" gap={3} mt={6} px={6}>
                 <Text fontSize="md" fontWeight="bold" color={textColor}>
                   Grammar and Vocabulary correction
                 </Text>
@@ -363,7 +469,6 @@ export default function SpeakingTestResult() {
                     variant={highlightedCorrection === index ? "solid" : "outline"}
                     colorScheme={highlightedCorrection === index ? "yellow" : "gray"}
                     size="sm"
-                    // onClick={() => handleCorrectionClick(index)}
                     justifyContent="flex-start"
                     whiteSpace="normal"
                     height="auto"
@@ -371,100 +476,102 @@ export default function SpeakingTestResult() {
                     px={3}
                     w="full"
                   >
-                    <Text fontSize="sm" textAlign={"left"}>{correction.explanation}</Text>
+                    <Text fontSize={getFontSizeValue()} textAlign={"left"}>{correction.explanation}</Text>
                   </Button>
                 ))}
               </VStack>
             </Box>
 
             {/* Pronunciation Section */}
-            <Box id="pronunciation" w="full" px={6}>
-              <Text fontSize="xl" fontWeight="bold" color={textColor} mb={4}>
-                Pronunciation
-              </Text>
-              <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4}>
+            <Box id="pronunciation" w="full">
+              <Box w="100%" bg={headerBgColor} px={6} py={2} alignItems={"center"} mb={4}>
+                <Text fontSize="xl" fontWeight="bold" color={textColor}>
+                  Pronunciation
+                </Text>
+              </Box>
+              <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4} px={6}>
                 Score: 6.0
               </Text>
 
-              <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
+              <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8" px={6}>
                 Think it depends. If we are talking about the network conditions, I{" "}
-                <Text as="span" bg="purple.200" px={1} borderRadius="sm">
+                <Text as="span" bg={highlightPurpleBg} color={highlightPurpleText} px={1} borderRadius="sm">
                   would
                 </Text>{" "}
                 say, if my computer can connect to the Wi-Fi,{" "}
-                <Text as="span" bg="purple.200" px={1} borderRadius="sm">
+                <Text as="span" bg={highlightPurpleBg} color={highlightPurpleText} px={1} borderRadius="sm">
                   to
                 </Text>{" "}
                 access the Internet, It would be difficult for me to use it because I spend almost my time using it to
                 surf web. But in the other hand, if we are talking about environment, the{" "}
-                <Text as="span" bg="purple.200" px={1} borderRadius="sm">
+                <Text as="span" bg={highlightPurpleBg} color={highlightPurpleText} px={1} borderRadius="sm">
                   atmosphere
                 </Text>{" "}
                 is around. I think it would be inappropriate.
               </Text>
 
-              <VStack align="start" gap={4} mt={6}>
-                <Text fontSize="md" fontWeight="bold" color={textColor}>
+              <VStack align="start" gap={4} mt={6} px={6}>
+                <Text fontSize={getFontSizeValue()} fontWeight="bold" color={textColor}>
                   Pronunciation correction
                 </Text>
 
-                <Table.Root w="full" border="1px" borderColor="gray.200" borderRadius="md" overflow="hidden" showColumnBorder={true}>
-                  {/* Table Header */}
+                <Table.Root w="full" border="1px" borderColor={borderColor} borderRadius="md" overflow="hidden" showColumnBorder={true}>
                   <Table.Body gap={0}>
                     <Table.Row>
-                      <Table.Cell p={3} bg="gray.100" borderRight="1px" borderColor="gray.200">
-                        <Text fontSize="sm" fontWeight="bold" color="gray.600">
+                      <Table.Cell p={3} bg={!mounted ? 'gray.700' : (colorMode === 'light' ? 'gray.100' : 'gray.700')} borderRight="1px">
+                        <Text fontSize={getFontSizeValue()} fontWeight="bold" color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.600' : 'gray.200')}>
                           Word
                         </Text>
                       </Table.Cell>
-                      <Table.Cell p={3} bg="red.50" borderRight="1px" borderColor="gray.200">
-                        <Text fontSize="sm" fontWeight="bold" color="red.600" textAlign="center">
+                      <Table.Cell p={3} bg={!mounted ? 'red.900' : (colorMode === 'light' ? 'red.50' : 'red.900')} borderRight="1px">
+                        <Text fontSize={getFontSizeValue()} fontWeight="bold" color={!mounted ? 'red.200' : (colorMode === 'light' ? 'red.600' : 'red.200')} textAlign="center">
                           You said incorrectly
                         </Text>
                       </Table.Cell>
-                      <Table.Cell p={3} bg="green.50">
-                        <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign="center">
+                      <Table.Cell p={3} bg={!mounted ? 'green.900' : (colorMode === 'light' ? 'green.50' : 'green.900')}>
+                        <Text fontSize={getFontSizeValue()} fontWeight="bold" color={!mounted ? 'green.200' : (colorMode === 'light' ? 'green.600' : 'green.200')} textAlign="center">
                           Correct pronunciation
                         </Text>
                       </Table.Cell>
                     </Table.Row>
                   </Table.Body>
 
-                  {/* Table Rows */}
                   {pronunciationCorrections.map((item, index) => (
                     <Table.Row key={index} gap={0} borderColor="black">
                       <Table.Cell p={3}> 
-                        <Text fontSize="sm" color={textColor} fontWeight="medium">
+                        <Text fontSize={getFontSizeValue()} color={textColor} fontWeight="medium">
                           {item.word}
                         </Text>
                       </Table.Cell>
-                      <Table.Cell p={3} bg="red.25">
+                      <Table.Cell p={3} bg={!mounted ? 'red.800' : (colorMode === 'light' ? 'red.25' : 'red.800')}>
                         <HStack gap={2}>
                           <IconButton
                             aria-label="Play incorrect pronunciation"
                             size="xs"
+                            borderRadius="full"
                             variant="ghost"
-                            color="red.600"
+                            color={!mounted ? 'red.200' : (colorMode === 'light' ? 'red.600' : 'red.200')}
                           >
-                            {<Icon as={MdVolumeUp} color={"black"} />}
+                            {<Icon as={MdVolumeUp} color={!mounted ? 'white' : (colorMode === 'light' ? 'black' : 'white')} />}
                           </IconButton>
-                          <Text fontSize="sm" color="black">
+                          <Text fontSize={getFontSizeValue()} color={!mounted ? 'white' : (colorMode === 'light' ? 'black' : 'white')}>
                             {item.incorrect}
                           </Text>
                         </HStack>
                       </Table.Cell>
-                      <Table.Cell p={3} bg="green.25">
+                      <Table.Cell p={3} bg={!mounted ? 'green.800' : (colorMode === 'light' ? 'green.25' : 'green.800')}>
                         <HStack gap={2}>
                           <IconButton
                             aria-label="Play correct pronunciation"
                             size="xs"
+                            borderRadius="full"
                             variant="ghost"
-                            color="green.600"
+                            color={!mounted ? 'green.200' : (colorMode === 'light' ? 'green.600' : 'green.200')}
                           >
-                            {<Icon as={MdVolumeUp} color={"black"} />}
+                            {<Icon as={MdVolumeUp} color={!mounted ? 'white' : (colorMode === 'light' ? 'black' : 'white')} />}
                           </IconButton>
 
-                          <Text fontSize="sm" color="black">
+                          <Text fontSize={getFontSizeValue()} color={!mounted ? 'white' : (colorMode === 'light' ? 'black' : 'white')}>
                             {item.correct}
                           </Text>
                         </HStack>
@@ -476,64 +583,64 @@ export default function SpeakingTestResult() {
             </Box>
 
             {/* Lexical Resource Section */}
-            <Box id="lexical" w="full" px={6}>
-              <Text fontSize="xl" fontWeight="bold" color={textColor} mb={4}>
-                Lexical Resource
-              </Text>
-              <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4}>
+            <Box id="lexical" w="full">
+              <Box w="100%" bg={headerBgColor} px={6} py={2} alignItems={"center"} mb={4}>
+                <Text fontSize="xl" fontWeight="bold" color={textColor}>
+                  Lexical Resource
+                </Text>
+              </Box>
+              <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4} px={6}>
                 Score: 6.0
               </Text>
 
-              <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
+              <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8" px={6}>
                 I think it depends. If we are talking about{" "}
-                <Text as="span" bg="green.100" px={1} textDecoration="line-through">
+                <Text as="span" bg={highlightGreenBg} color={highlightGreenText} px={1} textDecoration="line-through" borderRadius={"sm"}>
                   the network condition
                 </Text>
-                <Text as="span" bg="green.200" px={1} ml={1}>
+                <Text as="span" bg={highlightGreenBg} color={highlightGreenText} px={1} ml={1} borderRadius={"sm"}>
                   network conditions
                 </Text>
                 , I would say, if my computer can connect to the Wi-Fi, to access the Internet, It would be difficult
                 for me to use it because I spend almost my time using it to surf the web. But in the other hand, if we
                 are talking about the environment, the{" "}
-                <Text as="span" bg="green.100" px={1} textDecoration="line-through">
+                <Text as="span" bg={highlightGreenBg} color={highlightGreenText} px={1} textDecoration="line-through" borderRadius={"sm"}>
                   atmosphere
                 </Text>
-                <Text as="span" bg="green.200" px={1} ml={1}>
+                <Text as="span" bg={highlightGreenBg} color={highlightGreenText} px={1} ml={1} borderRadius={"sm"}>
                   surrounding atmosphere
                 </Text>{" "}
                 is around. I think it would be inappropriate.
               </Text>
 
-              <VStack align="start" gap={4} mt={6}>
-                <Text fontSize="md" fontWeight="bold" color={textColor}>
+              <VStack align="start" gap={4} mt={6} px={6}>
+                <Text fontSize={getFontSizeValue()} fontWeight="bold" color={textColor}>
                   Vocabulary correct suggestion
                 </Text>
 
-                <Table.Root size="md" variant="outline" showColumnBorder={true} borderColor={borderColor} color={textColor}>
+                <Table.Root w="full" border="1px" borderColor={borderColor} borderRadius="md" overflow="hidden" showColumnBorder={true}>
                   <Table.Body> 
-                    {/* Header Row */}
                     <Table.Row>
-                      <Table.Cell bg="gray.100" fontSize="sm" fontWeight="bold" textAlign="center" w="25%">
-                        Original word
+                        <Table.Cell bg={!mounted ? 'gray.700' : (colorMode === 'light' ? 'gray.100' : 'gray.700')} fontSize={getFontSizeValue()} fontWeight="bold" textAlign="left" w="25%" color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.700' : 'gray.200')}>
+                        Word
                       </Table.Cell>
-                      <Table.Cell bg="green.100" color="green.700" fontSize="sm" fontWeight="bold" textAlign="center" w="25%">
+                        <Table.Cell bg={!mounted ? 'green.900' : (colorMode === 'light' ? 'green.100' : 'green.900')} color={!mounted ? 'green.200' : (colorMode === 'light' ? 'green.700' : 'green.200')} fontSize={getFontSizeValue()} fontWeight="bold" textAlign="left" w="25%">
                         Suggestion
                       </Table.Cell>
-                      <Table.Cell bg="gray.50" fontSize="sm" fontWeight="bold" textAlign="center" w="50%">
-                        Explanation
+                        <Table.Cell bg={!mounted ? 'gray.800' : (colorMode === 'light' ? 'gray.50' : 'gray.800')} fontSize={getFontSizeValue()} fontWeight="bold" textAlign="left" w="50%" color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.700' : 'gray.200')}>
+                        
                       </Table.Cell>
                     </Table.Row>
 
-                    {/* Data Rows */}
                     {lexicalSuggestions.map((item, index) => (
                       <Table.Row key={index}>
-                        <Table.Cell bg="gray.50" fontWeight="medium" fontSize={getFontSizeValue()}>
+                          <Table.Cell bg={!mounted ? 'gray.800' : (colorMode === 'light' ? 'gray.50' : 'gray.800')} fontWeight="medium" fontSize={getFontSizeValue()} color={!mounted ? 'gray.100' : (colorMode === 'light' ? 'gray.800' : 'gray.100')} textAlign="left">
                           {item.original}
                         </Table.Cell>
-                        <Table.Cell bg="green.50" fontWeight="bold" color="green.700" fontSize={getFontSizeValue()}>
+                          <Table.Cell bg={!mounted ? 'green.800' : (colorMode === 'light' ? 'green.25' : 'green.800')} fontWeight="bold" color={!mounted ? 'green.200' : (colorMode === 'light' ? 'green.700' : 'green.200')} fontSize={getFontSizeValue()} textAlign="left">
                           {item.suggestion}
                         </Table.Cell>
-                        <Table.Cell fontSize="sm" color="gray.700">
+                          <Table.Cell fontSize={getFontSizeValue()} color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.700' : 'gray.200')} bg={!mounted ? 'gray.800' : (colorMode === 'light' ? 'gray.50' : 'gray.800')} textAlign="left">
                           {item.explanation}
                         </Table.Cell>
                       </Table.Row>
@@ -544,15 +651,17 @@ export default function SpeakingTestResult() {
             </Box>
 
             {/* Fluency and Coherence Section */}
-            <Box id="fluency" w="full" px={6}>
-              <Text fontSize="xl" fontWeight="bold" color={textColor} mb={4}>
-                Fluency and Coherence
-              </Text>
-              <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4}>
+            <Box id="fluency" w="full">
+              <Box w="100%" bg={headerBgColor} px={6} py={2} alignItems={"center"} mb={4}>
+                <Text fontSize="xl" fontWeight="bold" color={textColor}>
+                  Fluency and Coherence
+                </Text>
+              </Box>
+              <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4} px={6}>
                 Score: 5.0
               </Text>
 
-              <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8">
+              <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8" px={6}>
                 Think it depends. If we are talking about the network conditions, I would say, if my computer can't
                 connect to the Wi-Fi, to access the Internet, It would be difficult for me to use it because I spend
                 almost all my time using it to surf the web. But in the other hand, if we are talking about the
@@ -560,7 +669,7 @@ export default function SpeakingTestResult() {
               </Text>
 
               {/* Feedback section with bullet points listing fluency issues */}
-              <Box mt={6}>
+              <Box mt={6} px={6}>
                 <Text fontSize="lg" fontWeight="bold" color={textColor} mb={3}>
                   Feedback
                 </Text>
@@ -590,7 +699,7 @@ export default function SpeakingTestResult() {
               </Box>
 
               {/* Suggestion section with bullet points providing improvement advice */}
-              <Box mt={6}>
+              <Box mt={6} px={6}>
                 <Text fontSize="lg" fontWeight="bold" color={textColor} mb={3}>
                   Suggestion
                 </Text>
@@ -641,25 +750,25 @@ export default function SpeakingTestResult() {
         />
 
         {/* Right Panel - Notes */}
-        <Box width={`${100 - leftPanelWidth}%`} overflow="auto" p={6} bg={contentBackgroundColor}>
-          <VStack align="start" gap={4} h="full">
-            <Box bg="yellow.400" color="black" px={4} py={2} borderRadius="lg" w="full" textAlign="center">
+        <Box width={`${100 - leftPanelWidth}%`} overflow="auto" bg={contentBackgroundColor}>
+          <VStack align="start" gap={0} h="full">
+            <Box bg="yellow.400" color="black" px={4} py={2} w="full" textAlign="center">
               <Text fontWeight="bold">Note</Text>
             </Box>
 
             <Textarea
-              placeholder="Note"
+              placeholder="This is the note you used in Speaking test..."
               value={userNotes}
               onChange={(e) => setUserNotes(e.target.value)}
               resize="none"
-              h="calc(100vh - 200px)"
+              h="100%"
               bg={questionBackgroundColor}
               border="none"
-              borderRadius="lg"
               p={4}
               fontSize={getFontSizeValue()}
               color={textColor}
-            />
+            >
+            </Textarea>
           </VStack>
         </Box>
       </Flex>

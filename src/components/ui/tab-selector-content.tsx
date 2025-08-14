@@ -17,10 +17,10 @@ interface TabSelectorContentProps {
 }
 
 export default function TabSelectorContent({ activeTab, onTabChange, tabs }: TabSelectorContentProps) {
-  const activeBg = useColorModeValue("white", "gray.700")
+  const activeBg = useColorModeValue("white", "gray.800")
   const inactiveBg = useColorModeValue("transparent", "gray.800")
-  const activeColor = useColorModeValue("green.600", "green.500")
-  const inactiveColor = useColorModeValue("gray.500", "gray.400")
+  const activeColor = useColorModeValue("green.600", "green.400")
+  const inactiveColor = useColorModeValue("gray.500", "gray.100")
   const borderBottomColor = useColorModeValue("green.600", "green.500")
   const dividerColor = useColorModeValue("gray.300", "gray.600")
 
@@ -33,10 +33,9 @@ export default function TabSelectorContent({ activeTab, onTabChange, tabs }: Tab
               <Tabs.Trigger
                 value={tab.value}
                 px={3}
-                py={2}
                 borderBottomRadius="none"
                 borderTopRadius="lg"
-                bg={activeTab === tab.value ? activeBg : inactiveBg}
+                bg={activeTab === tab.value ? activeBg : "transparent"}
                 color={activeTab === tab.value ? activeColor : inactiveColor}
                 borderBottom="2px solid transparent"
                 borderBottomColor={activeTab === tab.value ? borderBottomColor : "transparent"}
@@ -44,12 +43,9 @@ export default function TabSelectorContent({ activeTab, onTabChange, tabs }: Tab
                   color: activeTab === tab.value ? activeColor : inactiveColor,
                 }}
               >
-                {tab.icon && <Icon as={tab.icon} mr={2} />}
-                <Text fontWeight="bold">{tab.label}</Text>
+                {tab.icon && <Icon as={tab.icon} mr={1} />}
+                <Text fontSize={"xs"} fontWeight="bold" border={activeTab === tab.value ? "none" : "1px solid #EAB308"} borderRadius={"md"} p={0.5}>{tab.label}</Text>
               </Tabs.Trigger>
-              {idx < tabs.length - 1 && (
-                <Box h="24px" alignSelf="center" borderColor={dividerColor} mx={1} />
-              )}
             </Box>
           ))}
         </HStack>
