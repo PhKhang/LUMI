@@ -51,8 +51,8 @@ export default function SpeakingTestResult() {
   const contentBackgroundColorDark = "gray.900"
   const questionBackgroundColorLight = "white"
   const questionBackgroundColorDark = "gray.700"
-  const borderColorLight = "gray.200"
-  const borderColorDark = "gray.600"
+  const borderColorLight = "gray.900"
+  const borderColorDark = "gray.200"
   const textColorLight = "gray.800"
   const textColorDark = "white"
   const mutedColorLight = "gray.600"
@@ -515,35 +515,35 @@ export default function SpeakingTestResult() {
                   Pronunciation correction
                 </Text>
 
-                <Table.Root w="full" border="1px" borderColor={borderColor} borderRadius="md" overflow="hidden" showColumnBorder={true}>
+                <Table.Root w="full" border="2px solid" borderColor={borderColor} borderRadius="md" showColumnBorder={true}>
                   <Table.Body gap={0}>
                     <Table.Row>
-                      <Table.Cell p={3} bg={!mounted ? 'gray.700' : (colorMode === 'light' ? 'gray.100' : 'gray.700')} borderRight="1px">
+                      <Table.Cell p={3} bg={!mounted ? 'gray.700' : (colorMode === 'light' ? 'gray.200' : 'gray.700')} border="2px solid" borderColor={borderColor}>
                         <Text fontSize={getFontSizeValue()} fontWeight="bold" color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.600' : 'gray.200')}>
                           Word
                         </Text>
                       </Table.Cell>
-                      <Table.Cell p={3} bg={!mounted ? 'red.900' : (colorMode === 'light' ? 'red.50' : 'red.900')} borderRight="1px">
-                        <Text fontSize={getFontSizeValue()} fontWeight="bold" color={!mounted ? 'red.200' : (colorMode === 'light' ? 'red.600' : 'red.200')} textAlign="center">
+                      <Table.Cell p={3} bg={!mounted ? 'red.900' : (colorMode === 'light' ? 'red.100' : 'red.900')} borderRight="1px" border="2px solid" borderColor={borderColor}>
+                        <Text fontSize={getFontSizeValue()} fontWeight="bold" color={!mounted ? 'red.200' : (colorMode === 'light' ? 'red.500' : 'red.200')} textAlign="center">
                           You said incorrectly
                         </Text>
                       </Table.Cell>
-                      <Table.Cell p={3} bg={!mounted ? 'green.900' : (colorMode === 'light' ? 'green.50' : 'green.900')}>
+                      <Table.Cell p={3} bg={!mounted ? 'green.900' : (colorMode === 'light' ? 'green.50' : 'green.900')} border="2px solid" borderColor={borderColor}>
                         <Text fontSize={getFontSizeValue()} fontWeight="bold" color={!mounted ? 'green.200' : (colorMode === 'light' ? 'green.600' : 'green.200')} textAlign="center">
                           Correct pronunciation
                         </Text>
                       </Table.Cell>
                     </Table.Row>
-                  </Table.Body>
+       
 
                   {pronunciationCorrections.map((item, index) => (
                     <Table.Row key={index} gap={0} borderColor="black">
-                      <Table.Cell p={3}> 
+                      <Table.Cell p={3} border="2px solid" borderColor={borderColor}> 
                         <Text fontSize={getFontSizeValue()} color={textColor} fontWeight="medium">
                           {item.word}
                         </Text>
                       </Table.Cell>
-                      <Table.Cell p={3} bg={!mounted ? 'red.800' : (colorMode === 'light' ? 'red.25' : 'red.800')}>
+                      <Table.Cell p={3} bg={!mounted ? 'red.800' : (colorMode === 'light' ? 'red.25' : 'red.800')} border="2px solid" borderColor={borderColor}>
                         <HStack gap={2}>
                           <IconButton
                             aria-label="Play incorrect pronunciation"
@@ -559,7 +559,7 @@ export default function SpeakingTestResult() {
                           </Text>
                         </HStack>
                       </Table.Cell>
-                      <Table.Cell p={3} bg={!mounted ? 'green.800' : (colorMode === 'light' ? 'green.25' : 'green.800')}>
+                      <Table.Cell p={3} bg={!mounted ? 'green.800' : (colorMode === 'light' ? 'green.25' : 'green.800')} border="2px solid" borderColor={borderColor}>
                         <HStack gap={2}>
                           <IconButton
                             aria-label="Play correct pronunciation"
@@ -576,8 +576,9 @@ export default function SpeakingTestResult() {
                           </Text>
                         </HStack>
                       </Table.Cell>
-                    </Table.Row>
+                      </Table.Row>
                   ))}
+                  </Table.Body>
                 </Table.Root>
               </VStack>
             </Box>
@@ -618,29 +619,29 @@ export default function SpeakingTestResult() {
                   Vocabulary correct suggestion
                 </Text>
 
-                <Table.Root w="full" border="1px" borderColor={borderColor} borderRadius="md" overflow="hidden" showColumnBorder={true}>
+                <Table.Root w="full" border="1px" borderColor={borderColor} borderRadius="md" showColumnBorder={true}>
                   <Table.Body> 
                     <Table.Row>
-                        <Table.Cell bg={!mounted ? 'gray.700' : (colorMode === 'light' ? 'gray.100' : 'gray.700')} fontSize={getFontSizeValue()} fontWeight="bold" textAlign="left" w="25%" color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.700' : 'gray.200')}>
+                        <Table.Cell bg={!mounted ? 'gray.700' : (colorMode === 'light' ? 'gray.200' : 'gray.700')} fontSize={getFontSizeValue()} fontWeight="bold" textAlign="left" w="25%" color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.700' : 'gray.200')} border="2px solid" borderColor={borderColor}>
                         Word
                       </Table.Cell>
-                        <Table.Cell bg={!mounted ? 'green.900' : (colorMode === 'light' ? 'green.100' : 'green.900')} color={!mounted ? 'green.200' : (colorMode === 'light' ? 'green.700' : 'green.200')} fontSize={getFontSizeValue()} fontWeight="bold" textAlign="left" w="25%">
+                        <Table.Cell bg={!mounted ? 'green.900' : (colorMode === 'light' ? 'green.100' : 'green.900')} color={!mounted ? 'green.200' : (colorMode === 'light' ? 'green.700' : 'green.200')} fontSize={getFontSizeValue()} fontWeight="bold" textAlign="left" w="25%" border="2px solid" borderColor={borderColor}>
                         Suggestion
                       </Table.Cell>
-                        <Table.Cell bg={!mounted ? 'gray.800' : (colorMode === 'light' ? 'gray.50' : 'gray.800')} fontSize={getFontSizeValue()} fontWeight="bold" textAlign="left" w="50%" color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.700' : 'gray.200')}>
-                        
+                        <Table.Cell bg={!mounted ? 'gray.800' : (colorMode === 'light' ? 'gray.200' : 'gray.700')} fontSize={getFontSizeValue()} fontWeight="bold" textAlign="left" w="50%" color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.700' : 'gray.200')} border="2px solid" borderColor={borderColor}>
+                        Note
                       </Table.Cell>
                     </Table.Row>
 
                     {lexicalSuggestions.map((item, index) => (
                       <Table.Row key={index}>
-                          <Table.Cell bg={!mounted ? 'gray.800' : (colorMode === 'light' ? 'gray.50' : 'gray.800')} fontWeight="medium" fontSize={getFontSizeValue()} color={!mounted ? 'gray.100' : (colorMode === 'light' ? 'gray.800' : 'gray.100')} textAlign="left">
+                          <Table.Cell bg={!mounted ? 'gray.800' : (colorMode === 'light' ? 'gray.50' : 'gray.800')} fontWeight="medium" fontSize={getFontSizeValue()} color={!mounted ? 'gray.100' : (colorMode === 'light' ? 'gray.800' : 'gray.100')} textAlign="left" border="2px solid" borderColor={borderColor}>
                           {item.original}
                         </Table.Cell>
-                          <Table.Cell bg={!mounted ? 'green.800' : (colorMode === 'light' ? 'green.25' : 'green.800')} fontWeight="bold" color={!mounted ? 'green.200' : (colorMode === 'light' ? 'green.700' : 'green.200')} fontSize={getFontSizeValue()} textAlign="left">
+                          <Table.Cell bg={!mounted ? 'green.800' : (colorMode === 'light' ? 'green.25' : 'green.800')} fontWeight="bold" color={!mounted ? 'green.200' : (colorMode === 'light' ? 'green.700' : 'green.200')} fontSize={getFontSizeValue()} textAlign="left" border="2px solid" borderColor={borderColor}>
                           {item.suggestion}
                         </Table.Cell>
-                          <Table.Cell fontSize={getFontSizeValue()} color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.700' : 'gray.200')} bg={!mounted ? 'gray.800' : (colorMode === 'light' ? 'gray.50' : 'gray.800')} textAlign="left">
+                          <Table.Cell fontSize={getFontSizeValue()} color={!mounted ? 'gray.200' : (colorMode === 'light' ? 'gray.700' : 'gray.200')} bg={!mounted ? 'gray.800' : (colorMode === 'light' ? 'gray.50' : 'gray.800')} textAlign="left" border="2px solid" borderColor={borderColor}>
                           {item.explanation}
                         </Table.Cell>
                       </Table.Row>
