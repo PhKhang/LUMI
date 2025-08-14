@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
   Box,
   Flex,
@@ -16,12 +16,13 @@ import {
 } from "@chakra-ui/react"
 import { Icon } from "@chakra-ui/react"
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
-import { MdAccessTime, MdMic, MdVolumeUp } from "react-icons/md"
+import { MdAccessTime, MdMic, MdVolumeUp, MdTimer } from "react-icons/md"
 import ExitTestButton from "@/components/ui/exit-test-button"
 import SettingsMenu from "@/components/ui/settings-menu"
 import AudioPlayer from "@/components/audio/audio-player"
 import TabSelector from "@/components/ui/tab-selector"
 
+import TabSelectorContent from "@/components/ui/tab-selector-content"
 interface ScoreSection {
   id: string
   name: string
@@ -37,6 +38,8 @@ export default function SpeakingTestResult() {
   const [activeSection, setActiveSection] = useState<string>("overall")
   const [userNotes, setUserNotes] = useState("")
   const [highlightedCorrection, setHighlightedCorrection] = useState<number | null>(null)
+  const [isManualTabChange, setIsManualTabChange] = useState(false)
+  
   const { colorMode, toggleColorMode } = useColorMode()
   const bgColor = useColorModeValue("#F6F0E7", "gray.800")
   const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900")
@@ -45,6 +48,10 @@ export default function SpeakingTestResult() {
   const textColor = useColorModeValue("gray.800", "white")
   const mutedColor = useColorModeValue("gray.600", "gray.400")
   const cardBgColor = useColorModeValue("gray.50", "gray.700")
+  const greenThemeColor = useColorModeValue("green.600", "green.500")
+
+  // Refs for section elements
+  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({})
 
   const overallScore = 5.5
 
@@ -56,11 +63,71 @@ export default function SpeakingTestResult() {
     { id: "fluency", name: "Fluency & Coherence", score: 5.0, maxScore: 9 },
   ]
 
+  // Set up Intersection Observer for auto tab switching
+  useEffect(() => {
+    const observerOptions = {
+      root: document.querySelector('[data-scroll-container]'),
+      rootMargin: '-120px 0px -50% 0px', // Account for sticky header height
+      threshold: 0
+    }
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      // Only auto-switch if user hasn't manually clicked a tab recently
+      if (isManualTabChange) return
+
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.id
+          if (sectionId && sectionId !== activeSection) {
+            setActiveSection(sectionId)
+          }
+        }
+      })
+    }
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions)
+
+    // Observe all sections
+    scoreSections.forEach((section) => {
+      const element = document.getElementById(section.id)
+      if (element) {
+        sectionRefs.current[section.id] = element
+        observer.observe(element)
+      }
+    })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [activeSection, isManualTabChange, scoreSections])
+
+  useEffect(() => {
+    if (isManualTabChange) {
+      const timer = setTimeout(() => {
+        setIsManualTabChange(false)
+      }, 1000) // Reset after 1 second
+
+      return () => clearTimeout(timer)
+    }
+  }, [isManualTabChange])
+
   const scrollToSection = (sectionId: string) => {
+    setIsManualTabChange(true)
     setActiveSection(sectionId)
     const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+    const stickyHeader = document.querySelector('[data-sticky-header]') as HTMLElement
+    
+    if (element && stickyHeader) {
+      const headerHeight = stickyHeader.offsetHeight
+      const elementPosition = element.offsetTop
+      const scrollContainer = element.closest('[data-scroll-container]') as HTMLElement
+      
+      if (scrollContainer) {
+        scrollContainer.scrollTo({
+          top: elementPosition - headerHeight - 20, // 20px extra padding
+          behavior: 'smooth'
+        })
+      }
     }
   }
 
@@ -184,11 +251,12 @@ export default function SpeakingTestResult() {
           <Box py={3}>
             <HStack gap={2} justify="center" bg={questionBackgroundColor} px={3} py={1} borderRadius="full">
               <HStack>
-                <Icon as={MdAccessTime} color={useColorModeValue("green.600", "green.500")}/>
+                <Icon as={MdTimer} color={greenThemeColor}/>
                 <Text fontSize={getFontSizeValue()} fontWeight="medium" color={textColor}>
-                  00:10:39
+                  00:30:12
                 </Text>
               </HStack>
+              {/* Add score here if you want to match reading/listening exactly */}
             </HStack>
           </Box>
 
@@ -207,38 +275,45 @@ export default function SpeakingTestResult() {
           borderRight="1px"
           borderColor={borderColor}
           overflow="auto"
-          p={6}
           bg={contentBackgroundColor}
+          position="relative"
+          pb={6}
+          data-scroll-container
         >
           <VStack align="start" gap={6}>
-            {/* Audio Question */}
-            <HStack gap={2} w="full" p={3} bg={cardBgColor} borderRadius="lg">
-              <Icon as={MdVolumeUp} color="gray.500" />
-              <Text fontSize={getFontSizeValue()} color={textColor} fontStyle={"bold"}>
-                In what conditions would it be difficult for you to use a computer?
-              </Text>
-            </HStack>
-
-            {/* Score Overview */}
-            <Box id="overall" w="full">
-              <HStack gap={3} mb={6} flexWrap="wrap">
-                {scoreSections.map((section) => (
-                  <Badge
-                    key={section.id}
-                    variant={section.id === "overall" ? "solid" : "outline"}
-                    colorScheme={getSectionBadgeColor(section.id)}
-                    px={3}
-                    py={1}
-                    borderRadius="full"
-                    cursor="pointer"
-                    onClick={() => scrollToSection(section.id)}
-                    fontSize="sm"
-                  >
-                    {section.name} {section.score}
-                  </Badge>
-                ))}
+            {/* Sticky Header for Question + Tabs */}
+            <Box
+              position="sticky"
+              top="0"
+              zIndex={10}
+              bg={contentBackgroundColor}
+              w="full"
+              boxShadow="sm"
+              px={6}
+              data-sticky-header
+            >
+              {/* Audio Question - Now inside sticky */}
+              <HStack gap={2} w="full" py={2} bg={cardBgColor} borderRadius="lg" mb={4}> 
+                <Text fontSize={getFontSizeValue()} color={textColor} fontWeight="bold">
+                  In what conditions would it be difficult for you to use a computer?
+                </Text>
               </HStack>
 
+              {/* Score Overview - Tabs */}
+              <Box>
+                <TabSelectorContent
+                  activeTab={activeSection}
+                  onTabChange={(tab) => {
+                    scrollToSection(tab);
+                  }}
+                  tabs={scoreSections.map((section) => ({
+                    value: section.id,
+                    label: `${section.name} ${section.score}`,
+                  }))}
+                />
+              </Box>
+            </Box>
+            <Box px={6} id="overall">
               <Text fontSize="lg" fontWeight="bold" color={textColor} mb={4}>
                 Your Answer
               </Text>
@@ -250,7 +325,7 @@ export default function SpeakingTestResult() {
                 environment, the surrounding atmosphere is around. I think it would be inappropriate.
               </Text>
 
-              <AudioPlayer duration="00:30" currentTime="00:00" />
+              <AudioPlayer/>
               <Text fontSize="lg" fontWeight="bold" color={textColor} mb={4}>
                 Sample Answer
               </Text>
@@ -260,13 +335,13 @@ export default function SpeakingTestResult() {
                 check emails, which can be frustrating. Last week, my Wi-Fi kept dropping and I felt so annoyed. Also,
                 in a noisy or dimly lit room, environmental distractions make it difficult to concentrate.
               </Text>
-              <AudioPlayer duration="00:17" currentTime="00:17" />
+              <AudioPlayer />
             </Box>
 
             {/* Grammatical Section */}
-            <Box id="grammatical" w="full">
+            <Box id="grammatical" w="full" px={6}>
               <Text fontSize="xl" fontWeight="bold" color={textColor} mb={4}>
-                Grammatical range and Accuracy
+                Grammatical Range and Accuracy
               </Text>
               <Text fontSize="lg" color="green.600" fontWeight="bold" mb={4}>
                 Score: 5.0
@@ -277,8 +352,6 @@ export default function SpeakingTestResult() {
                   "I think it depends. If we are talking about the network conditions, I would say, if my computer can't connect to the Wi-Fi, to access to to access the Internet, it would be difficult for me to use it because I spend almost because I spend almost all my time using it to surf the web. But in on the other hand, if we are talking about environment, the atmosphere is around the environment or the surrounding atmosphere, I think it would be inappropriate.",
                 )}
               </Text>
-
-              <AudioPlayer duration="00:30" currentTime="00:00" />
 
               <VStack align="start" gap={3} mt={6}>
                 <Text fontSize="md" fontWeight="bold" color={textColor}>
@@ -298,14 +371,14 @@ export default function SpeakingTestResult() {
                     px={3}
                     w="full"
                   >
-                    <Text fontSize="sm">{correction.explanation}</Text>
+                    <Text fontSize="sm" textAlign={"left"}>{correction.explanation}</Text>
                   </Button>
                 ))}
               </VStack>
             </Box>
 
             {/* Pronunciation Section */}
-            <Box id="pronunciation" w="full">
+            <Box id="pronunciation" w="full" px={6}>
               <Text fontSize="xl" fontWeight="bold" color={textColor} mb={4}>
                 Pronunciation
               </Text>
@@ -329,8 +402,6 @@ export default function SpeakingTestResult() {
                 </Text>{" "}
                 is around. I think it would be inappropriate.
               </Text>
-
-              <AudioPlayer duration="00:30" currentTime="00:00" />
 
               <VStack align="start" gap={4} mt={6}>
                 <Text fontSize="md" fontWeight="bold" color={textColor}>
@@ -405,7 +476,7 @@ export default function SpeakingTestResult() {
             </Box>
 
             {/* Lexical Resource Section */}
-            <Box id="lexical" w="full">
+            <Box id="lexical" w="full" px={6}>
               <Text fontSize="xl" fontWeight="bold" color={textColor} mb={4}>
                 Lexical Resource
               </Text>
@@ -432,8 +503,6 @@ export default function SpeakingTestResult() {
                 </Text>{" "}
                 is around. I think it would be inappropriate.
               </Text>
-
-              <AudioPlayer duration="00:30" currentTime="00:00" />
 
               <VStack align="start" gap={4} mt={6}>
                 <Text fontSize="md" fontWeight="bold" color={textColor}>
@@ -475,7 +544,7 @@ export default function SpeakingTestResult() {
             </Box>
 
             {/* Fluency and Coherence Section */}
-            <Box id="fluency" w="full">
+            <Box id="fluency" w="full" px={6}>
               <Text fontSize="xl" fontWeight="bold" color={textColor} mb={4}>
                 Fluency and Coherence
               </Text>
@@ -489,8 +558,6 @@ export default function SpeakingTestResult() {
                 almost all my time using it to surf the web. But in the other hand, if we are talking about the
                 environment, the surrounding atmosphere is around. I think it would be inappropriate.
               </Text>
-
-              <AudioPlayer duration="00:30" currentTime="00:00" />
 
               {/* Feedback section with bullet points listing fluency issues */}
               <Box mt={6}>

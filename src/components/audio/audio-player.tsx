@@ -16,7 +16,7 @@ export type AudioPlayerRef = {
 }
 
 const AudioPlayer = forwardRef<AudioPlayerRef, AudioPlayerProps>(
-({ audioSrc = "/Test2 Part1.mp3" }, ref) => { // Default to your audio file
+({ audioSrc }, ref) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
