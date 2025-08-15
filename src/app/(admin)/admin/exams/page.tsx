@@ -9,7 +9,8 @@ import {
   VStack,
   Input,
   Flex,
-  Container
+  Container,
+  SimpleGrid
 } from "@chakra-ui/react"
 import { Field } from "@chakra-ui/react"
 import { MdLightbulb, MdArrowForward, MdArrowBack, MdCheck, MdHeadphones, MdMenuBook, MdEdit, MdMic, MdAdd, MdExpandLess, MdExpandMore, MdFolder, MdFolderOpen, MdImage, MdChevronRight, MdDescription, MdClose } from "react-icons/md"
@@ -305,7 +306,7 @@ export default function ExamsPage() {
 
   return (
     <Box bg="background.primary" minH="100vh" p={0}>
-      <Container maxW="6xl" py={6}>
+      <Container py={6}>
         {/* Header */}
         <Text fontSize="2xl" fontWeight="bold" color="text.primary" mb={8}>
           Create New Test
@@ -550,149 +551,79 @@ export default function ExamsPage() {
                 <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={4}>
                   Select skill
                 </Text>
-                <VStack align="start" gap={3}>
-                  {/* Row 1: Listening and Reading */}
-                  <HStack w="full" gap={4}>
-                    {[
-                      { key: "listening", label: "Listening", description: "Section: Part 1, Part 2, Part 3, Part 4", icon: MdHeadphones },
-                      { key: "reading", label: "Reading", description: "Section: Passage 1, Passage 2, Passage 3", icon: MdMenuBook }
-                    ].map((skill) => (
-                      <Box 
-                        key={skill.key}
-                        flex="1"
-                        p={4}
-                        borderWidth="1px"
-                        borderRadius="lg"
-                        cursor="pointer"
-                        borderColor={selectedSkill === skill.key ? "accent" : "border.primary"}
-                        bg={selectedSkill === skill.key ? "background.accent" : "background.primary"}
-                        _hover={{ borderColor: "secondary" }}
-                        onClick={() => {
-                          setSelectedSkill(skill.key)
-                          setSelectedSection("")
-                        }}
-                      >
-                        <HStack align="start" gap={3}>
-                          <Box
-                            w={4}
-                            h={4}
-                            borderRadius="full"
-                            borderWidth="2px"
-                            borderColor={selectedSkill === skill.key ? "accent" : "border.secondary"}
-                            bg={selectedSkill === skill.key ? "accent" : "transparent"}
-                            mt={0.5}
-                            position="relative"
-                          >
-                            {selectedSkill === skill.key && (
-                              <Box
-                                w={2}
-                                h={2}
-                                borderRadius="full"
-                                bg="background.primary"
-                                position="absolute"
-                                top="50%"
-                                left="50%"
-                                transform="translate(-50%, -50%)"
-                              />
-                            )}
-                          </Box>
-                          <Box>
-                            <Icon 
-                              as={skill.icon} 
-                              boxSize={6} 
-                              color={selectedSkill === skill.key ? "accent" : "text.muted"} 
-                              mb={1}
+                <SimpleGrid columns={2} gap={4} w="full">
+                  {[
+                    { key: "listening", label: "Listening", description: "Section: Part 1, Part 2, Part 3, Part 4", icon: MdHeadphones },
+                    { key: "reading", label: "Reading", description: "Section: Passage 1, Passage 2, Passage 3", icon: MdMenuBook },
+                    { key: "writing", label: "Writing", description: "Section: Task 1, Task 2", icon: MdEdit },
+                    { key: "speaking", label: "Speaking", description: "Section: Part 1, Part 2, Part 3", icon: MdMic }
+                  ].map((skill) => (
+                    <HStack 
+                      key={skill.key}
+                      flex="1"
+                      p={4}
+                      borderWidth="1px"
+                      borderRadius="lg"
+                      cursor="pointer"
+                      borderColor={selectedSkill === skill.key ? "accent" : "border.primary"}
+                      bg={selectedSkill === skill.key ? "background.accent" : "background.primary"}
+                      _hover={{ borderColor: "secondary" }}
+                      onClick={() => {
+                        setSelectedSkill(skill.key)
+                        setSelectedSection("")
+                      }}
+                    >
+                      <HStack align="start" gap={3}>
+                        <Box
+                          w={4}
+                          h={4}
+                          borderRadius="full"
+                          borderWidth="2px"
+                          borderColor={selectedSkill === skill.key ? "accent" : "border.secondary"}
+                          bg={selectedSkill === skill.key ? "accent" : "transparent"}
+                          mt={0.5}
+                          position="relative"
+                        >
+                          {selectedSkill === skill.key && (
+                            <Box
+                              w={2}
+                              h={2}
+                              borderRadius="full"
+                              bg="background.primary"
+                              position="absolute"
+                              top="50%"
+                              left="50%"
+                              transform="translate(-50%, -50%)"
                             />
-                          </Box>
-                        </HStack>
-                        <VStack align="start" gap={1} mt={2}>
-                          <Text fontWeight="bold" color="text.primary">
-                            {skill.label}
-                          </Text>
-                          <Text fontSize="sm" color="text.muted">
-                            {skill.description}
-                          </Text>
-                        </VStack>
-                      </Box>
-                    ))}
-                  </HStack>
-
-                  {/* Row 2: Writing and Speaking */}
-                  <HStack w="full" gap={4}>
-                    {[
-                      { key: "writing", label: "Writing", description: "Section: Task 1, Task 2", icon: MdEdit },
-                      { key: "speaking", label: "Speaking", description: "Section: Part 1, Part 2, Part 3", icon: MdMic }
-                    ].map((skill) => (
-                      <Box 
-                        key={skill.key}
-                        flex="1"
-                        p={4}
-                        borderWidth="1px"
-                        borderRadius="lg"
-                        cursor="pointer"
-                        borderColor={selectedSkill === skill.key ? "accent" : "border.primary"}
-                        bg={selectedSkill === skill.key ? "background.accent" : "background.primary"}
-                        _hover={{ borderColor: "secondary" }}
-                        onClick={() => {
-                          setSelectedSkill(skill.key)
-                          setSelectedSection("")
-                        }}
-                      >
-                        <HStack align="start" gap={3}>
-                          <Box
-                            w={4}
-                            h={4}
-                            borderRadius="full"
-                            borderWidth="2px"
-                            borderColor={selectedSkill === skill.key ? "accent" : "border.secondary"}
-                            bg={selectedSkill === skill.key ? "accent" : "transparent"}
-                            mt={0.5}
-                            position="relative"
-                          >
-                            {selectedSkill === skill.key && (
-                              <Box
-                                w={2}
-                                h={2}
-                                borderRadius="full"
-                                bg="background.primary"
-                                position="absolute"
-                                top="50%"
-                                left="50%"
-                                transform="translate(-50%, -50%)"
-                              />
-                            )}
-                          </Box>
-                          <Box>
-                            <Icon 
-                              as={skill.icon} 
-                              boxSize={6} 
-                              color={selectedSkill === skill.key ? "accent" : "text.muted"} 
-                              mb={1}
-                            />
-                          </Box>
-                        </HStack>
-                        <VStack align="start" gap={1} mt={2}>
-                          <Text fontWeight="bold" color="text.primary">
-                            {skill.label}
-                          </Text>
-                          <Text fontSize="sm" color="text.muted">
-                            {skill.description}
-                          </Text>
-                        </VStack>
-                      </Box>
-                    ))}
-                  </HStack>
-                </VStack>
+                          )}
+                        </Box>
+                        <Box>
+                          <Icon 
+                            as={skill.icon} 
+                            boxSize={6} 
+                            color={selectedSkill === skill.key ? "accent" : "text.muted"} 
+                            mb={1}
+                          />
+                        </Box>
+                      </HStack>
+                      <VStack align="start" gap={1} mt={2}>
+                        <Text fontWeight="bold" color="text.primary">
+                          {skill.label}
+                        </Text>
+                        <Text fontSize="sm" color="text.muted">
+                          {skill.description}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                  ))}
+                </SimpleGrid>
               </Box>
 
               {/* Section Selection - Show based on selected skill */}
               {selectedSkill && (
                 <Box w="full">
                   <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={4}>
-                    {selectedSkill === "reading" ? "Select Section" : 
-                     selectedSkill === "listening" ? "Select Part" :
-                     selectedSkill === "writing" ? "Select Task" :
-                     "Select Part"}
+                    Select Section
                   </Text>
                   <HStack w="full" gap={3}>
                     {/* Reading Sections */}
@@ -753,10 +684,10 @@ export default function ExamsPage() {
 
                     {/* Listening Parts */}
                     {selectedSkill === "listening" && [
-                      { key: "full", label: "Full Part", description: "Bao gồm tất cả các phần" },
-                      { key: "part1", label: "Part 1", description: "Chỉ tạo cho part này" },
-                      { key: "part2", label: "Part 2", description: "Chỉ tạo cho part này" },
-                      { key: "part3", label: "Part 3", description: "Chỉ tạo cho part này" }
+                      { key: "full", label: "Full Part", description: "Include all parts" },
+                      { key: "part1", label: "Part 1", description: "Create for this part only" },
+                      { key: "part2", label: "Part 2", description: "Create for this part only" },
+                      { key: "part3", label: "Part 3", description: "Create for this part only" }
                     ].map((section) => (
                       <Box 
                         key={section.key}
@@ -809,9 +740,9 @@ export default function ExamsPage() {
 
                     {/* Writing Tasks */}
                     {selectedSkill === "writing" && [
-                      { key: "full", label: "Full Writing", description: "Bao gồm tất cả task" },
-                      { key: "task1", label: "Task 1", description: "Chỉ tạo task 1" },
-                      { key: "task2", label: "Task 2", description: "Chỉ tạo task 2" }
+                      { key: "full", label: "Full Writing", description: "Include all tasks" },
+                      { key: "task1", label: "Task 1", description: "Create for this task only" },
+                      { key: "task2", label: "Task 2", description: "Create for this task only" }
                     ].map((section) => (
                       <Box 
                         key={section.key}
@@ -864,10 +795,10 @@ export default function ExamsPage() {
 
                     {/* Speaking Parts */}
                     {selectedSkill === "speaking" && [
-                      { key: "full", label: "Full Speaking", description: "Bao gồm tất cả part" },
-                      { key: "part1", label: "Part 1", description: "Chỉ tạo part 1" },
-                      { key: "part2", label: "Part 2", description: "Chỉ tạo part 2" },
-                      { key: "part3", label: "Part 3", description: "Chỉ tạo part 3" }
+                      { key: "full", label: "Full Speaking", description: "Include all parts" },
+                      { key: "part1", label: "Part 1", description: "Create for this part only" },
+                      { key: "part2", label: "Part 2", description: "Create for this part only" },
+                      { key: "part3", label: "Part 3", description: "Create for this part only" }
                     ].map((section) => (
                       <Box 
                         key={section.key}
@@ -1588,10 +1519,10 @@ Step 4: Choose the correct answer.`}
                     <VStack align="center" justify="center" w="full" h="full" minH="400px">
                       <Icon as={MdDescription} boxSize={16} color="text.muted" mb={4} />
                       <Text fontSize="lg" fontWeight="bold" color="text.primary" mb={2}>
-                        Chưa chọn nhóm câu hỏi
+                        No question group selected
                       </Text>
                       <Text fontSize="sm" color="text.muted" textAlign="center">
-                        Hãy chọn một nhóm câu hỏi bên trái để bắt đầu chỉnh sửa nội dung và câu hỏi
+                        Please select a question group on the left to start editing content and questions
                       </Text>
                     </VStack>
                   )}

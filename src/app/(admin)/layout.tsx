@@ -78,17 +78,17 @@ export default function AdminLayout({
           minW="auto"
           _hover={{ bg: "background.accent" }}
         >
-          <Icon as={isCollapsed ? MdChevronRight : MdChevronLeft} w={4} h={4} />
+          <Icon as={isCollapsed ? MdChevronRight : MdChevronLeft} w={4} h={4} color="text.primary"/>
         </Button>
 
         {/* Logo */}
-        <HStack mb={8} justify={isCollapsed ? "center" : "flex-start"}>
+        <HStack mb={8} justify={isCollapsed ? "center" : "flex-start"} px={isCollapsed ? 0 : 4}>
           {isCollapsed ? (
             <Box w={10} h={10} display="flex" alignItems="center" justifyContent="center">
               <img
                 src="/favicon.png"
                 alt="LUMI Logo"
-                style={{ height: "32px", width: "32px", objectFit: "contain" }}
+                style={{ height: "24px", width: "24px", objectFit: "contain" }}
               />
             </Box>
           ) : (
@@ -126,7 +126,7 @@ export default function AdminLayout({
                 >
                   <Icon as={item.icon} w={5} h={5} />
                   {!isCollapsed && (
-                    <Text ml={3} fontWeight={isActive ? "semibold" : "medium"}>
+                    <Text ml={3} fontSize={"md"} fontWeight={isActive ? "semibold" : "medium"}>
                       {item.label}
                     </Text>
                   )}
@@ -191,18 +191,6 @@ export default function AdminLayout({
 
       {/* Main Content */}
       <Box flex="1" bg="background.primary">
-        {/* Header */}
-        <Box
-          borderBottom="1px"
-          borderColor="border.primary"
-          p={6}
-          bg="background.primary"
-        >
-          <Text fontSize="2xl" fontWeight="bold" color="text.primary">
-            LUMI Admin Panel
-          </Text>
-        </Box>
-
         {/* Content */}
         <Box p={6}>
           {children}
