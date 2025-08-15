@@ -18,12 +18,14 @@ import {
   Text,
   useDisclosure,
   VStack,
+  HStack,
   Separator,
+  ChakraProvider
 } from "@chakra-ui/react";
 import { useColorModeValue } from "./color-mode";
 import CheckBox from "./checkbox";
 
-export default function PracticeTestButton() {
+export default function PracticeTestButtonMiniTest() {
   const { open, onOpen, onClose } = useDisclosure();
 
   const modalBg = useColorModeValue("#FFF9F3", "gray.800");
@@ -63,7 +65,7 @@ export default function PracticeTestButton() {
         <img src="/weight-icon.svg" alt="weight icon" style={{ width: 18, height: 18, marginRight: 4 }} />
         Practice test
       </Button>
-      <Modal isOpen={open} onClose={onClose} isCentered size="xs" closeOnEsc>
+      <Modal isOpen={open} onClose={onClose} isCentered size="xs" closeOnEsc closeOnOverlayClick>
         <ModalOverlay
           bg="rgba(0, 0, 0, 0.5)"
           display="flex"
@@ -166,14 +168,25 @@ export default function PracticeTestButton() {
               <Box w={"full"}>
                 <VStack>
                   <Separator w="full" mb={1}/>
-                  <Button
-                    onClick={onClose}
-                    variant="solid"
-                    colorPalette="green"
-                    borderRadius="full"
-                  >
-                    Start Now
-                  </Button>
+                  <HStack>
+                    <Button
+                      onClick={onClose}
+                      variant="outline"
+                      colorScheme="gray"
+                      borderRadius="full"
+                      mr={2}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={onClose}
+                      variant="solid"
+                      colorPalette="green"
+                      borderRadius="full"
+                    >
+                      Start Now
+                    </Button>
+                  </HStack>
                 </VStack>
               </Box>
               {/* <Button

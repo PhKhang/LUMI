@@ -22,7 +22,7 @@ export const passageMatchingQuestions: Question[] = [
     correctAnswer: "A",
     userAnswer: "C",
     explanation:
-      "Mô tả về sự sinh sản của sam biển 🤔. Bước 2: Tìm các keywords được paraphrase trong câu hỏi: female horseshoe crabs communicate → horseshoe crab reproduction, crab eggs by digging holes → reproduction",
+      "Description of horseshoe crab reproduction 🤔. Step 2: Find paraphrased keywords in the question: female horseshoe crabs communicate → horseshoe crab reproduction, crab eggs by digging holes → reproduction",
   },
   {
     id: 2,
@@ -65,7 +65,7 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     correctAnswers: ["A", "D"],
     userAnswers: ["A", "E"],
     explanation:
-      "Bước 1: Hiểu yêu cầu câu hỏi: Theo tác giả, hai đặc điểm nào sau đây đúng về sam biển? Bước 2: Tìm các keywords đã được paraphrase trong câu hỏi: possess the rare ability to regrow lost limbs → able to replace their missing legs, copper-containing protein → different mineral composition",
+      "Step 1: Understand the question requirement: According to the author, which TWO features are true about horseshoe crabs? Step 2: Find paraphrased keywords in the question: possess the rare ability to regrow lost limbs → able to replace their missing legs, copper-containing protein → different mineral composition",
   },
   {
     id: 7,
@@ -82,14 +82,14 @@ export const multipleChoiceQuestions89: MultipleChoiceQuestion[] = [
     correctAnswers: ["A", "D"],
     userAnswers: ["A", "D"],
     explanation:
-      "Bước 1: Hiểu yêu cầu câu hỏi: Theo hai cách nào mà máu của sam biển khác biệt so với máu của hầu hết các động vật khác? Bước 2: Tìm các keywords: different mineral composition (A) và colour changes from blue to red (D) đều được đề cập trong đoạn văn về thành phần máu đặc biệt của sam biển.",
+      "Step 1: Understand the question requirement: In which TWO ways is horseshoe crab blood different from that of most other animals? Step 2: Find the keywords: different mineral composition (A) and colour changes from blue to red (D) are both mentioned in the passage about the special composition of horseshoe crab blood.",
   },
   {
     id: 9,
     correctAnswers: ["A", "D"],
     userAnswers: ["A", "D"],
     explanation:
-      "Giải thích tương tự câu 8 - cả hai câu hỏi đều yêu cầu chọn TWO letters để mô tả sự khác biệt trong máu của sam biển.",
+      "Explanation is similar to question 8 - both questions require choosing TWO letters to describe the differences in horseshoe crab blood.",
   },
 ];
 
@@ -123,14 +123,14 @@ export const gapFillQuestions = [
     correctAnswer: "decline",
     userAnswer: "decline",
     explanation:
-      "Tìm từ khóa trong đoạn văn về sự suy giảm của quần thể sam biển. Bước 2: widespread decline → decline in population",
+      "Find the keyword in the passage about the decline of the horseshoe crab population. Step 2: widespread decline → decline in population",
   },
   {
     id: 11,
     correctAnswer: "egg",
     userAnswer: "eggs",
     explanation:
-      "Cần chú ý đến dạng số ít/số   của danh từ. Trong ngữ cảnh này cần dùng dạng số ít 'egg'.",
+      "Pay attention to the singular/plural form of the noun. In this context, the singular form 'egg' should be used.",
   },
   {
     id: 12,

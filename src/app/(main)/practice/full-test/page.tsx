@@ -3,7 +3,7 @@
 import CheckBox from "@/components/ui/checkbox";
 import FilterOptions from "@/components/ui/filter-component";
 import FilterTest from "@/components/ui/filter-test";
-import TestBlock from "@/components/ui/test-block";
+import TestBlock from "@/components/ui/test-block-full-test";
 import {
   Box,
   Container,
@@ -86,7 +86,7 @@ export default function FullTestPage() {
     },
     {
       id: "listening-cam-03-s1",
-      title: "Cambridge Test 3",
+      title: "Test 3",
       attempts: 123,
       skills: ["Listening"],
       section: "",
@@ -97,7 +97,7 @@ export default function FullTestPage() {
     },
     {
       id: "listening-cam-03-s2",
-      title: "Cambridge Test 3",
+      title: "Test 3",
       attempts: 123,
       skills: ["Listening"],
       section: "",
@@ -108,23 +108,23 @@ export default function FullTestPage() {
     },
     {
       id: "speaking-cam-04-p1",
-      title: "Recent Actual Test 4",
+      title: "Test 4",
       attempts: 123,
       skills: ["Speaking"],
       section: "",
       questions: [],
-      source: "Cambridge",
+      source: "Recent Actual",
       isCompleted: true,
       imageSrc: "/test-thumbnail.png",
     },
     {
       id: "speaking-cam-04-p2",
-      title: "Recent Actual Test 4",
+      title: "Test 4",
       attempts: 123,
       skills: ["Speaking"],
       section: "",
       questions: [],
-      source: "Cambridge",
+      source: "Recent Actual",
       isCompleted: false,
       imageSrc: "/test-thumbnail.png",
     },

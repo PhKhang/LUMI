@@ -12,6 +12,7 @@ import ListeningTableGapFillComponent from "@/components/questionType/listening-
 import { MdClose, MdTimer } from "react-icons/md"
 import { FaPen, FaBook } from "react-icons/fa"
 import ExitTestButton from "@/components/ui/exit-test-button"
+import { useColorMode } from "@chakra-ui/color-mode"
 
 interface ListeningQuestion {
   id: number
@@ -48,46 +49,46 @@ export default function ListeningTestResult() {
       label: "Mathieson",
       userAnswer: "Mathieson",
       correctAnswer: "Mathieson",
-      explanation: "Giải thích cho câu 1",
+      explanation: "Explanation for question 1",
     },
     {
       id: 2,
       label: "beginners",
       userAnswer: "beginners",
       correctAnswer: "beginners",
-      explanation: "Giải thích cho câu 2",
+      explanation: "Explanation for question 2",
     },
-    { id: 3, label: "college", userAnswer: "college", correctAnswer: "college", explanation: "Giải thích cho câu 3" },
-    { id: 4, label: "New", userAnswer: "Neu", correctAnswer: "New", explanation: "Giải thích cho câu 4" },
-    { id: 5, label: "11", userAnswer: "11", correctAnswer: "11", explanation: "Giải thích cho câu 5" },
+  { id: 3, label: "college", userAnswer: "college", correctAnswer: "college", explanation: "Explanation for question 3" },
+  { id: 4, label: "New", userAnswer: "Neu", correctAnswer: "New", explanation: "Explanation for question 4" },
+  { id: 5, label: "11", userAnswer: "11", correctAnswer: "11", explanation: "Explanation for question 5" },
     {
       id: 6,
       label: "instrument",
       userAnswer: "instrument",
       correctAnswer: "instrument",
-      explanation: "Giải thích cho câu 6",
+      explanation: "Explanation for question 6",
     },
-    { id: 7, label: "ear", userAnswer: "ear", correctAnswer: "ear", explanation: "Giải thích cho câu 7" },
+  { id: 7, label: "ear", userAnswer: "ear", correctAnswer: "ear", explanation: "Explanation for question 7" },
     {
       id: 8,
       label: "clapping",
       userAnswer: "claping",
       correctAnswer: "clapping",
-      explanation: "Giải thích cho câu 8",
+      explanation: "Explanation for question 8",
     },
     {
       id: 9,
       label: "recording",
       userAnswer: "recording",
       correctAnswer: "recording",
-      explanation: "Giải thích cho câu 9",
+      explanation: "Explanation for question 9",
     },
     {
       id: 10,
       label: "alone",
       userAnswer: "alone",
       correctAnswer: "alone",
-      explanation: "Giải thích cho câu 10",
+      explanation: "Explanation for question 10",
     },
   ]
 
@@ -97,70 +98,70 @@ export default function ListeningTestResult() {
       label: "Question 11",
       userAnswer: null,
       correctAnswer: "Answer 11",
-      explanation: "Giải thích cho câu 11",
+      explanation: "Explanation for question 11",
     },
     {
       id: 12,
       label: "Question 12",
       userAnswer: "User 12",
       correctAnswer: "Answer 12",
-      explanation: "Giải thích cho câu 12",
+      explanation: "Explanation for question 12",
     },
     {
       id: 13,
       label: "Question 13",
       userAnswer: null,
       correctAnswer: "Answer 13",
-      explanation: "Giải thích cho câu 13",
+      explanation: "Explanation for question 13",
     },
     {
       id: 14,
       label: "Question 14",
       userAnswer: "User 14",
       correctAnswer: "Answer 14",
-      explanation: "Giải thích cho câu 14",
+      explanation: "Explanation for question 14",
     },
     {
       id: 15,
       label: "Question 15",
       userAnswer: null,
       correctAnswer: "Answer 15",
-      explanation: "Giải thích cho câu 15",
+      explanation: "Explanation for question 15",
     },
     {
       id: 16,
       label: "Question 16",
       userAnswer: "User 16",
       correctAnswer: "Answer 16",
-      explanation: "Giải thích cho câu 16",
+      explanation: "Explanation for question 16",
     },
     {
       id: 17,
       label: "Question 17",
       userAnswer: null,
       correctAnswer: "Answer 17",
-      explanation: "Giải thích cho câu 17",
+      explanation: "Explanation for question 17",
     },
     {
       id: 18,
       label: "Question 18",
       userAnswer: "User 18",
       correctAnswer: "Answer 18",
-      explanation: "Giải thích cho câu 18",
+      explanation: "Explanation for question 18",
     },
     {
       id: 19,
       label: "Question 19",
       userAnswer: null,
       correctAnswer: "Answer 19",
-      explanation: "Giải thích cho câu 19",
+      explanation: "Explanation for question 19",
     },
     {
       id: 20,
       label: "Question 20",
       userAnswer: "User 20",
       correctAnswer: "Answer 20",
-      explanation: "Giải thích cho câu 20",
+      explanation: "Explanation for question 20",
     },
   ]
 
@@ -170,70 +171,70 @@ export default function ListeningTestResult() {
       label: "Question 21",
       userAnswer: null,
       correctAnswer: "Answer 21",
-      explanation: "Giải thích cho câu 21",
+  explanation: "Explanation for question 21",
     },
     {
       id: 22,
       label: "Question 22",
       userAnswer: "User 22",
       correctAnswer: "Answer 22",
-      explanation: "Giải thích cho câu 22",
+  explanation: "Explanation for question 22",
     },
     {
       id: 23,
       label: "Question 23",
       userAnswer: null,
       correctAnswer: "Answer 23",
-      explanation: "Giải thích cho câu 23",
+  explanation: "Explanation for question 23",
     },
     {
       id: 24,
       label: "Question 24",
       userAnswer: "User 24",
       correctAnswer: "Answer 24",
-      explanation: "Giải thích cho câu 24",
+  explanation: "Explanation for question 24",
     },
     {
       id: 25,
       label: "Question 25",
       userAnswer: null,
       correctAnswer: "Answer 25",
-      explanation: "Giải thích cho câu 25",
+  explanation: "Explanation for question 25",
     },
     {
       id: 26,
       label: "Question 26",
       userAnswer: "User 26",
       correctAnswer: "Answer 26",
-      explanation: "Giải thích cho câu 26",
+  explanation: "Explanation for question 26",
     },
     {
       id: 27,
       label: "Question 27",
       userAnswer: null,
       correctAnswer: "Answer 27",
-      explanation: "Giải thích cho câu 27",
+  explanation: "Explanation for question 27",
     },
     {
       id: 28,
       label: "Question 28",
       userAnswer: "User 28",
       correctAnswer: "Answer 28",
-      explanation: "Giải thích cho câu 28",
+  explanation: "Explanation for question 28",
     },
     {
       id: 29,
       label: "Question 29",
       userAnswer: null,
       correctAnswer: "Answer 29",
-      explanation: "Giải thích cho câu 29",
+  explanation: "Explanation for question 29",
     },
     {
       id: 30,
       label: "Question 30",
       userAnswer: "User 30",
       correctAnswer: "Answer 30",
-      explanation: "Giải thích cho câu 30",
+  explanation: "Explanation for question 30",
     },
   ]
 
@@ -243,70 +244,70 @@ export default function ListeningTestResult() {
       label: "Question 31",
       userAnswer: null,
       correctAnswer: "Answer 31",
-      explanation: "Giải thích cho câu 31",
+  explanation: "Explanation for question 31",
     },
     {
       id: 32,
       label: "Question 32",
       userAnswer: "User 32",
       correctAnswer: "Answer 32",
-      explanation: "Giải thích cho câu 32",
+  explanation: "Explanation for question 32",
     },
     {
       id: 33,
       label: "Question 33",
       userAnswer: null,
       correctAnswer: "Answer 33",
-      explanation: "Giải thích cho câu 33",
+  explanation: "Explanation for question 33",
     },
     {
       id: 34,
       label: "Question 34",
       userAnswer: "User 34",
       correctAnswer: "Answer 34",
-      explanation: "Giải thích cho câu 34",
+  explanation: "Explanation for question 34",
     },
     {
       id: 35,
       label: "Question 35",
       userAnswer: null,
       correctAnswer: "Answer 35",
-      explanation: "Giải thích cho câu 35",
+  explanation: "Explanation for question 35",
     },
     {
       id: 36,
       label: "Question 36",
       userAnswer: "User 36",
       correctAnswer: "Answer 36",
-      explanation: "Giải thích cho câu 36",
+  explanation: "Explanation for question 36",
     },
     {
       id: 37,
       label: "Question 37",
       userAnswer: null,
       correctAnswer: "Answer 37",
-      explanation: "Giải thích cho câu 37",
+  explanation: "Explanation for question 37",
     },
     {
       id: 38,
       label: "Question 38",
       userAnswer: "User 38",
       correctAnswer: "Answer 38",
-      explanation: "Giải thích cho câu 38",
+  explanation: "Explanation for question 38",
     },
     {
       id: 39,
       label: "Question 39",
       userAnswer: null,
       correctAnswer: "Answer 39",
-      explanation: "Giải thích cho câu 39",
+  explanation: "Explanation for question 39",
     },
     {
       id: 40,
       label: "Question 40",
       userAnswer: "User 40",
       correctAnswer: "Answer 40",
-      explanation: "Giải thích cho câu 40",
+  explanation: "Explanation for question 40",
     },
   ]
 
@@ -419,11 +420,25 @@ export default function ListeningTestResult() {
             <Box alignItems="center">
               <ExitTestButton />
             </Box>
-            <Box marginTop="auto">
+            <Box marginTop="auto" position="relative">
               <TabSelector
                 activeTab={activeTab}
                 onTabChange={(tab) => setActiveTab(tab as "note" | "lookup")}
                 tabs={listeningTabs}
+              />
+              <Box
+                as="span"
+                position="absolute"
+                top={0}
+                left={0}
+                right={0}
+                bottom={0}
+                bg={useColorModeValue("rgba(128,128,128,0.2)", "rgba(128,128,128,0.3)") }
+                zIndex={1}
+                borderTopRadius="lg"
+                pointerEvents="auto"
+                title="Experience this feature in Reading Result Page"
+                _hover={{ bg: useColorModeValue("rgba(128,128,128,0.4)", "rgba(128,128,128,0.45)") }}
               />
             </Box>
           </HStack>

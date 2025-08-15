@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Text, Button, Box, HStack, VStack, Flex } from "@chakra-ui/react";
 import TestDialog from "./test-overlay";
-import PracticeTestButton from "./practice-test-button";
+import PracticeTestButtonMiniTest from "./practice-mini-test-button";
 
 interface TestBlockProps {
   id: string;
@@ -93,7 +93,7 @@ export default function TestBlock({
               fontWeight={"bold"}
               fontSize={"md"}
             >
-              {`${source} - ${title}`}
+              {`[${source}] - ${title}`}
             </Text>
             <Text color={"text.primary"} fontSize="xs" fontWeight={"light"}>
               {questions.join(", ")}
@@ -116,7 +116,7 @@ export default function TestBlock({
             >
               Practice test
             </Button> */}
-            <PracticeTestButton/>
+            <PracticeTestButtonMiniTest/>
             <Button
               variant={"solid"}
               colorPalette={"yellow"}

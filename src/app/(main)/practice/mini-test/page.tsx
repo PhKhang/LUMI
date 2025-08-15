@@ -3,7 +3,7 @@
 import CheckBox from "@/components/ui/checkbox";
 import FilterOptions from "@/components/ui/filter-component";
 import FilterTest from "@/components/ui/filter-test";
-import TestBlock from "@/components/ui/test-block";
+import TestBlock from "@/components/ui/test-block-mini-test";
 import TestDialog from "@/components/ui/test-overlay";
 import {
   Box,
@@ -143,6 +143,17 @@ export default function FullTestPage() {
       section: "Part 3",
       questions: ["Discussion Questions", "Follow-ups"],
       source: "Cambridge",
+      isCompleted: false,
+      imageSrc: "/test-thumbnail.png",
+    },
+    {
+      id: "speaking-recent-04-p3",
+      title: "Speaking Test 4",
+      attempts: 123,
+      skills: ["Speaking"],
+      section: "Part 3",
+      questions: ["Discussion Questions", "Follow-ups"],
+      source: "Recent Actual Test",
       isCompleted: false,
       imageSrc: "/test-thumbnail.png",
     },

@@ -522,11 +522,11 @@ const ReadingParagraph = ({
 
     if (!highlightText || !isHighlighted) {
       if (isDictionaryMode) {
-        return text.split(/(\s+)/).map((part, index) => 
+        return text.split(/(\s+)/).map((part, index) =>
           part.trim() ? (
-            <span 
-              key={index} 
-              className="cursor-pointer hover:underline" 
+            <span
+              key={`dict-${index}-${part}`}
+              className="cursor-pointer hover:underline"
               onClick={() => {
                 drawer.open("a", {
                   title: "Drawer Title",
@@ -538,7 +538,7 @@ const ReadingParagraph = ({
             >
               {part}
             </span>
-          ) : part
+          ) : <span key={`dict-ws-${index}`}>{part}</span>
         );
       } else {
         return text;
@@ -559,10 +559,10 @@ const ReadingParagraph = ({
       // Hàm helper để render words với optional underline hover và highlight
       const renderWords = (content: string, isHighlighted: boolean) => {
         if (isDictionaryMode) {
-          return content.split(/(\s+)/).map((word, wordIndex) => 
+          return content.split(/(\s+)/).map((word, wordIndex) =>
             word.trim() ? (
-              <span 
-                key={`${index}-${wordIndex}`} 
+              <span
+                key={`dict-hl-${index}-${wordIndex}-${word}`}
                 className="cursor-pointer hover:underline"
                 style={isHighlighted ? { backgroundColor: highlightBg } : undefined}
                 onClick={() => {
@@ -571,11 +571,11 @@ const ReadingParagraph = ({
               >
                 {word}
               </span>
-            ) : word
+            ) : <span key={`dict-hl-ws-${index}-${wordIndex}`}>{word}</span>
           );
         } else {
           return (
-            <span 
+            <span
               style={isHighlighted ? { backgroundColor: highlightBg } : undefined}
             >
               {content}

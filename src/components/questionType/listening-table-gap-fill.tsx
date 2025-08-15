@@ -316,6 +316,7 @@ export default function ListeningTableGapFillComponent({
                 onClick={() => onLocate(question.id)}
                 borderRadius="full"
                 style={activeTab === "lookup" ? { display: "none" } : {}}
+                disabled={true}
               >
                 <Icon as={PiMapPin} />
                 <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
