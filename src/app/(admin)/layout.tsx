@@ -15,6 +15,8 @@ import {
 import Link from "next/link"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
+import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
+import { useEffect } from "react"
 
 export default function AdminLayout({
   children,
@@ -23,6 +25,11 @@ export default function AdminLayout({
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const pathname = usePathname()
+  const { setColorMode } = useColorMode(); 
+
+  useEffect(() => {
+    setColorMode("light");
+  }, []);
 
   const sidebarItems = [
     { icon: FiHome, label: "Dashboard", href: "/admin" },

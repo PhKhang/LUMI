@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Box } from "@chakra-ui/react"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/footer"
+import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
 
 export default function MainLayout({
   children,
@@ -11,6 +12,11 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   const [currentLanguage, setCurrentLanguage] = useState<"en" | "vi">("en")
+  const { setColorMode } = useColorMode(); 
+
+  useEffect(() => {
+    setColorMode("light");
+  }, []);
 
   return (
     <Box minH="100vh" bg="background.primary">

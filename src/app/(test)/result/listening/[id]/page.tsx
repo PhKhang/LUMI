@@ -58,7 +58,7 @@ export default function ListeningTestResult() {
       explanation: "Giải thích cho câu 2",
     },
     { id: 3, label: "college", userAnswer: "college", correctAnswer: "college", explanation: "Giải thích cho câu 3" },
-    { id: 4, label: "New", userAnswer: "New", correctAnswer: "New", explanation: "Giải thích cho câu 4" },
+    { id: 4, label: "New", userAnswer: "Neu", correctAnswer: "New", explanation: "Giải thích cho câu 4" },
     { id: 5, label: "11", userAnswer: "11", correctAnswer: "11", explanation: "Giải thích cho câu 5" },
     {
       id: 6,
@@ -71,7 +71,7 @@ export default function ListeningTestResult() {
     {
       id: 8,
       label: "clapping",
-      userAnswer: "clapping",
+      userAnswer: "claping",
       correctAnswer: "clapping",
       explanation: "Giải thích cho câu 8",
     },
@@ -580,7 +580,7 @@ export default function ListeningTestResult() {
           </Box>
           {/* Fixed Audio Player */}
           <Box w="full" p={0} borderTop="1px" borderColor={borderColor} bg={contentBackgroundColor}>
-            <AudioPlayer ref={audioPlayerRef} />
+            <AudioPlayer audioSrc="/Test2 Part1.mp3" ref={audioPlayerRef} />
           </Box>
         </VStack>
 
@@ -674,7 +674,7 @@ export default function ListeningTestResult() {
               borderRadius="md"
               border={"1px solid"}
               borderColor={activePart === part.id ? "green.600" : "gray.300"}
-              _hover={{ bg: activePart === part.id ? contentBackgroundColor : "gray.100" }}
+              _hover={{ bg: activePart === part.id ? contentBackgroundColor : useColorModeValue("gray.100", "gray.700") }}
             >
               <HStack gap={4} alignItems="center">
                 <Text fontWeight="bold" fontSize="md" color={textColor}>

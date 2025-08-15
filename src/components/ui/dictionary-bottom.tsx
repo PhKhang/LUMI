@@ -10,17 +10,27 @@ import {
   VStack,
   Button,
   Separator,
+
 } from "@chakra-ui/react";
 import {
   MdThumbDown,
   MdThumbUp,
   MdClose,
   MdAdd,
+  MdCheck
 } from "react-icons/md";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { useState } from "react";
 import { useColorModeValue } from "@/components/ui/color-mode"
 import { FaVolumeUp } from "react-icons/fa"
+import {   
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
+  MenuItemOption,
+  MenuGroup,
+} from "@chakra-ui/menu";
 
 export interface DialogProps {
   title: string;
@@ -33,6 +43,7 @@ export interface DialogProps {
 export const drawer = createOverlay<DialogProps>((props) => {
   const { title, description, content, containerRef, ...rest } = props;
   const [likeStatus, setLikeStatus] = useState<'liked' | 'disliked' | null>(null);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
 
   const handleLike = () => {
     setLikeStatus(likeStatus === 'liked' ? null : 'liked');
@@ -41,6 +52,8 @@ export const drawer = createOverlay<DialogProps>((props) => {
   const handleDislike = () => {
     setLikeStatus(likeStatus === 'disliked' ? null : 'disliked');
   };
+
+  const topics = ["environment", "traffic", "Topic 3", "Topic 4"];
 
   return (
     <Drawer.Root {...rest} size={"sm"}>
@@ -71,11 +84,11 @@ export const drawer = createOverlay<DialogProps>((props) => {
                           >
                             <FaVolumeUp />
                           </Icon>
-                          <Span fontWeight={"bold"} color={"text.primary"} fontSize={"md"}>
+                          <Span fontWeight={"bold"} color={useColorModeValue("gray.900", "white")} fontSize={"md"}>
                             Fossil{" "}
                           </Span>
                           <Span
-                            color={"text.secondary"}
+                            color={useColorModeValue("gray.600", "gray.300")}
                             fontWeight={"normal"}
                             fontFamily={"fonts.ipa"}
                             fontSize={"md"}
@@ -83,7 +96,7 @@ export const drawer = createOverlay<DialogProps>((props) => {
                             /ˈfɒsɪl/
                           </Span>
                           <Span
-                            color={"text.secondary"}
+                            color={useColorModeValue("gray.500", "gray.400")}
                             fontWeight={"light"}
                             fontStyle={"italic"}
                             fontSize={"md"}
@@ -111,7 +124,7 @@ export const drawer = createOverlay<DialogProps>((props) => {
 
                     <Box w={"full"} py={0}>
                       <HStack justify={"space-between"} wrap={"nowrap"} alignItems={"flex-start"}>
-                        <Text color="accent" fontSize={"md"} fontWeight={"bold"}>hóa thạch</Text>
+                        <Text color={useColorModeValue("green.700", "green.300") } fontSize={"md"} fontWeight={"bold"}>hóa thạch</Text>
 
                         <HStack color={"text.secondary"}>
                           <Icon
@@ -138,10 +151,38 @@ export const drawer = createOverlay<DialogProps>((props) => {
                           >
                             {likeStatus === 'disliked' ? <MdThumbDown /> : <BiDislike />}
                           </Icon>
-                          <Button size="xs" variant="outline" colorPalette={"green"} rounded={"full"} px={2} pr={4}>
-                            <Icon as={MdAdd} />
-                            <Text>Save word</Text>
-                          </Button>
+                          <Menu placement="bottom-end" strategy="fixed">
+                            <MenuButton
+                              as={Button}
+                              size="xs"
+                              variant="outline"
+                              colorPalette={"green"}
+                              rounded={"full"}
+                              px={2}
+                              pr={4}
+                            >
+                                <HStack>
+                                  <Icon as={selectedTopics.length > 0 ? MdCheck : MdAdd} />
+                                  <Text>{selectedTopics.length > 0 ? "Saved" : "Save word"}</Text>
+                                </HStack>
+                            </MenuButton>
+                            <MenuList background='#F0FDF4' borderColor="#BBF7D0" borderWidth={"1px"} borderRadius="5px" px="24px" py="12px" color="black">
+                              <MenuGroup title="Choose topic" fontWeight={"bold"}>
+                                <MenuOptionGroup
+                                  type="radio"
+                                  value={selectedTopics[0] || ""}
+                                  onChange={(value) => setSelectedTopics([value as string])}
+                                  mb="5px"
+                                >
+                                  {topics.map((topic) => (
+                                    <MenuItemOption key={topic} value={topic}>
+                                      {topic}
+                                    </MenuItemOption>
+                                  ))}
+                                </MenuOptionGroup>
+                              </MenuGroup>
+                            </MenuList>
+                          </Menu>
                         </HStack>
                       </HStack>
                     </Box>
@@ -154,7 +195,7 @@ export const drawer = createOverlay<DialogProps>((props) => {
               <Box
                 overflowY={"auto"}
                 h="10rem"
-                color={"text.primary"}
+                color={useColorModeValue("gray.900", "gray.100")}
                 fontSize={"md"}
                 p={3}
               >
@@ -173,25 +214,25 @@ export const drawer = createOverlay<DialogProps>((props) => {
                 </Text>
                 <Text>
                   Fossil records give us clues about what dinosaurs looked like.{" "}
-                  <Text as="span" color="gray.600" fontStyle="italic">
+                  <Text as="span" color={useColorModeValue("gray.600", "gray.300")} fontStyle="italic">
                     (Hồ sơ hóa thạch cho chúng ta manh mối về loài khủng long
                     trông như thế nào.)
                   </Text>
                 </Text>
                 <Text mt={2}>
                   Fossil fuels found in the Earth are a finite resource.{" "}
-                  <Text as="span" color="gray.600" fontStyle="italic">
+                  <Text as="span" color={useColorModeValue("gray.600", "gray.300")} fontStyle="italic">
                     (Nhiên liệu hóa thạch được tìm thấy trong Trái đất là một
                     nguồn tài nguyên hữu hạn.)
                   </Text>
                 </Text>
 
-                <Text mt={4} color="blue.500" fontWeight="bold">
+                <Text mt={4} color={useColorModeValue("blue.600", "blue.300")} fontWeight="bold">
                   Hồ sơ hóa thạch cho thấy sinh vật này có niên đại từ 450 triệu
                   năm trước và nó hầu như không thay đổi nhiều theo thời gian.
                 </Text>
 
-                <Text mt={2} fontStyle="italic" color="gray.700">
+                <Text mt={2} fontStyle="italic" color={useColorModeValue("gray.700", "gray.300") }>
                   Fossil records indicate this creature dates back 450 million
                   years, and it has changed very little over time.
                 </Text>

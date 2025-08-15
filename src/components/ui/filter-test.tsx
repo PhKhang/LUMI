@@ -94,7 +94,7 @@ export default function FilterTest() {
                 <Button
                   onClick={() => toggleSkill(skill)}
                   w={"full"}
-                  bg={skillState.selected ? "green.100" : ""}
+                  bg={skillState.selected ? "green.100" : "white"}
                   justifyContent={"start"}
                   rounded={"full"}
                   border={"solid"}
@@ -111,7 +111,7 @@ export default function FilterTest() {
                     border={"1.8px solid"}
                     borderWidth={"1.6px"}
                     borderColor={"green.600"}
-                    bg={skillState.selected ? "green.600" : ""}
+                    bg={skillState.selected ? "green.600" : "white"}
                     transition={"all"}
                   >
                     {skillState.selected && (

@@ -75,33 +75,42 @@ export default function SettingsMenu({ fontSize, onFontSizeChange }: SettingsMen
                 <Button
                   size="sm"
                   variant={fontSize === "small" ? "solid" : "outline"}
-                  colorScheme={fontSize === "small" ? "blue" : "gray"}
+                  bg={fontSize === "small" ? useColorModeValue("yellow.400", "white") : undefined}
+                  color={fontSize === "small" ? useColorModeValue("yellow.700", "black") : undefined}
+                  _hover={fontSize === "small" ? { bg: useColorModeValue("yellow.300", "gray.200") } : {}}
                   onClick={() => onFontSizeChange("small")}
                   borderRadius="full"
                   w={8}
                   h={8}
+                  fontWeight={fontSize === "small" ? "bold" : "normal"}
                 >
                   S
                 </Button>
                 <Button
                   size="sm"
                   variant={fontSize === "medium" ? "solid" : "outline"}
-                  colorScheme={fontSize === "medium" ? "blue" : "gray"}
+                  bg={fontSize === "medium" ? useColorModeValue("yellow.400", "white") : undefined}
+                  color={fontSize === "medium" ? useColorModeValue("yellow.700", "black") : undefined}
+                  _hover={fontSize === "medium" ? { bg: useColorModeValue("yellow.300", "gray.200") } : {}}
                   onClick={() => onFontSizeChange("medium")}
                   borderRadius="full"
                   w={8}
                   h={8}
+                  fontWeight={fontSize === "medium" ? "bold" : "normal"}
                 >
                   M
                 </Button>
                 <Button
                   size="sm"
                   variant={fontSize === "large" ? "solid" : "outline"}
-                  colorScheme={fontSize === "large" ? "blue" : "gray"}
+                  bg={fontSize === "large" ? useColorModeValue("yellow.400", "white") : undefined}
+                  color={fontSize === "large" ? useColorModeValue("yellow.700", "black") : undefined}
+                  _hover={fontSize === "large" ? { bg: useColorModeValue("yellow.300", "gray.200") } : {}}
                   onClick={() => onFontSizeChange("large")}
                   borderRadius="full"
                   w={8}
                   h={8}
+                  fontWeight={fontSize === "large" ? "bold" : "normal"}
                 >
                   L
                 </Button>
