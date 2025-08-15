@@ -20,8 +20,9 @@ import {
   VStack,
   HStack,
   Separator,
-  ChakraProvider
+  ChakraProvider,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useColorModeValue } from "./color-mode";
 import CheckBox from "./checkbox";
 
@@ -62,10 +63,21 @@ export default function PracticeTestButtonMiniTest() {
         onClick={onOpen}
         size={"xs"}
       >
-        <img src="/weight-icon.svg" alt="weight icon" style={{ width: 18, height: 18, marginRight: 4 }} />
+        <img
+          src="/weight-icon.svg"
+          alt="weight icon"
+          style={{ width: 18, height: 18, marginRight: 4 }}
+        />
         Practice test
       </Button>
-      <Modal isOpen={open} onClose={onClose} isCentered size="xs" closeOnEsc closeOnOverlayClick>
+      <Modal
+        isOpen={open}
+        onClose={onClose}
+        isCentered
+        size="xs"
+        closeOnEsc
+        closeOnOverlayClick
+      >
         <ModalOverlay
           bg="rgba(0, 0, 0, 0.5)"
           display="flex"
@@ -95,7 +107,8 @@ export default function PracticeTestButtonMiniTest() {
                 fontSize="md"
                 color={textColor}
               >
-                Suitable for enhancing your accuracy and time spent on each part.
+                Suitable for enhancing your accuracy and time spent on each
+                part.
               </Text>
               <Box color={"accent"} fontWeight={"bold"} fontSize={"md"} mt={4}>
                 1. Choose sections you want to practice:
@@ -165,30 +178,32 @@ export default function PracticeTestButtonMiniTest() {
               px={0}
               mt="auto"
             >
-              <Box w={"full"}>
-                <VStack>
-                  <Separator w="full" mb={1}/>
-                  <HStack>
-                    <Button
-                      onClick={onClose}
-                      variant="outline"
-                      colorScheme="gray"
-                      borderRadius="full"
-                      mr={2}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={onClose}
-                      variant="solid"
-                      colorPalette="green"
-                      borderRadius="full"
-                    >
-                      Start Now
-                    </Button>
-                  </HStack>
-                </VStack>
-              </Box>
+              <Link href={"/practice/reading/1"}>
+                <Box w={"full"}>
+                  <VStack>
+                    <Separator w="full" mb={1} />
+                    <HStack>
+                      <Button
+                        onClick={onClose}
+                        variant="outline"
+                        colorScheme="gray"
+                        borderRadius="full"
+                        mr={2}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={onClose}
+                        variant="solid"
+                        colorPalette="green"
+                        borderRadius="full"
+                      >
+                        Start Now
+                      </Button>
+                    </HStack>
+                  </VStack>
+                </Box>
+              </Link>
               {/* <Button
                 onClick={() => router.push("/report")}
                 variant="solid"

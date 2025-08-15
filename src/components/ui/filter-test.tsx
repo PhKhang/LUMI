@@ -88,7 +88,7 @@ export default function FilterTest() {
           const skillState = skills[skill];
 
           return (
-            <div key={skill} className="space-y-1">
+            <Box key={skill} paddingBottom={"4"}>
               {/* Skill Toggle Button */}
               <Box borderRadius={"full"}>
                 <Button
@@ -144,7 +144,7 @@ export default function FilterTest() {
               </Box>
 
               {/* Section Type Options */}
-              <Box className="space-y-1 px-2 ml-4">
+              <Box className="space-y-1 ml-4" border={"2px solid"} borderTopWidth={0} borderRightWidth={0} borderColor={"gray.100"} roundedBottomLeft={"lg"} p={"2"}>
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="radio"
@@ -183,7 +183,7 @@ export default function FilterTest() {
                   </Text>
                 </label>
               </Box>
-            </div>
+            </Box>
           );
         })}
       </div>
