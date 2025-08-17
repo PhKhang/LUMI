@@ -71,8 +71,11 @@ export default function PracticeTestButton() {
           alignItems="center"
           justifyContent="center"
           onClick={onClose} 
+          zIndex={99}
         />
-        <ModalContent height="100vh" width="100vw">
+        <ModalContent height="100vh" width="100vw" containerProps={{
+            zIndex: '100',
+          }} >
           <VStack
             mx="auto"
             my="auto"

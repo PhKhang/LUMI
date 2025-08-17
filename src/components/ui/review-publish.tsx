@@ -184,11 +184,10 @@ export default function ReviewPublish({
       </VStack>
       <HStack justify="flex-end" w="full" mt={8}>
         <Button
-          size="lg"
+          size="md"
           bg="#28A745"
           color="white"
           _hover={{ bg: "#218838" }}
-          px={12}
         >
           Publish
         </Button>

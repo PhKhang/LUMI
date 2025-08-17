@@ -381,7 +381,7 @@ export default function ExamsPage() {
           {currentStep > 1 && (
             <Button
               variant="outline"
-              size="lg"
+              size="md"
               onClick={() => setCurrentStep(Math.max(currentStep - 1, 1))}
               borderColor="border.primary"
               color="text.primary"
@@ -396,7 +396,7 @@ export default function ExamsPage() {
           {currentStep < 5 && (
             <Button
               colorScheme="green"
-              size="lg"
+              size="md"
               onClick={() => setCurrentStep(Math.min(currentStep + 1, 5))}
               disabled={
                 (currentStep === 1 && !testName.trim()) ||

@@ -35,10 +35,14 @@ export default function ExitTestButton() {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          zIndex={99}
         />
         <ModalContent
           height="100vh"
           width="100vw"
+          containerProps={{
+            zIndex: '100',
+          }} 
         >
           <VStack mx="auto" my="auto" borderRadius="lg" bg={modalBg} py={4} px={6}>
             <ModalHeader

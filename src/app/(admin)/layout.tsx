@@ -60,6 +60,7 @@ export default function AdminLayout({
         p={4}
         transition="width 0.3s ease"
         position="relative"
+        height="100vh"
       >
         {/* Toggle Button */}
         <Button
@@ -190,9 +191,9 @@ export default function AdminLayout({
       </Box>
 
       {/* Main Content */}
-      <Box flex="1" bg="background.primary">
+      <Box flex="1" bg="background.primary" height="100vh" overflow="hidden">
         {/* Content */}
-        <Box p={6}>
+        <Box p={6} height="100vh" overflowY="auto">
           {children}
         </Box>
       </Box>

@@ -23,7 +23,7 @@ export default function MainLayout({
       <Box
         position="sticky" 
         top="0"
-        zIndex="sticky"
+        zIndex="10"
       >
         <Navigation 
           currentLanguage={currentLanguage} 

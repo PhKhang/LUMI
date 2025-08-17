@@ -83,8 +83,11 @@ export default function PracticeTestButtonMiniTest() {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          zIndex={99}
         />
-        <ModalContent height="100vh" width="100vw">
+        <ModalContent height="100vh" width="100vw" containerProps={{
+            zIndex: '100',
+          }} >
           <VStack
             mx="auto"
             my="auto"
@@ -178,20 +181,20 @@ export default function PracticeTestButtonMiniTest() {
               px={0}
               mt="auto"
             >
-              <Link href={"/practice/reading/1"}>
-                <Box w={"full"}>
-                  <VStack>
-                    <Separator w="full" mb={1} />
-                    <HStack>
-                      <Button
-                        onClick={onClose}
-                        variant="outline"
-                        colorScheme="gray"
-                        borderRadius="full"
-                        mr={2}
-                      >
-                        Cancel
-                      </Button>
+              <Box w={"full"}>
+                <VStack>
+                  <Separator w="full" mb={1} />
+                  <HStack>
+                    <Button
+                      onClick={onClose}
+                      variant="outline"
+                      colorScheme="gray"
+                      borderRadius="full"
+                      mr={2}
+                    >
+                      Cancel
+                    </Button>
+                    <Link href={"/practice/reading/1"}>
                       <Button
                         onClick={onClose}
                         variant="solid"
@@ -200,10 +203,10 @@ export default function PracticeTestButtonMiniTest() {
                       >
                         Start Now
                       </Button>
-                    </HStack>
-                  </VStack>
-                </Box>
-              </Link>
+                    </Link>
+                  </HStack>
+                </VStack>
+              </Box>
               {/* <Button
                 onClick={() => router.push("/report")}
                 variant="solid"

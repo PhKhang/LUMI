@@ -92,8 +92,8 @@ export default function SpeakingTestResult() {
   const mutedColor = !mounted ? mutedColorDark : (colorMode === 'light' ? mutedColorLight : mutedColorDark)
   const cardBgColor = !mounted ? cardBgColorDark : (colorMode === 'light' ? cardBgColorLight : cardBgColorDark)
   const greenThemeColor = !mounted ? greenThemeColorDark : (colorMode === 'light' ? greenThemeColorLight : greenThemeColorDark)
-  const headerBgColor = !mounted ? headerBgColorDark : (colorMode === 'light' ? headerBgColorLight : headerBgColorDark)
-  
+  const headerBgColor = !mounted ? headerBgColorDark : (colorMode === 'light' ? headerBgColorLight : headerBgColorDark) 
+  const resizerBorderColor = useColorModeValue("gray.200", "gray.600")
   const highlightYellowBg = !mounted ? highlightYellowBgDark : (colorMode === 'light' ? highlightYellowBgLight : highlightYellowBgDark)
   const highlightYellowText = !mounted ? highlightYellowTextDark : (colorMode === 'light' ? highlightYellowTextLight : highlightYellowTextDark)
   const highlightGreenBg = !mounted ? highlightGreenBgDark : (colorMode === 'light' ? highlightGreenBgLight : highlightGreenBgDark)
@@ -727,7 +727,7 @@ export default function SpeakingTestResult() {
         {/* Resizer */}
         <Box
           width="4px"
-          bg={borderColor}
+          bg={resizerBorderColor}
           cursor="col-resize"
           _hover={{ bg: "blue.300" }}
           onMouseDown={(e) => {

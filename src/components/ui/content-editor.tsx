@@ -1,8 +1,9 @@
 "use client"
 
-import { Box, Text, Flex, VStack, HStack, Icon, Button, Input } from "@chakra-ui/react"
+import { Box, Text, Flex, VStack, HStack, Icon, Button, Input, Textarea } from "@chakra-ui/react"
 import { MdMenuBook, MdAdd, MdExpandMore, MdExpandLess, MdClose, MdFolder, MdFolderOpen, MdChevronRight, MdDescription, MdImage, MdHeadphones } from "react-icons/md"
 import EditorToolbar from "./editor-toolbar"
+import { PiMapPin } from "react-icons/pi"
 
 interface Passage {
   id: string
@@ -154,35 +155,87 @@ export default function ContentEditor({
                 {expandedPassages[passage.id] && (
                   <VStack align="start" gap={2} pl={6} mt={2}>
                     {questionGroups[passage.id]?.map((group) => (
-                      <HStack 
-                        key={group.id}
-                        justify="space-between" 
-                        w="full" 
-                        p={2}
-                        borderRadius="md"
-                        bg={selectedQuestionGroup === `${passage.id}_${group.id}` ? "background.primary" : "transparent"}
-                        _hover={{ bg: "background.primary" }}
-                        cursor="pointer"
-                        onClick={() => setSelectedQuestionGroup(`${passage.id}_${group.id}`)}
-                      >
-                        <HStack gap={2}>
-                          <Icon as={MdChevronRight} color="text.muted" boxSize={4} />
-                          <Text fontSize="sm" color="text.primary">
-                            {group.title}
-                          </Text>
+                      <Box key={group.id} w="full">
+                        <HStack 
+                          justify="space-between" 
+                          w="full" 
+                          p={2}
+                          borderRadius="md"
+                          bg={selectedQuestionGroup === `${passage.id}_${group.id}` ? "background.primary" : "transparent"}
+                          _hover={{ bg: "background.primary" }}
+                          cursor="pointer"
+                          onClick={() => setSelectedQuestionGroup(`${passage.id}_${group.id}`)}
+                        >
+                          <HStack gap={2}>
+                            <Icon as={MdChevronRight} color="text.muted" boxSize={4} />
+                            <Text fontSize="sm" color="text.primary">
+                              {group.title}
+                            </Text>
+                          </HStack>
+                          <HStack gap={1}>
+                            <Icon
+                              as={MdAdd}
+                              color="#4CAF50"
+                              boxSize={4}
+                              cursor="pointer"
+                              _hover={{ color: "#388E3C" }}
+                              onClick={e => {
+                                e.stopPropagation();
+                                addQuestion(passage.id, group.id);
+                              }}
+                            />
+                            <Icon 
+                              as={MdClose} 
+                              color="#F44336" 
+                              boxSize={4} 
+                              cursor="pointer" 
+                              _hover={{ color: "#D32F2F" }}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                deleteQuestionGroup(passage.id, group.id)
+                              }}
+                            />
+                          </HStack>
                         </HStack>
-                        <Icon 
-                          as={MdClose} 
-                          color="#F44336" 
-                          boxSize={4} 
-                          cursor="pointer" 
-                          _hover={{ color: "#D32F2F" }}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            deleteQuestionGroup(passage.id, group.id)
-                          }}
-                        />
-                      </HStack>
+                        {/* Show questions under group */}
+                        {selectedQuestionGroup === `${passage.id}_${group.id}` && group.questions.length > 0 && (
+                          <VStack align="start" pl={8} pr={2} py={2} gap={2}>
+                            {group.questions.map((q, idx) => (
+                              <HStack key={idx} w="full" justify="space-between">
+                                <Text
+                                  fontSize="sm"
+                                  color="text.primary"
+                                  cursor="pointer"
+                                  _hover={{ textDecoration: "underline", color: "accent" }}
+                                  onClick={() => {
+                                    // Scroll to or select question in main content if needed
+                                    // You can implement scroll/selection logic here if required
+                                  }}
+                                >
+                                  Question {(() => {
+                                    // Calculate absolute question number
+                                    const groups = questionGroups[passage.id];
+                                    const groupIndex = groups.findIndex(g => g.id === group.id) || 0;
+                                    const questionsBeforeGroup = groups.slice(0, groupIndex).reduce((acc, g) => acc + g.questions.length, 0) || 0;
+                                    return questionsBeforeGroup + idx + 1;
+                                  })()}
+                                </Text>
+                                <Icon
+                                  as={MdClose}
+                                  color="#F44336"
+                                  boxSize={3.5}
+                                  cursor="pointer"
+                                  _hover={{ color: "#D32F2F" }}
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    deleteQuestion(passage.id, group.id, idx);
+                                  }}
+                                />
+                              </HStack>
+                            ))}
+                          </VStack>
+                        )}
+                      </Box>
                     ))}
                     <Button 
                       variant="ghost" 
@@ -282,8 +335,7 @@ export default function ContentEditor({
                         </HStack>
                       </HStack>
                       <EditorToolbar />
-                      <Box
-                        as="textarea"
+                      <Textarea
                         w="full"
                         minH="200px"
                         p={3}
@@ -416,7 +468,7 @@ export default function ContentEditor({
                             </Text>
                             <HStack gap={2}>
                               <Icon 
-                                as={expandedQuestions[`${selectedQuestionGroup}_${index}`] ? MdExpandLess : MdExpandMore} 
+                                as={expandedQuestions[`${selectedQuestionGroup}_${index}`] ? MdExpandMore : MdExpandLess} 
                                 color="text.muted" 
                                 boxSize={5} 
                                 cursor="pointer"
@@ -521,17 +573,14 @@ Step 4: Choose the correct answer.`}
                                   <Text fontSize="sm" fontWeight="medium" color="text.primary">
                                     {}
                                   </Text>
-                                  <Button 
-                                    size="sm" 
-                                    variant="outline" 
-                                    borderColor="#4CAF50" 
-                                    color="#4CAF50"
-                                    _hover={{ bg: "#4CAF50", color: "white" }}
+                                  <Button
+                                    size="sm"
+                                    colorPalette="green"
+                                    variant="outline"
+                                    borderRadius="full"
                                   >
-                                    <HStack gap={2}>
-                                      <Icon as={MdDescription} boxSize={4} />
-                                      <Text>Locate</Text>
-                                    </HStack>
+                                    <Icon as={PiMapPin} />
+                                    <Text>Locate</Text>
                                   </Button>
                                 </HStack>
                               </Box>
