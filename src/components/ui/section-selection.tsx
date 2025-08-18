@@ -60,7 +60,7 @@ export default function SectionSelection({ selectedSkill, selectedSection, setSe
             borderRadius="lg"
             cursor="pointer"
             borderColor={selectedSection === section.key ? "accent" : "border.primary"}
-            bg={selectedSection === section.key ? "background.accent" : "background.primary"}
+            bg={selectedSection === section.key ? "green.50" : "background.primary"}
             _hover={{ borderColor: "secondary" }}
             onClick={() => setSelectedSection(section.key)}
             textAlign="center"

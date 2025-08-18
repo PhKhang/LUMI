@@ -32,7 +32,7 @@ export default function SkillSelection({ selectedSkill, setSelectedSkill, setSel
             borderRadius="lg"
             cursor="pointer"
             borderColor={selectedSkill === skill.key ? "accent" : "border.primary"}
-            bg={selectedSkill === skill.key ? "background.accent" : "background.primary"}
+            bg={selectedSkill === skill.key ? "green.50" : "background.primary"}
             _hover={{ borderColor: "secondary" }}
             onClick={() => {
               setSelectedSkill(skill.key)

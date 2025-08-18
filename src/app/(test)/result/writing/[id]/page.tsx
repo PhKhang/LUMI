@@ -670,7 +670,7 @@ In conclusion, the transition from school to university or college can bring sev
 
                       <Box borderRadius="md" borderLeft="4px">
                         <Text fontSize={getFontSizeErrorValue()} fontWeight="bold" color="orange.500" mb={2}>
-                          Gợi ý sửa:
+                          Suggestion:
                         </Text>
                         <Text fontSize={getFontSizeErrorValue()} color={textColor} lineHeight="1.6">
                           {error.suggestion}

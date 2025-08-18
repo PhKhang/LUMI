@@ -56,7 +56,7 @@ export default function TestInfoForm({ testName, setTestName, testType, setTestT
               borderRadius="lg"
               cursor="pointer"
               borderColor={testType === option.value ? "accent" : "border.primary"}
-              bg={testType === option.value ? "background.accent" : "background.primary"}
+              bg={testType === option.value ? "green.50" : "background.primary"}
               _hover={{ borderColor: "secondary" }}
               onClick={() => setTestType(option.value)}
             >
