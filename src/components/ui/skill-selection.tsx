@@ -1,7 +1,7 @@
 "use client"
 
 import { Box, Text, SimpleGrid, HStack, VStack, Icon } from "@chakra-ui/react"
-import { MdHeadphones, MdMenuBook, MdEdit, MdMic } from "react-icons/md"
+import { FaHeadphones, FaBookOpen, FaPen, FaMicrophone } from "react-icons/fa6"
 
 interface SkillSelectionProps {
   selectedSkill: string
@@ -11,10 +11,10 @@ interface SkillSelectionProps {
 
 export default function SkillSelection({ selectedSkill, setSelectedSkill, setSelectedSection }: SkillSelectionProps) {
   const skills = [
-    { key: "listening", label: "Listening", description: "Section: Part 1, Part 2, Part 3, Part 4", icon: MdHeadphones },
-    { key: "reading", label: "Reading", description: "Section: Passage 1, Passage 2, Passage 3", icon: MdMenuBook },
-    { key: "writing", label: "Writing", description: "Section: Task 1, Task 2", icon: MdEdit },
-    { key: "speaking", label: "Speaking", description: "Section: Part 1, Part 2, Part 3", icon: MdMic }
+    { key: "listening", label: "Listening", description: "Section: Part 1, Part 2, Part 3, Part 4", icon: FaHeadphones, color: "#43A047" },
+    { key: "reading", label: "Reading", description: "Section: Passage 1, Passage 2, Passage 3", icon: FaBookOpen, color: "#43A047" },
+    { key: "writing", label: "Writing", description: "Section: Task 1, Task 2", icon: FaPen, color: "#43A047" },
+    { key: "speaking", label: "Speaking", description: "Section: Part 1, Part 2, Part 3", icon: FaMicrophone, color: "#43A047" }
   ]
 
   return (
@@ -38,6 +38,7 @@ export default function SkillSelection({ selectedSkill, setSelectedSkill, setSel
               setSelectedSkill(skill.key)
               setSelectedSection("")
             }}
+            gap={4}
           >
             <HStack align="start" gap={3}>
               <Box
@@ -47,7 +48,6 @@ export default function SkillSelection({ selectedSkill, setSelectedSkill, setSel
                 borderWidth="2px"
                 borderColor={selectedSkill === skill.key ? "accent" : "border.secondary"}
                 bg={selectedSkill === skill.key ? "accent" : "transparent"}
-                mt={0.5}
                 position="relative"
               >
                 {selectedSkill === skill.key && (
@@ -63,16 +63,14 @@ export default function SkillSelection({ selectedSkill, setSelectedSkill, setSel
                   />
                 )}
               </Box>
-              <Box>
-                <Icon 
-                  as={skill.icon} 
-                  boxSize={6} 
-                  color={selectedSkill === skill.key ? "accent" : "text.muted"} 
-                  mb={1}
-                />
-              </Box>
+              <Icon
+                as={skill.icon} 
+                boxSize={6}
+                color={selectedSkill === skill.key ? skill.color : "gray.400"}
+                alignSelf="start"
+              />
             </HStack>
-            <VStack align="start" gap={1} mt={2}>
+            <VStack align="start" gap={1} justifyContent={"start"}>
               <Text fontWeight="bold" color="text.primary">
                 {skill.label}
               </Text>

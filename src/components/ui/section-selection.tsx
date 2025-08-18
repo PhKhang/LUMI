@@ -18,7 +18,7 @@ export default function SectionSelection({ selectedSkill, selectedSection, setSe
   let sections: Section[] = []
   if (selectedSkill === "reading") {
     sections = [
-      { key: "full", label: "Full Section", description: "All sections in this skill" },
+      { key: "full", label: "Full Section", description: "Include all passages" },
       { key: "passage1", label: "Passage 1", description: "Only this section" },
       { key: "passage2", label: "Passage 2", description: "Only this section" },
       { key: "passage3", label: "Passage 3", description: "Only this section" }

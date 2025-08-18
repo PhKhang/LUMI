@@ -381,11 +381,10 @@ export default function ExamsPage() {
           {currentStep > 1 && (
             <Button
               variant="outline"
+              colorPalette={"black"}
               size="md"
               onClick={() => setCurrentStep(Math.max(currentStep - 1, 1))}
-              borderColor="border.primary"
               color="text.primary"
-              _hover={{ borderColor: "secondary", bg: "background.secondary" }}
             >
               <Flex align="center" gap={2}>
                 <MdArrowBack />
@@ -395,16 +394,14 @@ export default function ExamsPage() {
           )}
           {currentStep < 5 && (
             <Button
-              colorScheme="green"
+              colorPalette="green"
               size="md"
               onClick={() => setCurrentStep(Math.min(currentStep + 1, 5))}
               disabled={
                 (currentStep === 1 && !testName.trim()) ||
                 (currentStep === 2 && (!selectedSkill || !selectedSection))
               }
-              bg="accent"
               color="white"
-              _hover={{ bg: "secondary" }}
               ml={currentStep === 1 ? "auto" : 0}
             >
               <Flex align="center" gap={2}>
