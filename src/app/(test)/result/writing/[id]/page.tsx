@@ -638,7 +638,7 @@ In conclusion, the transition from school to university or college can bring sev
                 <VStack gap={4} w="full">
                   {grammarErrors.map((error) => (
                       <Box key={error.id} w="full" p={4} bg={cardBgColor} borderRadius="lg" shadow={"sm"} cursor="pointer" onClick={() => scrollToError(`orig-error-${error.id}`)}> 
-                        <Text fontSize="md" fontWeight="bold" color={textColor} mb={3} textDecoration={"underline"}>
+                        <Text fontSize="md" fontWeight="bold" color={textColor} mb={3}>
                           {error.type === "Vocabulary Error" ? "Vocabulary" : "Grammar"}: {error.type}
                         </Text>
                         <Text fontSize={getFontSizeErrorValue()} color={textColor} lineHeight="1.6">
