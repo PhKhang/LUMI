@@ -182,7 +182,7 @@ export default function AdminLayout({
           >
             <Icon as={MdLogout} w={5} h={5} />
             {!isCollapsed && (
-              <Text font="lg" ml={3} fontWeight="medium">
+              <Text fontSize="md" ml={3} fontWeight="medium">
                 Logout
               </Text>
             )}

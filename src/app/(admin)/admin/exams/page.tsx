@@ -282,7 +282,7 @@ export default function ExamsPage() {
   return (
     <Box bg="background.primary" minH="100vh" p={0}>
       <Container py={6}>
-        <Text fontSize="2xl" fontWeight="bold" color="text.primary" mb={8}>
+        <Text fontSize="2xl" fontWeight="bold" color="text.primary" mb={2}>
           Create New Test
         </Text>
         <StepProgress currentStep={currentStep} steps={steps} />

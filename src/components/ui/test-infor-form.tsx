@@ -43,7 +43,7 @@ export default function TestInfoForm({ testName, setTestName, testType, setTestT
         <Text fontSize="sm" fontWeight="medium" color="text.primary" mb={4}>
           Test type
         </Text>
-        <VStack align="start" gap={4}>
+        <HStack align="start" gap={4}>
           {[
             { value: "full", label: "Full Test", description: "Complete IELTS test with all 4 skills" },
             { value: "mini", label: "Mini Test", description: "Small IELTS test with 1 skill only" }
@@ -95,7 +95,7 @@ export default function TestInfoForm({ testName, setTestName, testType, setTestT
               </HStack>
             </Box>
           ))}
-        </VStack>
+        </HStack>
       </Box>
       <Box 
         bg="background.secondary" 
