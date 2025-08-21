@@ -100,7 +100,7 @@ export default function SpeakingTestResult() {
   const highlightGreenText = !mounted ? highlightGreenTextDark : (colorMode === 'light' ? highlightGreenTextLight : highlightGreenTextDark)
   const highlightPurpleBg = !mounted ? highlightPurpleBgDark : (colorMode === 'light' ? highlightPurpleBgLight : highlightPurpleBgDark)
   const highlightPurpleText = !mounted ? highlightPurpleTextDark : (colorMode === 'light' ? highlightPurpleTextLight : highlightPurpleTextDark)
-
+  const resizerColor = useColorModeValue("orange.500", "orange.400")
   // Refs for section elements
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({})
   const questionAudioRef = useRef<HTMLAudioElement | null>(null)
@@ -319,7 +319,7 @@ export default function SpeakingTestResult() {
       </Box>
 
       {/* Main Content */}
-      <Flex h="calc(100vh - 60px)" mx="auto">
+      <Flex h="calc(100vh - 60px)" mx="auto" minWidth={"1000px"}>
         {/* Left Panel - Content */}
         <Box
           width={`${leftPanelWidth}%`}
@@ -330,6 +330,7 @@ export default function SpeakingTestResult() {
           position="relative"
           pb={6}
           data-scroll-container
+          minWidth={"630px"}
         >
           <VStack align="start" gap={6}>
             {/* Sticky Header for Question + Tabs */}
@@ -726,17 +727,17 @@ export default function SpeakingTestResult() {
 
         {/* Resizer */}
         <Box
-          width="4px"
+          width="6px"
           bg={resizerBorderColor}
           cursor="col-resize"
-          _hover={{ bg: "blue.300" }}
+          _hover={{ bg: resizerColor }}
           onMouseDown={(e) => {
             const startX = e.clientX
             const startWidth = leftPanelWidth
 
             const handleMouseMove = (e: MouseEvent) => {
               const diff = e.clientX - startX
-              const newWidth = Math.max(20, Math.min(80, startWidth + (diff / window.innerWidth) * 100))
+              const newWidth = Math.max(30, Math.min(70, startWidth + (diff / window.innerWidth) * 100))
               setLeftPanelWidth(newWidth)
             }
 

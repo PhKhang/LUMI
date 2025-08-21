@@ -97,7 +97,8 @@ export default function TestResult() {
   const borderColor = useColorModeValue("gray.200", "gray.600")
   const textColor = useColorModeValue("gray.800", "white")
   const greenThemeColor = useColorModeValue("green.600", "green.500")
-
+  const resizerColor = useColorModeValue("orange.500", "orange.400")
+  
   const getQuestionButtonColor = (status: number) => {
     switch (status) {
       case 1:
@@ -276,9 +277,9 @@ export default function TestResult() {
   ]
 
   return (
-    <Box minH="100vh" bg={bgColor} overflow="hidden">
+    <Box minH="100vh" bg={bgColor}>
       {/* Header */}
-      <Box bg={bgColor} borderColor={borderColor} px={4}>
+      <Box bg={bgColor} borderColor={borderColor} px={4} minWidth={"1000px"}>
         <Box display="grid" gridTemplateColumns="1fr auto 1fr" alignItems="center" w="full" mx="auto">
           {/* Left Section - Close Button + Tabs */}
           <HStack gap={4} height="60px">
@@ -318,14 +319,14 @@ export default function TestResult() {
       </Box>
 
       {/* Main Content */}
-      <Flex h="calc(100vh - 125px)" mx="auto">
+      <Flex h="calc(100vh - 125px)" mx="auto" minWidth={"1000px"} overflowX="auto">
         {/* Left Panel - Reading Content */}
         <DrawerContainer
           h={"full"}
           width={`${leftPanelWidth}%`}
           borderRight="1px"
           borderColor={borderColor}
-          overflow="hidden"
+          overflow="auto"
           bg={contentBackgroundColor}
           ref={leftPanelRef}
         >
@@ -362,16 +363,16 @@ export default function TestResult() {
 
         {/* Resizer */}
         <Box
-          width="4px"
+          width="6px"
           bg={borderColor}
           cursor="col-resize"
-          _hover={{ bg: "blue.300" }}
+          _hover={{ bg: resizerColor}}
           onMouseDown={(e) => {
             const startX = e.clientX
             const startWidth = leftPanelWidth
             const handleMouseMove = (e: MouseEvent) => {
               const diff = e.clientX - startX
-              const newWidth = Math.max(20, Math.min(80, startWidth + (diff / window.innerWidth) * 100))
+              const newWidth = Math.max(30, Math.min(70, startWidth + (diff / window.innerWidth) * 100))
               setLeftPanelWidth(newWidth)
             }
             const handleMouseUp = () => {
@@ -384,7 +385,7 @@ export default function TestResult() {
         />
 
         {/* Right Panel - Questions */}
-        <Box width={`${100 - leftPanelWidth}%`} overflow="auto" p={6} bg={contentBackgroundColor}>
+        <Box width={`${100 - leftPanelWidth}%`} overflow="auto" p={6} bg={contentBackgroundColor} minWidth={"410px"}>
           <Box id="questions-1-5" mb={5}>
             <PassageMatchingQuestionComponent
               title="Questions 1-5"

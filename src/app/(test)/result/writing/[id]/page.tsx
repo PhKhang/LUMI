@@ -1,11 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { Box, Flex, HStack, VStack, Text, Button, IconButton, Badge, SimpleGrid, Tabs, Separator } from "@chakra-ui/react"
+import { Box, Flex, HStack, VStack, Text, Button, Badge, SimpleGrid } from "@chakra-ui/react"
 import { Icon } from "@chakra-ui/react"
-import { MenuButton, MenuList, Menu, MenuItem } from "@chakra-ui/menu"
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode"
-import { MdTimer, MdSettings, MdAccessTime, MdLightMode, MdDarkMode, MdExpandMore, MdExpandLess, MdNote, MdEdit } from "react-icons/md"
+import { MdTimer, MdExpandMore, MdExpandLess } from "react-icons/md"
 import ExitTestButton from "@/components/ui/exit-test-button"
 import TabSelector from "@/components/ui/tab-selector"
 import SettingsMenu from "@/components/ui/settings-menu"
@@ -35,16 +34,15 @@ export default function WritingTestResult() {
   const [expandedCriteria, setExpandedCriteria] = useState<Set<string>>(new Set())
   const { colorMode, toggleColorMode } = useColorMode()
   const bgColor = useColorModeValue("#F6F0E7", "gray.800")
-  const bgColorSecondary = useColorModeValue("gray.50", "gray.800")
   const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900") // background color for left (passages content) and right (test answers) panel
   const questionBackgroundColor = useColorModeValue("white", "gray.700")
   const borderColor = useColorModeValue("gray.200", "gray.600")
   const textColor = useColorModeValue("gray.800", "white")
   const mutedColor = useColorModeValue("gray.600", "gray.200")
   const cardBgColor = useColorModeValue("gray.50", "gray.700")
-  const expandColor = useColorModeValue("gray.200", "gray.700")
   const greenThemeColor = useColorModeValue("green.600", "green.500")
-  const highlightBg = useColorModeValue('rgba(255, 0, 0, 0.1)', 'rgba(255, 255, 255, 0.3)');
+  const highlightBg = useColorModeValue("rgba(255, 0, 0, 0.1)", "rgba(255, 255, 255, 0.3)")
+  const resizerColor = useColorModeValue("orange.500", "orange.400")
 
   const overallScore = 7.0
   const totalErrors = 15
@@ -233,13 +231,12 @@ export default function WritingTestResult() {
     },
   ]
 
-
   const originalEssayWithHighlights = `Nowadays, there are many students who <mark id="orig-error-1" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>are at</del> at</mark> university or college who find it difficult to learn than when they studied at school. This essay will explore some reasons behind this phenomenon.
 There are several reasons that make students find <mark id="orig-error-2" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>harder</del> it harder</mark> when studying at university or school could understand the knowledge more effectively and easier. In contrast, when they continue to study at university or college, most of students have to look up information about the lecture <mark id="orig-error-3" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>in</del> on</mark> the Internet or in specialized books by themselves to do complex <mark id="orig-error-4" style="background-color: #4ADE80; padding: 2px 4px; border-radius: 4px;"> <del>reseach</del> research</mark> projects with minimal guidance from their teachers. Secondly, students are often <mark id="orig-error-5" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"> <del>facing up</del> faced</mark> with many classes with <mark id="orig-error-6" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>large</del> a large</mark> number of students. These classes can make some students find <mark id="orig-error-2" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>harder</del> it harder</mark> to connect with their professors. As <mark id="orig-error-7" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>the</del> a</mark> result, the individualized support may decrease.
 To address these challenges, students should be more proactive in their <mark id="orig-error-8" style="background-color: #4ADE80; padding: 2px 4px; border-radius: 4px;"><del>leaning</del> learning</mark> processes. For example, when the students have questions about the lecture, they should meet their professors to ask them their questions after the class <mark id="orig-error-9" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>ended</del> ends</mark>. Most <mark id="orig-error-10" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>of</del></mark> professors may spend <mark id="orig-error-10" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>little</del> a little</mark> of their time to answer <mark id="orig-error-11" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>student's</del> students'</mark> questions. <mark id="orig-error-12" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>By</del> In</mark> this way, many students can understand <mark id="orig-error-13" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>deeper</del> more deeply</mark> about the lecture. Moreover, universities and colleges should divide classes into different smaller classes. Thanks to this solution, professors can focus more on their students and enhance the quality of the lecture.
 In conclusion, the transition from school to university or college can bring several challenges for many students due to the requirement <mark id="orig-error-14" style="background-color: #FEF08A; padding: 2px 4px; border-radius: 4px;"><del>of</del> for</mark> concentration and self-study and the lack of individualized support. However, the proactiveness of students and smaller classes can solve these issues.`
 
-const correctedEssayWithHighlights = `Nowadays, there are many students who are at university or college find difficult to learn than when they studied at school. This essay will explore some reasons behind this phenomenon.
+  const correctedEssayWithHighlights = `Nowadays, there are many students who are at university or college find difficult to learn than when they studied at school. This essay will explore some reasons behind this phenomenon.
 There are several reasons that make students find it harder when studying at university or college. Firstly, transition to higher level education is difficult for students to follow. The curriculum at university or college <mark id="corr-error-1" style="background-color: #FFA500; padding: 2px 4px; border-radius: 4px;">The reason is given that when they studied at school, their old teachers might give them different examples and exercises in each lessons. Thanks to that, student when studied at school could understand the knowledge more effectively and easier.</mark> Secondly, students are often facing up with many classes with large number of students. <mark id="corr-error-2" style="background-color: #FFA500; padding: 2px 4px; border-radius: 4px;">As the</mark> result, the individualized support may decrease. This is also very different from what they received from their old teachers at school. Due to the smaller class size, old teachers could focus on all students, so they could know each student's weaknesses and strengths to help them improve their strengths and fix their weaknesses.
 To address these challenges, students should be more proactive in their learning processes. For example, when the students have questions about the lecture, they should meet their professors to ask them their questions after the class ended. <mark id="corr-error-3" style="background-color: #FFA500; padding: 2px 4px; border-radius: 4px;">Most of professors may spend little of their time to answer student's questions. By this way, many students can understand deeper about the lecture.</mark>
 In conclusion, the transition from school to university or college can bring several challenges for many students due to the requirement of concentration and self-study and the lack of individualized support. However, by the proactive of students and smaller classes can solve these issues.`
@@ -310,15 +307,15 @@ In conclusion, the transition from school to university or college can bring sev
   }
 
   const scrollToError = (id: string) => {
-    const element = document.getElementById(id);
+    const element = document.getElementById(id)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      element.classList.add('error-highlight');
+      element.scrollIntoView({ behavior: "smooth", block: "center" })
+      element.classList.add("error-highlight")
       setTimeout(() => {
-        element.classList.remove('error-highlight');
-      }, 2000);
+        element.classList.remove("error-highlight")
+      }, 2000)
     }
-  };
+  }
 
   const writingTabs = [
     { value: "original", label: "Task 1" },
@@ -367,34 +364,42 @@ In conclusion, the transition from school to university or college can bring sev
               />
             </Box>
           </HStack>
-            {/* Center Section - Time (and Score if needed) */}
-            <Box py={3}>
-              <HStack gap={2} justify="center" bg={questionBackgroundColor} px={3} py={1} borderRadius="full">
-                <HStack>
-                  <Icon as={MdTimer} color={greenThemeColor}/>
-                  <Text fontSize={getFontSizeValue()} fontWeight="medium" color={textColor}>
-                    00:30:12
-                  </Text>
-                </HStack>
-                {/* Add score here if you want to match reading/listening exactly */}
+          {/* Center Section - Time (and Score if needed) */}
+          <Box py={3}>
+            <HStack gap={2} justify="center" bg={questionBackgroundColor} px={3} py={1} borderRadius="full">
+              <HStack>
+                <Icon as={MdTimer} color={greenThemeColor} />
+                <Text fontSize={getFontSizeValue()} fontWeight="medium" color={textColor}>
+                  00:30:12
+                </Text>
               </HStack>
-            </Box>
-
-            {/* Right Section - Settings */}
-            <HStack justify="flex-end">
-              <SettingsMenu fontSize={fontSize} onFontSizeChange={setFontSize} />
+              {/* Add score here if you want to match reading/listening exactly */}
             </HStack>
           </Box>
+
+          {/* Right Section - Settings */}
+          <HStack justify="flex-end">
+            <SettingsMenu fontSize={fontSize} onFontSizeChange={setFontSize} />
+          </HStack>
         </Box>
+      </Box>
 
       {/* Main Content */}
-      <Flex h="calc(100vh - 60px)" mx="auto">
+      <Flex h="calc(100vh - 60px)" mx="auto" minWidth="1000px" overflow="auto">
         {/* Left Panel - Essay Content */}
-        <Box width={`${leftPanelWidth}%`} borderRight="1px" borderColor={borderColor} overflow="auto" p={6} bg={contentBackgroundColor}>
+        <Box
+          width={`${leftPanelWidth}%`}
+          borderRight="1px"
+          borderColor={borderColor}
+          overflow="auto"
+          p={6}
+          bg={contentBackgroundColor}
+          minWidth={"400px"}
+        >
           <VStack align="start" gap={6}>
             {/* Word Count */}
             <VStack alignItems={"left"}>
-              <Text fontSize="md" color={mutedColor}  px={4} textAlign={"left"}>
+              <Text fontSize="md" color={mutedColor} px={4} textAlign={"left"}>
                 Word count: 384
               </Text>
               {/* Essay Question */}
@@ -477,17 +482,17 @@ In conclusion, the transition from school to university or college can bring sev
 
         {/* Resizer */}
         <Box
-          width="4px"
+          width="6px"
           bg={borderColor}
           cursor="col-resize"
-          _hover={{ bg: "blue.300" }}
+          _hover={{ bg: resizerColor }}
           onMouseDown={(e) => {
             const startX = e.clientX
             const startWidth = leftPanelWidth
 
             const handleMouseMove = (e: MouseEvent) => {
               const diff = e.clientX - startX
-              const newWidth = Math.max(20, Math.min(80, startWidth + (diff / window.innerWidth) * 100))
+              const newWidth = Math.max(30, Math.min(70, startWidth + (diff / window.innerWidth) * 100))
               setLeftPanelWidth(newWidth)
             }
 
@@ -502,12 +507,12 @@ In conclusion, the transition from school to university or college can bring sev
         />
 
         {/* Right Panel - Scoring */}
-        <Box width={`${100 - leftPanelWidth}%`} minWidth={`30%`} overflow="auto" pt={6} bg={contentBackgroundColor}>
+        <Box width={`${100 - leftPanelWidth}%`} minWidth={`418px`} overflow="auto" pt={6} bg={contentBackgroundColor}>
           <VStack align="start" gap={0}>
             {/* Overall Score */}
             <Box w="full" textAlign="center">
               <HStack justify="flex-start" mb={4} px={6}>
-                <img src={"/favicon.png"} width="50px"/>
+                <img src={"/favicon.png"} width="50px" />
                 <Text fontSize="lg" fontWeight="bold" color={textColor}>
                   LUMI Evaluation Score
                 </Text>
@@ -529,7 +534,7 @@ In conclusion, the transition from school to university or college can bring sev
                     <Text fontSize={getFontSizeValue()} opacity={0.9} px={9}>
                       Est. Band Score
                     </Text>
-                    <Text fontSize="5xl" fontWeight="bold" my="1"> 
+                    <Text fontSize="5xl" fontWeight="bold" my="1">
                       7.0
                     </Text>
                     <Text fontSize={getFontSizeValue()} opacity={0.9}>
@@ -540,8 +545,17 @@ In conclusion, the transition from school to university or college can bring sev
 
                 <SimpleGrid columns={2} gap={4} flex={2} w="full" minW={0}>
                   {scoringCriteria.map((criteria) => (
-                    <VStack justifyContent={"space-between"} key={criteria.name} bg="gray.100" p={3} borderRadius="lg" textAlign="center" minW={0} w="full">
-                      <Text fontSize={getFontSizeErrorValue()}  color="gray.600" mb={1}>
+                    <VStack
+                      justifyContent={"space-between"}
+                      key={criteria.name}
+                      bg="gray.100"
+                      p={3}
+                      borderRadius="lg"
+                      textAlign="center"
+                      minW={0}
+                      w="full"
+                    >
+                      <Text fontSize={getFontSizeErrorValue()} color="gray.600" mb={1}>
                         {criteria.name}
                       </Text>
                       <Text fontSize={getFontSizeTitleValue()} fontWeight="bold" color="black">
@@ -575,7 +589,14 @@ In conclusion, the transition from school to university or college can bring sev
                 <VStack gap={4} w="full" mb={6}>
                   {scoringCriteria.map((criteria, idx) => (
                     <>
-                      <Box key={criteria.name} w="full" p={4} border="2px solid" borderColor="green.600" borderRadius="xl">
+                      <Box
+                        key={criteria.name}
+                        w="full"
+                        p={4}
+                        border="2px solid"
+                        borderColor="green.600"
+                        borderRadius="xl"
+                      >
                         <Text fontSize="lg" fontWeight="bold" color={textColor} mb={2}>
                           {criteria.name}: {criteria.score}
                         </Text>
@@ -587,7 +608,14 @@ In conclusion, the transition from school to university or college can bring sev
                           <SimpleGrid columns={1} gap={0}>
                             {criteria.subCriteria.map((sub) => (
                               <HStack key={sub.name} pb={1} borderRadius="md">
-                                <Box border="0.5px solid" px={2} py={1} borderColor="green.600" bgColor="green.50" borderRadius={"lg"}>
+                                <Box
+                                  border="0.5px solid"
+                                  px={2}
+                                  py={1}
+                                  borderColor="green.600"
+                                  bgColor="green.50"
+                                  borderRadius={"lg"}
+                                >
                                   <Text fontSize="xs" fontWeight={"bold"} color="black">
                                     {sub.score}
                                   </Text>
@@ -622,7 +650,7 @@ In conclusion, the transition from school to university or college can bring sev
                 ]}
               />
             </Box>
-            
+
             {/* Tab Content */}
             {activeRightTab === "grammar" && (
               <Box w="full" px={6} pt={4} pb={6}>
@@ -630,21 +658,37 @@ In conclusion, the transition from school to university or college can bring sev
                   <Text fontSize={getFontSizeTitleValue()} fontWeight="bold" color={textColor}>
                     Grammar & Vocabulary Correction
                   </Text>
-                  <Badge fontSize={getFontSizeErrorValue()} colorPalette="yellow" variant="solid" borderRadius="full" px={3} py={1}>
+                  <Badge
+                    fontSize={getFontSizeErrorValue()}
+                    colorPalette="yellow"
+                    variant="solid"
+                    borderRadius="full"
+                    px={3}
+                    py={1}
+                  >
                     Number of errors: 15
                   </Badge>
                 </HStack>
 
                 <VStack gap={4} w="full">
                   {grammarErrors.map((error) => (
-                      <Box key={error.id} w="full" p={4} bg={cardBgColor} borderRadius="lg" shadow={"sm"} cursor="pointer" onClick={() => scrollToError(`orig-error-${error.id}`)}> 
-                        <Text fontSize="md" fontWeight="bold" color={textColor} mb={3}>
-                          {error.type === "Vocabulary Error" ? "Vocabulary" : "Grammar"}: {error.type}
-                        </Text>
-                        <Text fontSize={getFontSizeErrorValue()} color={textColor} lineHeight="1.6">
-                          {error.explanation}
-                        </Text>
-                      </Box>
+                    <Box
+                      key={error.id}
+                      w="full"
+                      p={4}
+                      bg={cardBgColor}
+                      borderRadius="lg"
+                      shadow={"sm"}
+                      cursor="pointer"
+                      onClick={() => scrollToError(`orig-error-${error.id}`)}
+                    >
+                      <Text fontSize="md" fontWeight="bold" color={textColor} mb={3}>
+                        {error.type === "Vocabulary Error" ? "Vocabulary" : "Grammar"}: {error.type}
+                      </Text>
+                      <Text fontSize={getFontSizeErrorValue()} color={textColor} lineHeight="1.6">
+                        {error.explanation}
+                      </Text>
+                    </Box>
                   ))}
                 </VStack>
               </Box>
@@ -656,14 +700,30 @@ In conclusion, the transition from school to university or college can bring sev
                   <Text fontSize={getFontSizeTitleValue()} fontWeight="bold" color={textColor}>
                     Coherence & Cohesion Correction
                   </Text>
-                  <Badge fontSize={getFontSizeErrorValue()} colorPalette="yellow" variant="solid" borderRadius="full" px={3} py={1}>
+                  <Badge
+                    fontSize={getFontSizeErrorValue()}
+                    colorPalette="yellow"
+                    variant="solid"
+                    borderRadius="full"
+                    px={3}
+                    py={1}
+                  >
                     Number of errors: 3
                   </Badge>
                 </HStack>
 
                 <VStack gap={6} w="full">
                   {coherenceErrors.map((error) => (
-                    <Box key={error.id} w="full" p={4} bg={cardBgColor} borderRadius="lg" shadow={"md"} cursor="pointer" onClick={() => scrollToError(`corr-error-${error.id}`)}>
+                    <Box
+                      key={error.id}
+                      w="full"
+                      p={4}
+                      bg={cardBgColor}
+                      borderRadius="lg"
+                      shadow={"md"}
+                      cursor="pointer"
+                      onClick={() => scrollToError(`corr-error-${error.id}`)}
+                    >
                       <Text fontSize={getFontSizeErrorValue()} color={textColor} lineHeight="1.8" mb={4}>
                         {error.description}
                       </Text>

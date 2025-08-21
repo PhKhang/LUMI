@@ -41,7 +41,7 @@ export default function ListeningTestResult() {
   const activePartBgColor = useColorModeValue("green.50", "green.900")
   const inactivePartBgColor = useColorModeValue("gray.50", "gray.700")
   const mutedColor = useColorModeValue("gray.500", "gray.400")
-
+  const resizerColor = useColorModeValue("orange.500", "orange.400")
   // Updated sample data with correct answers for questions 7-10
   const part1Questions: ListeningQuestion[] = [
     {
@@ -411,9 +411,9 @@ export default function ListeningTestResult() {
   const currentPartTotalQuestions = allQuestions[activePart].length
 
   return (
-    <Box minH="100vh" bg={bgColor} overflow="hidden">
+    <Box minH="100vh" bg={bgColor}>
       {/* Header */}
-      <Box bg={bgColor} borderColor={borderColor} px={4}>
+      <Box bg={bgColor} borderColor={borderColor} px={4}  minWidth={"1000px"}>
         <Box display="grid" gridTemplateColumns="1fr auto 1fr" alignItems="center" w="full" mx="auto">
           {/* Left Section - Close Button + Tabs */}
           <HStack gap={4} height="60px">
@@ -467,7 +467,7 @@ export default function ListeningTestResult() {
       </Box>
 
       {/* Main Content */}
-      <Flex h="calc(100vh - 125px)" mx="auto">
+      <Flex h="calc(100vh - 125px)" mx="auto" minWidth={"1000px"}>
         {/* Left Panel - Transcript Content */}
         <VStack
           width={`${leftPanelWidth}%`}
@@ -475,6 +475,7 @@ export default function ListeningTestResult() {
           borderColor={borderColor}
           bg={contentBackgroundColor}
           align="start"
+          minWidth={"570px"}
         >
           <Box flex={1} overflowY="auto" p={6} w="full">
             <VStack align="start" gap={4} fontSize={getFontSizeValue()} color={textColor}>
@@ -601,16 +602,16 @@ export default function ListeningTestResult() {
 
         {/* Resizer */}
         <Box
-          width="4px"
+          width="6px"
           bg={borderColor}
           cursor="col-resize"
-          _hover={{ bg: "blue.300" }}
+          _hover={{ bg: resizerColor }}
           onMouseDown={(e) => {
             const startX = e.clientX
             const startWidth = leftPanelWidth
             const handleMouseMove = (e: MouseEvent) => {
               const diff = e.clientX - startX
-              const newWidth = Math.max(20, Math.min(80, startWidth + (diff / window.innerWidth) * 100))
+              const newWidth = Math.max(30, Math.min(70, startWidth + (diff / window.innerWidth) * 100))
               setLeftPanelWidth(newWidth)
             }
             const handleMouseUp = () => {
@@ -677,7 +678,7 @@ export default function ListeningTestResult() {
       </Flex>
 
       {/* Question Navigation */}
-      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} height="65px">
+      <Box bg={bgColor} borderTop="1px" borderColor={borderColor} height="65px"  minWidth={"1000px"}>
         <Flex justify="center" mx="auto" align="center" h="100%" gap={4}>
           {partNavigationData.map((part) => (
             <Box
