@@ -138,7 +138,7 @@ export default function MultipleChoiceQuestionComponent({
       </Box>
 
       {/* Options */}
-      <VStack align="start" gap={3}>
+      <VStack align="start" gap={3} px={4}>
         {options.map((option) => {
           const isSelected = selectedAnswers.includes(option.letter)
 

@@ -221,9 +221,10 @@ export default function MultipleChoiceQuestionComponent({
       </Box>
 
       {/* Answer Sections */}
-      {questions.map((question) => (
+      <VStack gap={5}>
+        {questions.map((question) => (
         <Box key={question.id} w="full">
-          <Flex justify="space-between" align="center" w="full" mb={5}>
+          <Flex justify="space-between" align="center" w="full">
             <Box bg="gray.200" px={4} py={2} borderRadius="md">
               <Text fontSize={getAnswerTextFontSize()} color="gray.700">
                 {question.id}. Answer:{" "}
@@ -275,6 +276,8 @@ export default function MultipleChoiceQuestionComponent({
           </div>
         </Box>
       ))}
+      </VStack>
+      
     </VStack>
   )
 }

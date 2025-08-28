@@ -22,9 +22,9 @@ export default function GapFillBlank({
       case "small":
         return { w: "20px", h: "20px", fontSize: "xs" }
       case "large":
-        return { w: "28px", h: "28px", fontSize: "sm" }
+        return { w: "28px", h: "28px", fontSize: "md" }
       default:
-        return { w: "24px", h: "24px", fontSize: "xs" }
+        return { w: "24px", h: "24px", fontSize: "sm" }
     }
   }
 
@@ -52,6 +52,7 @@ export default function GapFillBlank({
         fontWeight="bold"
         color="black"
         mr={2}
+        flexShrink={0}
         {...getNumberBoxSize()}
       >
         {questionNumber}

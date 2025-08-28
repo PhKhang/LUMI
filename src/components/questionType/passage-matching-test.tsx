@@ -1,5 +1,5 @@
 "use client"
-import { Box, Flex, HStack, VStack, Text, Icon } from "@chakra-ui/react"
+import { Box, Flex, HStack, VStack, Text, Icon, ChakraProvider } from "@chakra-ui/react"
 import { useColorModeValue } from "@/components/ui/color-mode"
 import { FiChevronDown } from "react-icons/fi"
 import {   
@@ -8,6 +8,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/menu";
+import { system } from "@/styles/theme"
 
 interface PassageMatchingQuestion {
   id: number
@@ -44,6 +45,28 @@ export default function PassageMatchingQuestionComponent({
   const borderColor = useColorModeValue("gray.200", "gray.600")
 
   const getFontSizeValue = () => {
+    switch (fontSize) {
+      case "small":
+        return "sm"
+      case "large":
+        return "lg"
+      default:
+        return "md"
+    }
+  }
+
+  const getAnswerTextFontSize = () => {
+    switch (fontSize) {
+      case "small":
+        return "xs"
+      case "large":
+        return "md"
+      default:
+        return "sm"
+    }
+  }
+
+  const getChooseAnswerTextFontSize = () => {
     switch (fontSize) {
       case "small":
         return "sm"
@@ -94,7 +117,7 @@ export default function PassageMatchingQuestionComponent({
   }
 
   return (
-    <VStack align="start" gap={0} w="full">
+    <VStack align="start" w="full" gap={0}>
       {/* Header Section */}
       <Box mb={4}>
         <Text fontSize={getQuestionHeaderFontSize()} fontWeight="bold" color={textColor}>
@@ -113,68 +136,93 @@ export default function PassageMatchingQuestionComponent({
         )}
       </Box>
 
+      <VStack gap={6} w="full">
       {/* Questions */}
-      {questions.map((question, index) => (
-        <Box key={question.id} id={`question-${question.id}`} w="full" mb={6}>
-          {/* Question Header */}
-          <HStack align="center" gap={4} mb={4}>
-            {/* Question Number */}
-            <Box
-              bg={questionBackgroundColor}
-              borderRadius="lg"
-              p={3}
-              {...getQuestionBoxSize()}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              shadow="md"
-            >
-              <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
-                {question.id}
-              </Text>
-            </Box>
-
-            {/* Dropdown */}
-            <Menu>
-              <MenuButton
-                as={Box}
-                bg="white"
-                color="black"
-                px={4}
-                py={2}
-                borderRadius="full"
-                height="35px"
-                width="125px"
-                textAlign="center"
+        {questions.map((question, index) => (
+          <Box key={question.id} id={`question-${question.id}`} w="full">
+            {/* Question Header */}
+            <HStack align="center" gap={4}>
+              {/* Question Number */}
+              <Box
+                bg={questionBackgroundColor}
+                borderRadius="lg"
+                p={3}
+                {...getQuestionBoxSize()}
                 display="flex"
-                justifyContent="space-between"
                 alignItems="center"
-                border="1px solid"
-                borderColor="gray.500"
+                justifyContent="center"
+                shadow="md"
               >
-                <HStack>
-                  <Text fontWeight="bold" fontSize={getFontSizeValue()}>
-                    {answers[index] || "—"}
-                  </Text>
-                  <Icon as={FiChevronDown} height="24px" color="black" />
-                </HStack>
-              </MenuButton>
-              <MenuList>
-                {question.options.map((opt) => (
-                  <MenuItem key={opt} onClick={() => handleSelect(index, opt)}>
-                    {opt}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </Menu>
+                <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
+                  {question.id}
+                </Text>
+              </Box>
 
-            {/* Question Text */}
-            <Text fontSize={getFontSizeValue()} color={textColor} flex={1}>
-              {question.text}
-            </Text>
-          </HStack>
-        </Box>
-      ))}
+              {/* Dropdown */}
+              <ChakraProvider value={system}>
+                <Menu>
+                  <MenuButton
+                    as={Box}
+                    bg="white"
+                    color="black"
+                    px={4}
+                    py={2}
+                    borderRadius="full"
+                    height="35px"
+                    width="125px"
+                    textAlign="center"
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    border="1px solid"
+                    borderColor="gray.500"
+                  >
+                    <HStack justify={"space-between"}>
+                      <Text fontWeight="bold" fontSize={getAnswerTextFontSize()}>
+                        {answers[index] || "—"}
+                      </Text>
+                      <Icon as={FiChevronDown} height="24px" color="black" />
+                    </HStack>
+                  </MenuButton>
+                  <MenuList 
+                    bg="white"
+                    w="full"
+                    py="7px"
+                    borderRadius="10px"
+                    border="1px solid"
+                    borderColor="#717171"
+                  >
+                    {question.options.map((opt) => (
+                      <MenuItem
+                        key={opt}
+                        onClick={() => handleSelect(index, opt)}
+                        width="125px"
+                        px="12px"
+                        transition="background 0.2s ease"
+                        _hover={{
+                          bg: "#e4e4e7",
+                        }}
+                        cursor="pointer"
+                      >
+                        <Text fontSize={getChooseAnswerTextFontSize()} color="black" py="2px">
+                          {opt}
+                        </Text>
+                      </MenuItem>
+                    ))}
+                  </MenuList>
+                </Menu>
+              </ChakraProvider>
+              
+
+              {/* Question Text */}
+              <Text fontSize={getFontSizeValue()} color={textColor} flex={1}>
+                {question.text}
+              </Text>
+            </HStack>
+          </Box>
+        ))}
+      </VStack>
+      
     </VStack>
   )
 }

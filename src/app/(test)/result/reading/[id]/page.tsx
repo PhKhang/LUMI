@@ -386,71 +386,75 @@ export default function TestResult() {
 
         {/* Right Panel - Questions */}
         <Box width={`${100 - leftPanelWidth}%`} overflow="auto" p={6} bg={contentBackgroundColor} minWidth={"410px"}>
-          <Box id="questions-1-5" mb={5}>
-            <PassageMatchingQuestionComponent
-              title="Questions 1-5"
-              instruction="Reading Passage 2 has six sections, A-F. Which section contains the following information?"
-              note="You may use any letter more than once."
-              questions={passageMatchingQuestions}
-              fontSize={fontSize}
-              onLocate={activeTab === "note" ? handleLocate : () => {}}
-              onExplain={toggleExplanation}
-              expandedExplanations={expandedExplanations}
-              activeTab={activeTab}
-            />
-          </Box>
+          <VStack gap={11} w="full" align="stretch">
+          {/* Passage Matching Questions 1-5 */}
+            <Box id="questions-1-5">
+              <PassageMatchingQuestionComponent
+                title="Questions 1-5"
+                instruction="Reading Passage 2 has six sections, A-F. Which section contains the following information?"
+                note="You may use any letter more than once."
+                questions={passageMatchingQuestions}
+                fontSize={fontSize}
+                onLocate={activeTab === "note" ? handleLocate : () => {}}
+                onExplain={toggleExplanation}
+                expandedExplanations={expandedExplanations}
+                activeTab={activeTab}
+              />
+            </Box>
 
-          {/* Multiple Choice Questions 6-7 */}
-          <Box id="questions-6-7" mb={5}>
-            <MultipleChoiceQuestionComponent
-              title="Questions 6-7"
-              instruction="Choose TWO letters, A-E."
-              questionRange="6 - 7"
-              questionText="Which TWO of the following are true about the characteristics of horseshoe crabs?"
-              options={multipleChoiceOptions}
-              questions={multipleChoiceQuestions}
-              fontSize={fontSize}
-              onLocate={activeTab === "note" ? handleLocate : () => {}}
-              onExplain={toggleExplanation}
-              expandedExplanations={expandedExplanations}
-              activeTab={activeTab}
-            />
-          </Box>
+            {/* Multiple Choice Questions 6-7 */}
+            <Box id="questions-6-7">
+              <MultipleChoiceQuestionComponent
+                title="Questions 6-7"
+                instruction="Choose TWO letters, A-E."
+                questionRange="6 - 7"
+                questionText="Which TWO of the following are true about the characteristics of horseshoe crabs?"
+                options={multipleChoiceOptions}
+                questions={multipleChoiceQuestions}
+                fontSize={fontSize}
+                onLocate={activeTab === "note" ? handleLocate : () => {}}
+                onExplain={toggleExplanation}
+                expandedExplanations={expandedExplanations}
+                activeTab={activeTab}
+              />
+            </Box>
 
-          {/* Multiple Choice Questions 8-9 */}
-          <Box id="questions-8-9" mb={5}>
-            <MultipleChoiceQuestionComponent
-              title="Questions 8-9"
-              instruction="Choose TWO letters, A-E."
-              questionRange="8 - 9"
-              questionText="In which TWO ways is horseshoe crab blood different from that of most other animals?"
-              options={multipleChoiceOptions89}
-              questions={multipleChoiceQuestions89}
-              fontSize={fontSize}
-              onLocate={activeTab === "note" ? handleLocate : () => {}}
-              onExplain={toggleExplanation}
-              expandedExplanations={expandedExplanations}
-              activeTab={activeTab}
-            />
-          </Box>
+            {/* Multiple Choice Questions 8-9 */}
+            <Box id="questions-8-9">
+              <MultipleChoiceQuestionComponent
+                title="Questions 8-9"
+                instruction="Choose TWO letters, A-E."
+                questionRange="8 - 9"
+                questionText="In which TWO ways is horseshoe crab blood different from that of most other animals?"
+                options={multipleChoiceOptions89}
+                questions={multipleChoiceQuestions89}
+                fontSize={fontSize}
+                onLocate={activeTab === "note" ? handleLocate : () => {}}
+                onExplain={toggleExplanation}
+                expandedExplanations={expandedExplanations}
+                activeTab={activeTab}
+              />
+            </Box>
 
-          {/* Gap Fill Questions */}
-          <Box id="questions-10-13">
-            <GapFillQuestionComponent
-              title="Questions 10-13"
-              instruction="Complete the summary below."
-              questionRange="10 - 13"
-              additionalInstruction="Choose ONE WORD ONLY from the passage for each answer."
-              summaryTitle="The horseshoe crab in Florida"
-              summaryContent={gapFillSummaryContent}
-              questions={gapFillQuestions}
-              fontSize={fontSize}
-              onLocate={activeTab === "note" ? handleLocate : () => {}}
-              onExplain={toggleExplanation}
-              expandedExplanations={expandedExplanations}
-              activeTab={activeTab}
-            />
-          </Box>
+            {/* Gap Fill Questions */}
+            <Box id="questions-10-13">
+              <GapFillQuestionComponent
+                title="Questions 10-13"
+                instruction="Complete the summary below."
+                questionRange="10 - 13"
+                additionalInstruction="Choose ONE WORD ONLY from the passage for each answer."
+                summaryTitle="The horseshoe crab in Florida"
+                summaryContent={gapFillSummaryContent}
+                questions={gapFillQuestions}
+                fontSize={fontSize}
+                onLocate={activeTab === "note" ? handleLocate : () => {}}
+                onExplain={toggleExplanation}
+                expandedExplanations={expandedExplanations}
+                activeTab={activeTab}
+              />
+            </Box>
+          </VStack>
+          
         </Box>
       </Flex>
 

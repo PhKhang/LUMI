@@ -149,8 +149,13 @@ export const drawer = createOverlay<DialogProps>((props) => {
                                   </Icon>
                               </HStack>
                             </MenuButton>
-                            <MenuList bg={useColorModeValue("#FFF", "#27272A")} borderColor={useColorModeValue("#d4d4d8", "#52525b")} borderWidth={"1px"} borderRadius="5px" px="12px" py="8px" color="black" zIndex={1}>
-                              <MenuItem onClick={() => setLanguage('vietnamese')}>
+                            <MenuList bg={useColorModeValue("#FFF", "#27272A")} borderColor={useColorModeValue("#d4d4d8", "#52525b")} borderWidth={"1px"} borderRadius="5px" py="8px" color="black" zIndex={1}>
+                              <MenuItem onClick={() => setLanguage('vietnamese')}
+                              transition="background 0.2s ease"
+                              _hover={{
+                                bg: "#e4e4e7",
+                              }}
+                              px="12px">
                                 <HStack>
                                   <Box boxSize="24px" borderRadius="md" overflow="hidden">
                                     <img src="/vietnam-flag.svg" alt="Vietnam" style={{ width: 24, objectFit: 'cover'}} />
@@ -158,7 +163,12 @@ export const drawer = createOverlay<DialogProps>((props) => {
                                   <Text fontSize={"md"} color={useColorModeValue("gray.800", "gray.200")}>Tiếng Việt</Text>
                                 </HStack>
                               </MenuItem>
-                              <MenuItem onClick={() => setLanguage('english')}>
+                              <MenuItem onClick={() => setLanguage('english')}
+                              transition="background 0.2s ease"
+                              _hover={{
+                                bg: "#e4e4e7",
+                              }}
+                              px="12px">
                                 <HStack>
                                   <Box boxSize="24px" borderRadius="md" overflow="hidden">
                                     <img src="/english-us-flag.svg" alt="US" style={{ width: 24, objectFit: 'cover'}} />

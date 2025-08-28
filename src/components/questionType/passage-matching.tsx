@@ -137,107 +137,110 @@ export default function PassageMatchingQuestionComponent({
       </Box>
 
       {/* Questions */}
-      {questions.map((question) => (
-        <Box key={question.id} id={`question-${question.id}`} w="full" mb={6}>
-          {/* Question Header */}
-          <HStack align="center" gap={4} mb={4}>
-            {/* Question Number */}
-            <Box
-              bg={questionBackgroundColor}
-              borderRadius="lg"
-              p={3}
-              {...getQuestionBoxSize()}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              shadow="md"
-            >
-              <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
-                {question.id}
-              </Text>
-            </Box>
-
-            {/* User Answer Badge */}
-            <Box
-              bg={getUserAnswerBgColor(question)}
-              color="white"
-              px={4}
-              py={2}
-              borderRadius="full"
-              height="35px"
-              width="125px"
-              textAlign="center"
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              border="1px solid"
-              borderColor="gray.500"
-            >
-              <Text fontWeight="bold" fontSize={getAnswerTextFontSize()}>
-                {question.userAnswer || "—"}
-              </Text>
-              <Icon as={FiChevronDown} height="24px" color="white" />
-            </Box>
-
-            {/* Question Text */}
-            <Text fontSize={getFontSizeValue()} color={textColor} flex={1}>
-              {question.text}
-            </Text>
-          </HStack>
-
-          {/* Answer Section */}
-          <Flex justify="space-between" align="center">
-            <Box bg="gray.200" px={4} py={2} borderRadius="md">
-              <Text fontSize={getAnswerTextFontSize()} color="gray.700">
-                {question.id}. Answer:{" "}
-                <Text as="span" fontWeight="bold">
-                  {question.correctAnswer}
-                </Text>
-              </Text>
-            </Box>
-
-            <HStack gap={2}>
-              <Button
-                size="sm"
-                colorPalette="green"
-                variant="outline"
-                onClick={() => onLocate(question.id)}
-                borderRadius="full"
-                style={activeTab === "lookup" ? { display: "none" } : {}}
+      <VStack gap={6}>
+        {questions.map((question) => (
+          <Box key={question.id} id={`question-${question.id}`} w="full">
+            {/* Question Header */}
+            <HStack align="center" gap={4} mb={4}>
+              {/* Question Number */}
+              <Box
+                bg={questionBackgroundColor}
+                borderRadius="lg"
+                p={3}
+                {...getQuestionBoxSize()}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                shadow="md"
               >
-                <Icon as={PiMapPin} />
-                <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
-              </Button>
-              <Button
-                size="sm"
-                variant="solid"
-                colorPalette="green"
-                onClick={() => onExplain(question.id)}
-                borderRadius="full"
-              >
-                <Icon as={TbNotes} /> Explain
-              </Button>
-            </HStack>
-          </Flex>
-
-          {/* Explanation for this specific question */}
-          <div
-            className={`transition-all duration-300 ease-in-out overflow-hidden ${
-              question.explanation && expandedExplanations.has(question.id)
-                ? 'max-h-96 opacity-100'
-                : 'max-h-0 opacity-0'
-            }`}
-          >
-            {question.explanation && (
-              <Box mt={5} p={4} bg={explanationBgColor} borderRadius="md" w="full">
-                <Text fontSize="sm" color={textColor} lineHeight="1.6">
-                  {question.explanation}
+                <Text fontSize={getQuestionNumberFontSize()} fontWeight="bold" color="yellow.400">
+                  {question.id}
                 </Text>
               </Box>
-            )}
-          </div>
-        </Box>
-      ))}
+
+              {/* User Answer Badge */}
+              <Box
+                bg={getUserAnswerBgColor(question)}
+                color="white"
+                px={4}
+                py={2}
+                borderRadius="full"
+                height="35px"
+                width="125px"
+                textAlign="center"
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                border="1px solid"
+                borderColor="gray.500"
+              >
+                <Text fontWeight="bold" fontSize={getAnswerTextFontSize()}>
+                  {question.userAnswer || "—"}
+                </Text>
+                <Icon as={FiChevronDown} height="24px" color="white" />
+              </Box>
+
+              {/* Question Text */}
+              <Text fontSize={getFontSizeValue()} color={textColor} flex={1}>
+                {question.text}
+              </Text>
+            </HStack>
+
+            {/* Answer Section */}
+            <Flex justify="space-between" align="center">
+              <Box bg="gray.200" px={4} py={2} borderRadius="md">
+                <Text fontSize={getAnswerTextFontSize()} color="gray.700">
+                  {question.id}. Answer:{" "}
+                  <Text as="span" fontWeight="bold">
+                    {question.correctAnswer}
+                  </Text>
+                </Text>
+              </Box>
+
+              <HStack gap={2}>
+                <Button
+                  size="sm"
+                  colorPalette="green"
+                  variant="outline"
+                  onClick={() => onLocate(question.id)}
+                  borderRadius="full"
+                  style={activeTab === "lookup" ? { display: "none" } : {}}
+                >
+                  <Icon as={PiMapPin} />
+                  <Text fontSize={getAnswerTextFontSize()}>Locate</Text>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="solid"
+                  colorPalette="green"
+                  onClick={() => onExplain(question.id)}
+                  borderRadius="full"
+                >
+                  <Icon as={TbNotes} /> Explain
+                </Button>
+              </HStack>
+            </Flex>
+
+            {/* Explanation for this specific question */}
+            <div
+              className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                question.explanation && expandedExplanations.has(question.id)
+                  ? 'max-h-96 opacity-100'
+                  : 'max-h-0 opacity-0'
+              }`}
+            >
+              {question.explanation && (
+                <Box mt={5} p={4} bg={explanationBgColor} borderRadius="md" w="full">
+                  <Text fontSize="sm" color={textColor} lineHeight="1.6">
+                    {question.explanation}
+                  </Text>
+                </Box>
+              )}
+            </div>
+          </Box>
+        ))}
+      </VStack>
+      
     </VStack>
   )
 }
