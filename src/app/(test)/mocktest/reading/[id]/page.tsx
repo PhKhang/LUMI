@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect, forwardRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { HiOutlineArrowRight } from "react-icons/hi";
 import {
   Box,
   Flex,
@@ -43,6 +44,7 @@ import {
   sectionContent,
 } from "./data";
 import { drawer } from "@/components/ui/dictionary-bottom";
+import { keyframes } from '@emotion/react';
 
 interface Question {
   id: number;
@@ -106,7 +108,7 @@ export default function TestTaking() {
     "medium"
   );
   const [leftPanelWidth, setLeftPanelWidth] = useState(50);
-  const [timer, setTimer] = useState(0);
+  const [minutesRemaining, setMinutesRemaining] = useState(20);
   const [passageAnswers, setPassageAnswers] = useState<(string | null)[]>(
     passageMatchingQuestions.map(() => null)
   );
@@ -115,11 +117,12 @@ export default function TestTaking() {
   const [gapAnswers, setGapAnswers] = useState<string[]>(
     gapFillQuestions.map(() => "")
   );
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // Intro modal and exit modal state
   const [isIntroOpen, setIsIntroOpen] = useState(true);
   const [isExitOpen, setIsExitOpen] = useState(false);
   const [started, setStarted] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(true);
 
   // Request fullscreen when starting test
   const enterFullScreen = async () => {
@@ -186,7 +189,7 @@ export default function TestTaking() {
 
       const text = (btn.textContent || '').trim();
       // If it's the Exit button inside a dialog, handle here (prevent component's handler)
-      if (text === 'Exit' && btn.closest('[role="dialog"]')) {
+      if (text === 'Exit' && btn.closest('[role="dialog"]') && !isSubmitting) {
         e.stopPropagation();
         e.preventDefault();
         // exit fullscreen first, then navigate to home
@@ -203,7 +206,7 @@ export default function TestTaking() {
 
     document.addEventListener('click', onCaptureClick, true);
     return () => document.removeEventListener('click', onCaptureClick, true);
-  }, [router]);
+  }, [router, isSubmitting]);
 
   const bgColor = useColorModeValue("#F6F0E7", "gray.800");
   const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900");
@@ -223,20 +226,35 @@ export default function TestTaking() {
     { value: "lookup", label: "Dictionary Mode", icon: FaBook },
   ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+    setShowExitModal(false); // Ensure the exit modal is hidden
+    exitFullScreen(); // Exit fullscreen immediately
+    // Simulate marking process for 2.5 seconds
+    setTimeout(() => {
+      router.push('/result/reading/1');
+    }, 4000);
   };
+
+  useEffect(() => {
+    if (started) {
+      const interval = setInterval(() => {
+        setMinutesRemaining((prev) => {
+          if (prev <= 0) {
+            clearInterval(interval);
+            exitFullScreen(); // Exit fullscreen immediately
+            setIsIntroOpen(false); // Ensure no intro modal is shown
+            handleSubmit();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000); // decrement 1 minute every 60 seconds
+      return () => clearInterval(interval);
+    }
+  }, [started]);
+
+  const timerColor = minutesRemaining <= 5 ? "red.500" : textColor;
 
   const questionStatuses = useMemo(() => {
     const statuses: boolean[] = []; // true if answered
@@ -361,39 +379,41 @@ export default function TestTaking() {
       </Modal>
 
       {/* Exit Modal - match ExitTestButton UI/props exactly */}
-      <Modal isOpen={isExitOpen} onClose={() => setIsExitOpen(false)} isCentered size="sm">
-        <ModalOverlay 
-          bg="rgba(0, 0, 0, 0.5)"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          zIndex={99}
-        />
-        <ModalContent
-          height="100vh"
-          width="100vw"
-          containerProps={{
-            zIndex: '100',
-          }}
-        >
-          <VStack mx="auto" my="auto" borderRadius="lg" bg={modalBg} py={4} px={6}>
-            <ModalHeader textAlign="center" bg={modalBg} w="100%">
-              <Text color={modalTextColor} fontWeight="bold" fontSize="2xl">Exit Test</Text>
-            </ModalHeader>
-            <ModalBody bg={modalBg} mb={2}>
-              <Center>
-                <Icon as={PiWarningFill} boxSize={10} color={iconColor} mb={2}/>
-              </Center>
-              <Text textAlign="center" fontWeight="semibold" fontSize="lg" color={modalTextColor}>Are you sure you want to exit this test?</Text>
-              <Text textAlign="center" color={subTextColor} fontSize="sm">If you exit now, your progress will not be saved.</Text>
-            </ModalBody>
-            <ModalFooter display="flex" justifyContent="center" gap={10} bg={modalBg} w="100%" px={0}>
-              <Button onClick={async () => { await enterFullScreen(); setIsExitOpen(false); setStarted(true); }} variant="outline" colorPalette="gray" borderRadius="full">Continue Test</Button>
-              <Button onClick={() => window.location.href = '/report'} variant="solid" colorPalette="black" borderRadius="full">Exit</Button>
-            </ModalFooter>
-          </VStack>
-        </ModalContent>
-      </Modal>
+      {showExitModal && (
+        <Modal isOpen={isExitOpen} onClose={() => setIsExitOpen(false)} isCentered size="sm">
+          <ModalOverlay 
+            bg="rgba(0, 0, 0, 0.5)"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            zIndex={99}
+          />
+          <ModalContent
+            height="100vh"
+            width="100vw"
+            containerProps={{
+              zIndex: '100',
+            }}
+          >
+            <VStack mx="auto" my="auto" borderRadius="lg" bg={modalBg} py={4} px={6}>
+              <ModalHeader textAlign="center" bg={modalBg} w="100%">
+                <Text color={modalTextColor} fontWeight="bold" fontSize="2xl">Exit Test</Text>
+              </ModalHeader>
+              <ModalBody bg={modalBg} mb={2}>
+                <Center>
+                  <Icon as={PiWarningFill} boxSize={10} color={iconColor} mb={2}/>
+                </Center>
+                <Text textAlign="center" fontWeight="semibold" fontSize="lg" color={modalTextColor}>Are you sure you want to exit this test?</Text>
+                <Text textAlign="center" color={subTextColor} fontSize="sm">If you exit now, your progress will not be saved.</Text>
+              </ModalBody>
+              <ModalFooter display="flex" justifyContent="center" gap={10} bg={modalBg} w="100%" px={0}>
+                <Button onClick={async () => { await enterFullScreen(); setIsExitOpen(false); setStarted(true); }} variant="outline" colorPalette="gray" borderRadius="full">Continue Test</Button>
+                <Button onClick={() => window.location.href = '/report'} variant="solid" colorPalette="black" borderRadius="full">Exit</Button>
+              </ModalFooter>
+            </VStack>
+          </ModalContent>
+        </Modal>
+      )}
       
       {/* Header */}
       <Box bg={bgColor} borderColor={borderColor} px={4}>
@@ -438,9 +458,9 @@ export default function TestTaking() {
                       : "md"
                   }
                   fontWeight="medium"
-                  color={textColor}
+                  color={timerColor}
                 >
-                  {formatTime(timer)}
+                  {minutesRemaining} minute{minutesRemaining !== 1 ? "s" : ""}
                 </Text>
               </HStack>
             </HStack>
@@ -593,16 +613,77 @@ export default function TestTaking() {
         </Box>
       </Flex>
 
-      {/* Question Navigation */}
+      {/* Loading Overlay */}
+      {isSubmitting && (
+        <Box
+          position="fixed"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bg="rgba(0, 0, 0, 0.9)"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          zIndex={9999}
+        >
+          <VStack gap={6} textAlign="center" mb={6}>
+            {/* Animated Favicon */}
+            <Box animation={`${bounce} 2s ease-in-out infinite`}>
+              <Image src="/favicon.png" alt="LUMI" width="80px" />
+            </Box>
+
+            {/* Loading Message */}
+            <VStack gap={2}>
+              <Text
+                fontSize="2xl"
+                fontWeight="bold"
+                color="white"
+                textAlign="center"
+              >
+                LUMI is marking your exam
+              </Text>
+              <Text
+                fontSize="md"
+                color="gray.300"
+                textAlign="center"
+              >
+                Please wait while we process your answers...
+              </Text>
+            </VStack>
+
+            {/* Loading Dots Animation */}
+            <HStack gap={1}>
+              {[0, 1, 2].map((i) => (
+                <Box
+                  key={i}
+                  w="8px"
+                  h="8px"
+                  bg="green.400"
+                  borderRadius="full"
+                  animation={`${pulse} 1.5s ease-in-out ${i * 0.2}s infinite`}
+                />
+              ))}
+            </HStack>
+          </VStack>
+        </Box>
+      )}
+
+      {/* Submit Button */}
       <Box
         bg={bgColor}
         borderTop="1px"
         borderColor={borderColor}
         display="flex"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="space-between"
         height="65px"
+        px={10}
       >
+        <Button variant="solid" colorPalette={"green"} borderRadius={"full"} size="sm" border="1px solid" borderColor={borderColor} visibility="hidden">
+          Submit
+          <Icon as={HiOutlineArrowRight}/>
+        </Button>
         <Flex justify="center">
           <SimpleGrid
             columns={13}
@@ -623,16 +704,19 @@ export default function TestTaking() {
                   key={questionNum}
                   size="sm"
                   variant="solid"
-                  color={isAnswered ? "yellow.600" : "black"}
-                  bg={isAnswered ? "yellow.100" : "white"}
-                  _hover={{ bg: isAnswered ? "yellow.500" : "gray.100" }}
+                  color={isAnswered ? "yellow.600" : textColor}
+                  bg={isAnswered ? "yellow.100" : questionBackgroundColor}
+                  _hover={{ 
+                    bg: isAnswered ? "yellow.500" : useColorModeValue("gray.100", "gray.600"),
+                    color: isAnswered ? "yellow.700" : textColor
+                  }}
                   w="35px"
                   h="35px"
                   borderRadius="full"
                   onClick={() => scrollToQuestion(questionNum)}
                   cursor="pointer"
                   border="1px solid"
-                  borderColor={isAnswered ? "background" : borderColor}
+                  borderColor={isAnswered ? "yellow.200" : borderColor}
                 >
                   {questionNum}
                 </IconButton>
@@ -640,6 +724,12 @@ export default function TestTaking() {
             })}
           </SimpleGrid>
         </Flex>
+        <Button variant="solid" colorPalette={"green"} borderRadius={"full"} size="sm" border="1px solid" borderColor={borderColor} onClick={handleSubmit}>
+            <Text fontWeight={"medium"}>
+              Submit
+            </Text>
+            <Icon as={HiOutlineArrowRight}/>
+        </Button>
       </Box>
     </Box>
   );
@@ -758,3 +848,23 @@ const ReadingParagraph = ({
     </p>
   )
 }
+
+const pulse = keyframes`
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+`;
+
+const bounce = keyframes`
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+`;
