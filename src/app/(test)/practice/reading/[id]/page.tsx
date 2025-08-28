@@ -188,12 +188,25 @@ export default function TestTaking() {
 
   const totalQuestions = 13;
 
-  const scrollToQuestion = (questionNum: number) => {
-    const element = document.getElementById(`question-${questionNum}`);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
+  const scrollToQuestion = (questionNumber: number) => {
+    let targetId = '';
+    if (questionNumber >= 1 && questionNumber <= 5) {
+      targetId = `question-${questionNumber}`;
+    } else if (questionNumber >= 6 && questionNumber <= 7) {
+      targetId = 'questions-6-7';
+    } else if (questionNumber >= 8 && questionNumber <= 9) {
+      targetId = 'questions-8-9';
+    } else if (questionNumber >= 10 && questionNumber <= 13) {
+      targetId = 'questions-10-13';
     }
-  };
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }
 
   const handleSubmit = () => {
     setIsSubmitting(true);

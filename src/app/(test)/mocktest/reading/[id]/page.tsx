@@ -227,8 +227,13 @@ export default function TestTaking() {
   const modalTextColor = useColorModeValue('gray.800', 'gray.100')
   const subTextColor = useColorModeValue('gray.600', 'gray.400')
   const outlineBtnColor = useColorModeValue('gray', 'gray')
-  const readingTabs = [
+  // Define TabOption type to match TabSelectorProps
+  type TabOption = {
+    label: string;
+    value: string;
+  };
 
+  const readingTabs: TabOption[] = [
   ];
 
   const handleSubmit = () => {
@@ -262,37 +267,47 @@ export default function TestTaking() {
   const timerColor = minutesRemaining <= 5 ? "red.500" : textColor;
 
   const questionStatuses = useMemo(() => {
-    const statuses: boolean[] = []; // true if answered
-
+    const statuses: boolean[] = [];
     // 1-5: Passage matching
     passageAnswers.forEach((ans, idx) => {
       statuses[idx] = !!ans;
     });
-
-    // 6-7: MC 67, answered if at least one selected (since choose two)
-    statuses[5] = mcAnswers67.length > 0;
-    statuses[6] = mcAnswers67.length > 0;
-
-    // 8-9: MC 89
-    statuses[7] = mcAnswers89.length > 0;
-    statuses[8] = mcAnswers89.length > 0;
-
+    // 6-7: MC 67, giống trang practice
+    statuses[5] = mcAnswers67.length >= 1; // Q6: chọn >=1 đáp án
+    statuses[6] = mcAnswers67.length >= 2; // Q7: chọn đủ 2 đáp án
+    // 8-9: MC 89, giống trang practice
+    statuses[7] = mcAnswers89.length >= 1; // Q8: chọn >=1 đáp án
+    statuses[8] = mcAnswers89.length >= 2; // Q9: chọn đủ 2 đáp án
     // 10-13: Gap fill
     gapAnswers.forEach((ans, idx) => {
       statuses[9 + idx] = !!ans.trim();
     });
-
     return statuses;
   }, [passageAnswers, mcAnswers67, mcAnswers89, gapAnswers]);
 
   const totalQuestions = 13;
 
-  const scrollToQuestion = (questionNum: number) => {
-    const element = document.getElementById(`question-${questionNum}`);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
+  // Tách riêng từng câu 1-5: scroll đến id question-1, question-2,...
+  // 6-7: questions-6-7, 8-9: questions-8-9, 10-13: questions-10-13
+  const scrollToQuestion = (questionNumber: number) => {
+    let targetId = '';
+    if (questionNumber >= 1 && questionNumber <= 5) {
+      targetId = `question-${questionNumber}`;
+    } else if (questionNumber >= 6 && questionNumber <= 7) {
+      targetId = 'questions-6-7';
+    } else if (questionNumber >= 8 && questionNumber <= 9) {
+      targetId = 'questions-8-9';
+    } else if (questionNumber >= 10 && questionNumber <= 13) {
+      targetId = 'questions-10-13';
     }
-  };
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }
 
   const gapFillSummaryContent = (
     <Text mb={4}>
