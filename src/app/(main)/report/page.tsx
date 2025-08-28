@@ -754,7 +754,6 @@ export default function ReportPage() {
               {/* Reading Analysis */}
               <Box>
                 <Text fontSize="md" color={textColor}>
-                  <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">📖 </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Reading: </Text>
                   Your <Text as="span" fontWeight="bold" color="green.600">strongest skill</Text> with 82% accuracy, fewer errors 
@@ -766,7 +765,6 @@ export default function ReportPage() {
               {/* Listening Analysis */}
               <Box>
                 <Text fontSize="md" color={textColor}>
-                  <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">🎧 </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Listening: </Text>
                   Stable results with average score of 7.0/9.0, you often 
@@ -777,7 +775,6 @@ export default function ReportPage() {
               {/* Writing Analysis */}
               <Box>
                 <Text fontSize="md" color={textColor}>
-                  <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">✍️ </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Writing: </Text>
                   You <Text as="span" fontWeight="bold" >mainly use simple sentences, repetitive vocabulary, and limited 
@@ -789,7 +786,6 @@ export default function ReportPage() {
               {/* Speaking Analysis */}
               <Box>
                 <Text fontSize="md" color={textColor}>
-                  <Text as="span" fontSize="16px">• </Text>
                   <Text as="span" fontSize="18px">🗣️ </Text>
                   <Text as="span" fontWeight="bold" color={textColor}>Speaking: </Text>
                   Average score, need to improve <Text as="span" fontWeight="bold" >fluency and pronunciation</Text>. 
