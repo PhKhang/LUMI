@@ -40,7 +40,6 @@ export default function Footer({ currentLanguage }: FooterProps) {
       miniTestPractice: "Mini Test",
       tutorialGuide: "Vocabulary Guide",
       studyReport: "Study Report",
-      testResult: "Test Result",
       supportKnowledge: "Support & Knowledge Base",
       community: "LUMI Community",
       talkToSales: "Talk to Sales",
@@ -80,9 +79,6 @@ export default function Footer({ currentLanguage }: FooterProps) {
             </Link>
             <Link color="text.secondary" _hover={{ color: "link.hover" }}>
               {content.studyReport}
-            </Link>
-            <Link as={NextLink} href="/test-result" _hover={{ color: "blue.500" }}>
-              {content.testResult}
             </Link>
           </VStack>
 

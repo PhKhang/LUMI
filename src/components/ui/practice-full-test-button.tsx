@@ -23,6 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { useColorModeValue } from "./color-mode";
 import CheckBox from "./checkbox";
+import Link from "next/link";
 
 export default function PracticeTestButton() {
   const { open, onOpen, onClose } = useDisclosure();
@@ -144,14 +145,16 @@ export default function PracticeTestButton() {
                     >
                       Cancel
                     </Button>
-                    <Button
-                      onClick={onClose}
-                      variant="solid"
-                      colorPalette="green"
-                      borderRadius="full"
-                    >
-                      Start Now
-                    </Button>
+                    <Link href={"/practice/reading/1"}>
+                      <Button
+                        onClick={onClose}
+                        variant="solid"
+                        colorPalette="green"
+                        borderRadius="full"
+                      >
+                        Start Now
+                      </Button>
+                    </Link>
                   </HStack>
                 </VStack>
               </Box>

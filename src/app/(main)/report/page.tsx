@@ -13,7 +13,9 @@ import {
   Button,
   Progress,
   Pagination,
-  Image
+  Image,
+  Skeleton,
+  SkeletonText
 } from "@chakra-ui/react"
 import { MdShare, MdOpenInNew, MdCalendarToday, MdLaunch, MdHeadphones, MdMenuBook, MdEdit, MdRecordVoiceOver } from "react-icons/md"
 import { 
@@ -27,7 +29,7 @@ import {
   Tooltip
 } from 'recharts'
 import { TbTargetArrow, TbCalendarMonthFilled, TbPencilMinus, TbChartRadar } from "react-icons/tb"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { FaHeadphones, FaBookOpen } from "react-icons/fa"
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { BiSolidPencil, BiSolidMicrophone } from "react-icons/bi"
@@ -35,6 +37,19 @@ import { BiSolidPencil, BiSolidMicrophone } from "react-icons/bi"
 export default function ReportPage() {
   const [selectedSkill, setSelectedSkill] = useState('Listening')
   const [selectedTab, setSelectedTab] = useState('Reading')
+  const [loadingAnalysis, setLoadingAnalysis] = useState(false);
+  // Skeleton loading effect for analysis section
+  useEffect(() => {
+    setLoadingAnalysis(true);
+    if (analysisTimeout.current) clearTimeout(analysisTimeout.current);
+    analysisTimeout.current = setTimeout(() => {
+      setLoadingAnalysis(false);
+    }, 2500);
+    return () => {
+      if (analysisTimeout.current) clearTimeout(analysisTimeout.current);
+    };
+  }, [selectedTab]);
+  const analysisTimeout = useRef<NodeJS.Timeout | null>(null);
   const [currentPage, setCurrentPage] = useState(1)
   const [mounted, setMounted] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState('By Time')
@@ -748,96 +763,109 @@ export default function ReportPage() {
             </Text>
           </Text>
 
-          <Flex px={6} gap={6} direction={{ base: "column", md: "row" }} align="start">
+          <Flex gap={6} direction={{ base: "column", md: "row" }} align="start">
             {/* Left Column - Skills Analysis */}
-            <VStack align="start" gap={1} flex="1">
-              {/* Reading Analysis */}
-              <Box>
-                <Text fontSize="md" color={textColor}>
-                  <Text as="span" fontSize="18px">📖 </Text>
-                  <Text as="span" fontWeight="bold" color={textColor}>Reading: </Text>
-                  Your <Text as="span" fontWeight="bold" color="green.600">strongest skill</Text> with 82% accuracy, fewer errors 
-                  in Passages 1 and 2, but <Text as="span" fontWeight="bold" >often lose points in Passage 3</Text>. Strong in 
-                  <Text as="span" fontWeight="bold" color="green.600"> Multiple Choice</Text>, weak in <Text as="span" fontWeight="bold" >Matching Headings</Text> (52%).
-                </Text>
-              </Box>
+            {loadingAnalysis ? (
+              <Flex direction={{ base: "column", md: "row" }} align="start" width="100%">
+                <VStack align="start" gap={1} width="60%" pr={8}>
+                  <SkeletonText ml={6} width="full" borderRadius="lg" colorScheme="gray" noOfLines={11}/>
+                </VStack>
+                <Box width="30%" alignItems="end">
+                  <SkeletonText width="full" borderRadius="lg" colorScheme="gray" noOfLines={5}/>
+                </Box>
+              </Flex>
+            ) : (
+              <Flex px={6} gap={6} direction={{ base: "column", md: "row" }} align="start">
+                {/* Left Column - Skills Analysis */}
+                <VStack align="start" gap={1} flex="1">
+                  {/* Reading Analysis */}
+                  <Box>
+                    <Text fontSize="md" color={textColor}>
+                      <Text as="span" fontSize="18px">📖 </Text>
+                      <Text as="span" fontWeight="bold" color={textColor}>Reading: </Text>
+                      Your <Text as="span" fontWeight="bold" color="green.600">strongest skill</Text> with 82% accuracy, fewer errors 
+                      in Passages 1 and 2, but <Text as="span" fontWeight="bold" >often lose points in Passage 3</Text>. Strong in 
+                      <Text as="span" fontWeight="bold" color="green.600"> Multiple Choice</Text>, weak in <Text as="span" fontWeight="bold" >Matching Headings</Text> (52%).
+                    </Text>
+                  </Box>
 
-              {/* Listening Analysis */}
-              <Box>
-                <Text fontSize="md" color={textColor}>
-                  <Text as="span" fontSize="18px">🎧 </Text>
-                  <Text as="span" fontWeight="bold" color={textColor}>Listening: </Text>
-                  Stable results with average score of 7.0/9.0, you often 
-                  struggle with <Text as="span" fontWeight="bold" >Part 2, Part 4</Text>, and <Text as="span" fontWeight="bold" >Map/Diagram Labelling</Text> questions.
-                </Text>
-              </Box>
+                  {/* Listening Analysis */}
+                  <Box>
+                    <Text fontSize="md" color={textColor}>
+                      <Text as="span" fontSize="18px">🎧 </Text>
+                      <Text as="span" fontWeight="bold" color={textColor}>Listening: </Text>
+                      Stable results with average score of 7.0/9.0, you often 
+                      struggle with <Text as="span" fontWeight="bold" >Part 2, Part 4</Text>, and <Text as="span" fontWeight="bold" >Map/Diagram Labelling</Text> questions.
+                    </Text>
+                  </Box>
 
-              {/* Writing Analysis */}
-              <Box>
-                <Text fontSize="md" color={textColor}>
-                  <Text as="span" fontSize="18px">✍️ </Text>
-                  <Text as="span" fontWeight="bold" color={textColor}>Writing: </Text>
-                  You <Text as="span" fontWeight="bold" >mainly use simple sentences, repetitive vocabulary, and limited 
-                  grammatical structures</Text>. Need to practice <Text as="span" color="orange.500" fontWeight="bold">Task 1 Overview section</Text> and 
-                  <Text as="span" color="orange.500" fontWeight="bold"> conclusion arguments in Task 2</Text>.
-                </Text>
-              </Box>
+                  {/* Writing Analysis */}
+                  <Box>
+                    <Text fontSize="md" color={textColor}>
+                      <Text as="span" fontSize="18px">✍️ </Text>
+                      <Text as="span" fontWeight="bold" color={textColor}>Writing: </Text>
+                      You <Text as="span" fontWeight="bold" >mainly use simple sentences, repetitive vocabulary, and limited 
+                      grammatical structures</Text>. Need to practice <Text as="span" color="orange.500" fontWeight="bold">Task 1 Overview section</Text> and 
+                      <Text as="span" color="orange.500" fontWeight="bold"> conclusion arguments in Task 2</Text>.
+                    </Text>
+                  </Box>
 
-              {/* Speaking Analysis */}
-              <Box>
-                <Text fontSize="md" color={textColor}>
-                  <Text as="span" fontSize="18px">🗣️ </Text>
-                  <Text as="span" fontWeight="bold" color={textColor}>Speaking: </Text>
-                  Average score, need to improve <Text as="span" fontWeight="bold" >fluency and pronunciation</Text>. 
-                  Often struggle with <Text as="span" fontWeight="bold" >Part 2</Text>
-                </Text>
-              </Box>
-            </VStack>
-
-            {/* Right Column - Suggestions */}
-            <Box>
-              <HStack mb={1}>
-                <Text fontSize="lg" fontWeight="bold">
-                  ✨
-                </Text>
-                <Text fontSize="lg" fontWeight="bold" 
-                  background="linear-gradient(-90deg, var(--yellow-500, #EAB308) 0%, var(--green-500, #22C55E) 100%)"
-                  backgroundClip="text"
-                  style={{
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent"
-                  }}>
-                  LUMI suggests you following exercises:
-                </Text>
-              </HStack>
-
-              
-              <VStack align="start" gap={1}>
-                <VStack align="start" gap={0}>
-                  <HStack>
-                    <Text color={textColor} fontSize="md">•</Text>
-                    <Text color={textColor} fontWeight="medium" fontSize="md">Reading:</Text>
-                    <Link color="blue.500" fontSize="md">
-                      The Step Pyramid Of Djoser
-                      <Icon as={MdOpenInNew} color="blue.500" boxSize={4} />
-                    </Link>
-                  </HStack>
-                  <Text fontSize="md" color={mutedColor}>(Matching Headings, Note Completion)</Text>
+                  {/* Speaking Analysis */}
+                  <Box>
+                    <Text fontSize="md" color={textColor}>
+                      <Text as="span" fontSize="18px">🗣️ </Text>
+                      <Text as="span" fontWeight="bold" color={textColor}>Speaking: </Text>
+                      Average score, need to improve <Text as="span" fontWeight="bold" >fluency and pronunciation</Text>. 
+                      Often struggle with <Text as="span" fontWeight="bold" >Part 2</Text>
+                    </Text>
+                  </Box>
                 </VStack>
 
-                <VStack align="start" gap={0}>
-                  <HStack>
-                    <Text color={textColor} fontSize="md">•</Text>
-                    <Text color={textColor} fontSize="md" fontWeight="medium">Listening:</Text>
-                    <Link color="blue.500" fontSize="md">
-                      The New Housing
-                      <Icon as={MdOpenInNew} color="blue.500" boxSize={4} />
-                    </Link>
+                {/* Right Column - Suggestions */}
+                <Box>
+                  <HStack mb={1}>
+                    <Text fontSize="lg" fontWeight="bold">
+                      ✨
+                    </Text>
+                    <Text fontSize="lg" fontWeight="bold" 
+                      background="linear-gradient(-90deg, var(--yellow-500, #EAB308) 0%, var(--green-500, #22C55E) 100%)"
+                      backgroundClip="text"
+                      style={{
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent"
+                      }}>
+                      LUMI suggests you following exercises:
+                    </Text>
                   </HStack>
-                  <Text fontSize="md" color={mutedColor}>(Multiple Choice, Map Labeling)</Text>
-                </VStack>
-              </VStack>
-            </Box>
+
+                  <VStack align="start" gap={1}>
+                    <VStack align="start" gap={0}>
+                      <HStack>
+                        <Text color={textColor} fontSize="md">•</Text>
+                        <Text color={textColor} fontWeight="medium" fontSize="md">Reading:</Text>
+                        <Link color="blue.500" fontSize="md">
+                          The Step Pyramid Of Djoser
+                          <Icon as={MdOpenInNew} color="blue.500" boxSize={4} />
+                        </Link>
+                      </HStack>
+                      <Text fontSize="md" color={mutedColor}>(Matching Headings, Note Completion)</Text>
+                    </VStack>
+
+                    <VStack align="start" gap={0}>
+                      <HStack>
+                        <Text color={textColor} fontSize="md">•</Text>
+                        <Text color={textColor} fontSize="md" fontWeight="medium">Listening:</Text>
+                        <Link color="blue.500" fontSize="md">
+                          The New Housing
+                          <Icon as={MdOpenInNew} color="blue.500" boxSize={4} />
+                        </Link>
+                      </HStack>
+                      <Text fontSize="md" color={mutedColor}>(Multiple Choice, Map Labeling)</Text>
+                    </VStack>
+                  </VStack>
+                </Box>
+              </Flex>
+            )}
           </Flex>
         </Box>
       </Flex>

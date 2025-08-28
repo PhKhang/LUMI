@@ -124,6 +124,7 @@ export default function TestBlock({
               rounded={"full"}
               py={0}
               size={"xs"}
+              onClick={() => window.location.href = "/mocktest/reading/1"}
             >
               <img src="/race-flag.svg" alt="mock test icon" width="16px" />
               Mock Test

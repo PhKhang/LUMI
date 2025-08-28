@@ -103,7 +103,7 @@ export default function TestTaking() {
   const leftPanelRef = useRef<HTMLElement>(null);
   const router = useRouter();
 
-  const [activeTab, setActiveTab] = useState<"note" | "lookup">("note");
+  const [activeTab, setActiveTab] = useState<"note">("note");
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large">(
     "medium"
   );
@@ -151,6 +151,12 @@ export default function TestTaking() {
   // Exit handler: open exit modal on ESC
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Chặn Ctrl+F (find)
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'f' || e.key === 'F')) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
       if (e.key === "Escape") {
         setIsExitOpen(true);
       }
@@ -222,8 +228,7 @@ export default function TestTaking() {
   const subTextColor = useColorModeValue('gray.600', 'gray.400')
   const outlineBtnColor = useColorModeValue('gray', 'gray')
   const readingTabs = [
-    { value: "note", label: "Take notes Mode", icon: FaPen },
-    { value: "lookup", label: "Dictionary Mode", icon: FaBook },
+
   ];
 
   const handleSubmit = () => {
@@ -249,7 +254,7 @@ export default function TestTaking() {
           }
           return prev - 1;
         });
-      }, 1000); // decrement 1 minute every 60 seconds
+      }, 4000); // decrement 1 minute every 60 seconds
       return () => clearInterval(interval);
     }
   }, [started]);
@@ -432,7 +437,7 @@ export default function TestTaking() {
             <Box marginTop="auto">
               <TabSelector
                 activeTab={activeTab}
-                onTabChange={(tab) => setActiveTab(tab as "note" | "lookup")}
+                onTabChange={(tab) => setActiveTab(tab as "note")}
                 tabs={readingTabs}
               />
             </Box>

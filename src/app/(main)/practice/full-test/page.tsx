@@ -26,6 +26,7 @@ import { RiSearchLine } from "react-icons/ri";
 
 export default function FullTestPage() {
   const [showSource, setShowSource] = useState(true);
+  const [sourceClearTrigger, setSourceClearTrigger] = useState(0);
   const [tests, setTests] = useState([
     {
       id: "reading-cam-01-p1",
@@ -141,6 +142,11 @@ export default function FullTestPage() {
     },
   ]);
 
+  const clearSource = () => {
+    setSourceClearTrigger(prev => prev + 1);
+  };
+
+
   const [sourceList, setSourceList] = useState([
     "Cambridge",
     "British Council",
@@ -217,21 +223,33 @@ export default function FullTestPage() {
           {/* <FilterOptions /> */}
           {/* <FilterTest /> */}
           <VStack borderTop="1px solid" borderColor="#E5E5EA" pt={4} width="100%" justifyContent={"flex-start"} alignItems="flex-start">
-            <HStack justifyContent={"space-between"} width="100%" cursor="pointer" onClick={() => setShowSource((v) => !v)}>
-              <Text
-                fontSize="md"
-                fontWeight="bolder"
-                color="text.primary"
-                textAlign={"left"}
+            <HStack justifyContent={"space-between"} width="100%">
+              <HStack cursor="pointer" onClick={() => setShowSource((v) => !v)} flex={1}>
+                <Text
+                  fontSize="md"
+                  fontWeight="bolder"
+                  color="text.primary"
+                  textAlign={"left"}
+                >
+                  Source
+                </Text>
+                <Icon
+                  as={showSource ? BiChevronUp : BiChevronDown}
+                  boxSize={5}
+                  color="text.primary"
+                  transition="transform 0.2s ease-in-out"
+                />
+              </HStack>
+              <Button 
+                size="xs" 
+                variant="ghost" 
+                color="gray.500" 
+                fontSize="xs" 
+                onClick={clearSource}
+                _hover={{ color: "gray.700" }}
               >
-                Source
-              </Text>
-              <Icon
-                as={showSource ? BiChevronUp : BiChevronDown}
-                boxSize={5}
-                color="text.primary"
-                transition="transform 0.2s ease-in-out"
-              />
+                Clear
+              </Button>
             </HStack>
             <Box 
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -240,7 +258,7 @@ export default function FullTestPage() {
               width="100%"
             >
               <Box mb={3} className={`transition-transform duration-300 ease-in-out ${showSource ? 'translate-y-0' : '-translate-y-2'}`}>
-                <CheckBox options={sourceList} />
+                <CheckBox options={sourceList} clearTrigger={sourceClearTrigger} />
               </Box>
             </Box>
           </VStack>
