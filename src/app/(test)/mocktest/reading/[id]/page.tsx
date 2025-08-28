@@ -151,8 +151,24 @@ export default function TestTaking() {
   // Exit handler: open exit modal on ESC
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      // Chặn Ctrl+F (find)
-      if ((e.ctrlKey || e.metaKey) && (e.key === 'f' || e.key === 'F')) {
+      // Block Ctrl+F (find), Ctrl+G (next result), F3 (next result), Ctrl+Shift+G (prev result), Shift+F3 (prev result)
+      const isCtrlOrMeta = e.ctrlKey || e.metaKey;
+      const isShift = e.shiftKey;
+      const key = e.key;
+      // Block Ctrl+F
+      if (isCtrlOrMeta && (key === 'f' || key === 'F')) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+      // Block Ctrl+G, F3 (next result)
+      if ((isCtrlOrMeta && (key === 'g' || key === 'G')) || key === 'F3') {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+      // Block Ctrl+Shift+G, Shift+F3 (prev result)
+      if ((isCtrlOrMeta && isShift && (key === 'g' || key === 'G')) || (isShift && key === 'F3')) {
         e.preventDefault();
         e.stopPropagation();
         return false;
