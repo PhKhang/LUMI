@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect, forwardRef } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   Box,
   Flex,
@@ -39,6 +39,28 @@ import {
   sectionContent,
 } from "./data";
 import { drawer } from "@/components/ui/dictionary-bottom";
+import { HiOutlineArrowRight } from "react-icons/hi";
+import { keyframes } from '@emotion/react';
+
+const pulse = keyframes`
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+`;
+
+const bounce = keyframes`
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+`;
 
 interface Question {
   id: number;
@@ -95,6 +117,7 @@ export default function TestTaking() {
   const params = useParams();
   const examId = params.id as string;
   const leftPanelRef = useRef<HTMLElement>(null);
+  const router = useRouter();
 
   const [activeTab, setActiveTab] = useState<"note" | "lookup">("note");
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large">(
@@ -110,6 +133,7 @@ export default function TestTaking() {
   const [gapAnswers, setGapAnswers] = useState<string[]>(
     gapFillQuestions.map(() => "")
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const bgColor = useColorModeValue("#F6F0E7", "gray.800");
   const contentBackgroundColor = useColorModeValue("#FFFAF6", "gray.900");
@@ -146,13 +170,13 @@ export default function TestTaking() {
       statuses[idx] = !!ans;
     });
 
-    // 6-7: MC 67, answered if at least one selected (since choose two)
-    statuses[5] = mcAnswers67.length > 0;
-    statuses[6] = mcAnswers67.length > 0;
+    // 6-7: MC 67, choose two answers
+    statuses[5] = mcAnswers67.length >= 1; // Question 6 answered when at least 1 answer selected
+    statuses[6] = mcAnswers67.length >= 2; // Question 7 answered when 2 answers selected
 
-    // 8-9: MC 89
-    statuses[7] = mcAnswers89.length > 0;
-    statuses[8] = mcAnswers89.length > 0;
+    // 8-9: MC 89, choose two answers
+    statuses[7] = mcAnswers89.length >= 1; // Question 8 answered when at least 1 answer selected
+    statuses[8] = mcAnswers89.length >= 2; // Question 9 answered when 2 answers selected
 
     // 10-13: Gap fill
     gapAnswers.forEach((ans, idx) => {
@@ -169,6 +193,14 @@ export default function TestTaking() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "center" });
     }
+  };
+
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+    // Simulate marking process for 2.5 seconds
+    setTimeout(() => {
+      router.push('/result/reading/1');
+    }, 4000);
   };
 
   const gapFillSummaryContent = (
@@ -423,6 +455,62 @@ export default function TestTaking() {
         </Box>
       </Flex>
 
+      {/* Loading Overlay */}
+      {isSubmitting && (
+        <Box
+          position="fixed"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bg="rgba(0, 0, 0, 0.9)"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          zIndex={9999}
+        >
+          <VStack gap={6} textAlign="center" mb={6}>
+            {/* Animated Favicon */}
+            <Box animation={`${bounce} 2s ease-in-out infinite`}>
+              <Image src="/favicon.png" alt="LUMI" width="80px" />
+            </Box>
+
+            {/* Loading Message */}
+            <VStack gap={2}>
+              <Text
+                fontSize="2xl"
+                fontWeight="bold"
+                color="white"
+                textAlign="center"
+              >
+                LUMI is marking your exam
+              </Text>
+              <Text
+                fontSize="md"
+                color="gray.300"
+                textAlign="center"
+              >
+                Please wait while we process your answers...
+              </Text>
+            </VStack>
+
+            {/* Loading Dots Animation */}
+            <HStack gap={1}>
+              {[0, 1, 2].map((i) => (
+                <Box
+                  key={i}
+                  w="8px"
+                  h="8px"
+                  bg="green.400"
+                  borderRadius="full"
+                  animation={`${pulse} 1.5s ease-in-out ${i * 0.2}s infinite`}
+                />
+              ))}
+            </HStack>
+          </VStack>
+        </Box>
+      )}
+
       {/* Question Navigation */}
       <Box
         bg={bgColor}
@@ -430,9 +518,14 @@ export default function TestTaking() {
         borderColor={borderColor}
         display="flex"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="space-between"
         height="65px"
+        px={10}
       >
+        <Button variant="solid" colorPalette={"green"} borderRadius={"full"} size="sm" border="1px solid" borderColor={borderColor} visibility="hidden">
+          Submit
+          <Icon as={HiOutlineArrowRight}/>
+        </Button>
         <Flex justify="center">
           <SimpleGrid
             columns={13}
@@ -453,16 +546,19 @@ export default function TestTaking() {
                   key={questionNum}
                   size="sm"
                   variant="solid"
-                  color={isAnswered ? "yellow.600" : "black"}
-                  bg={isAnswered ? "yellow.100" : "white"}
-                  _hover={{ bg: isAnswered ? "yellow.500" : "gray.100" }}
+                  color={isAnswered ? "yellow.600" : textColor}
+                  bg={isAnswered ? "yellow.100" : questionBackgroundColor}
+                  _hover={{ 
+                    bg: isAnswered ? "yellow.500" : useColorModeValue("gray.100", "gray.600"),
+                    color: isAnswered ? "yellow.700" : textColor
+                  }}
                   w="35px"
                   h="35px"
                   borderRadius="full"
                   onClick={() => scrollToQuestion(questionNum)}
                   cursor="pointer"
                   border="1px solid"
-                  borderColor={isAnswered ? "background" : borderColor}
+                  borderColor={isAnswered ? "yellow.200" : borderColor}
                 >
                   {questionNum}
                 </IconButton>
@@ -470,6 +566,12 @@ export default function TestTaking() {
             })}
           </SimpleGrid>
         </Flex>
+        <Button variant="solid" colorPalette={"green"} borderRadius={"full"} size="sm" border="1px solid" borderColor={borderColor} onClick={handleSubmit}>
+            <Text fontWeight={"medium"}>
+              Submit
+            </Text>
+            <Icon as={HiOutlineArrowRight}/>
+        </Button>
       </Box>
     </Box>
   );

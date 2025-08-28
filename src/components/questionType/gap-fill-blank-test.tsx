@@ -16,6 +16,8 @@ export default function GapFillBlank({
   fontSize,
 }: GapFillBlankProps) {
   const textColor = useColorModeValue("gray.800", "white")
+  const borderColor = useColorModeValue("gray.200", "gray.600")
+  const inputBgColor = useColorModeValue("white", "gray.700")
 
   const getNumberBoxSize = () => {
     switch (fontSize) {
@@ -40,7 +42,7 @@ export default function GapFillBlank({
   }
 
   return (
-    <Box as="span" display="inline-flex" alignItems="center" mx={1}>
+    <Box as="span" display="inline-flex" alignItems="center" mx={1} py={1}>
       {/* Question Number - positioned to the left */}
       <Box
         as="span"
@@ -63,15 +65,20 @@ export default function GapFillBlank({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         borderBottom="2px solid"
-        borderColor="black"
-        color="black"
-        fontWeight="bold"
+        borderColor={borderColor}
+        color={textColor}
+        bg={inputBgColor}
+        fontWeight="medium"
         fontSize={getInputFontSize()}
         px={2}
         py={1}
         minW="60px"
         display="inline-block"
         textAlign="center"
+        _focus={{
+          borderColor: "blue.500",
+          boxShadow: "0 0 0 1px blue.500"
+        }}
       />
     </Box>
   )

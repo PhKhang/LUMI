@@ -34,6 +34,7 @@ export default function MultipleChoiceQuestionComponent({
 }: MultipleChoiceQuestionProps) {
   const questionBackgroundColor = useColorModeValue("white", "gray.700")
   const textColor = useColorModeValue("gray.800", "white")
+  const borderColor = useColorModeValue("gray.200", "gray.600")
 
   const getFontSizeValue = () => {
     switch (fontSize) {
@@ -88,7 +89,9 @@ export default function MultipleChoiceQuestionComponent({
   }
 
   const getCheckboxBg = (isSelected: boolean) => {
-    return isSelected ? "black" : "transparent"
+    return isSelected
+      ? useColorModeValue("black", "white")
+      : useColorModeValue("white", "gray.800")
   }
 
   const getCheckboxBorder = () => {
@@ -96,11 +99,15 @@ export default function MultipleChoiceQuestionComponent({
   }
 
   const getCheckboxBorderColor = (isSelected: boolean) => {
-    return isSelected ? "transparent" : "gray.300"
+    return isSelected
+      ? useColorModeValue("black", "white")
+      : useColorModeValue("gray.300", "gray.300")
   }
 
   const getCheckboxIcon = (isSelected: boolean) => {
-    return isSelected ? <Icon as={MdCheck} color="white" /> : null
+    return isSelected
+      ? <Icon as={MdCheck} color={useColorModeValue("white", "black")} />
+      : null
   }
 
   return (

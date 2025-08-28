@@ -151,9 +151,10 @@ export const drawer = createOverlay<DialogProps>((props) => {
                             </MenuButton>
                             <MenuList bg={useColorModeValue("#FFF", "#27272A")} borderColor={useColorModeValue("#d4d4d8", "#52525b")} borderWidth={"1px"} borderRadius="5px" py="8px" color="black" zIndex={1}>
                               <MenuItem onClick={() => setLanguage('vietnamese')}
-                              transition="background 0.2s ease"
+                              transition="background 0.2s, color 0.2s, border-radius 0.2s"
                               _hover={{
-                                bg: "#e4e4e7",
+                                bg: useColorModeValue("#fff", "#3f3f46"),
+                                color: useColorModeValue("yellow.700", "yellow.200"),
                               }}
                               px="12px">
                                 <HStack>
@@ -164,9 +165,10 @@ export const drawer = createOverlay<DialogProps>((props) => {
                                 </HStack>
                               </MenuItem>
                               <MenuItem onClick={() => setLanguage('english')}
-                              transition="background 0.2s ease"
+                              transition="background 0.2s, color 0.2s, border-radius 0.2s"
                               _hover={{
-                                bg: "#e4e4e7",
+                                bg: useColorModeValue("#fff", "#3f3f46"),
+                                color: useColorModeValue("yellow.700", "yellow.200"),
                               }}
                               px="12px">
                                 <HStack>

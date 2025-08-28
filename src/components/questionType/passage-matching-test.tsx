@@ -40,9 +40,9 @@ export default function PassageMatchingQuestionComponent({
   fontSize,
   activeTab,
 }: PassageMatchingQuestionProps) {
-  const questionBackgroundColor = useColorModeValue("white", "gray.700")
+  const questionBackgroundColor = useColorModeValue("white", "#3f3f46")
   const textColor = useColorModeValue("gray.800", "white")
-  const borderColor = useColorModeValue("gray.200", "gray.600")
+  const borderColor = useColorModeValue("#3f3f46", "#52525b")
 
   const getFontSizeValue = () => {
     switch (fontSize) {
@@ -163,8 +163,8 @@ export default function PassageMatchingQuestionComponent({
                 <Menu>
                   <MenuButton
                     as={Box}
-                    bg="white"
-                    color="black"
+                    bg={questionBackgroundColor}
+                    color={textColor}
                     px={4}
                     py={2}
                     borderRadius="full"
@@ -175,22 +175,25 @@ export default function PassageMatchingQuestionComponent({
                     justifyContent="space-between"
                     alignItems="center"
                     border="1px solid"
-                    borderColor="gray.500"
+                    borderColor={borderColor}
+                    _hover={{
+                      bg: useColorModeValue("gray.50", "gray.600"),
+                    }}
                   >
                     <HStack justify={"space-between"}>
                       <Text fontWeight="bold" fontSize={getAnswerTextFontSize()}>
                         {answers[index] || "—"}
                       </Text>
-                      <Icon as={FiChevronDown} height="24px" color="black" />
+                      <Icon as={FiChevronDown} height="24px" color={textColor} />
                     </HStack>
                   </MenuButton>
                   <MenuList 
-                    bg="white"
+                    bg={questionBackgroundColor}
                     w="full"
                     py="7px"
                     borderRadius="10px"
                     border="1px solid"
-                    borderColor="#717171"
+                    borderColor={borderColor}
                   >
                     {question.options.map((opt) => (
                       <MenuItem
@@ -198,13 +201,14 @@ export default function PassageMatchingQuestionComponent({
                         onClick={() => handleSelect(index, opt)}
                         width="125px"
                         px="12px"
-                        transition="background 0.2s ease"
                         _hover={{
-                          bg: "#e4e4e7",
+                          bg: useColorModeValue("#e4e4e7", "#27272A"),
+                          color: useColorModeValue("gray.900", "white"),
                         }}
                         cursor="pointer"
+                        color={textColor}
                       >
-                        <Text fontSize={getChooseAnswerTextFontSize()} color="black" py="2px">
+                        <Text fontSize={getChooseAnswerTextFontSize()} color={textColor} py="2px">
                           {opt}
                         </Text>
                       </MenuItem>
