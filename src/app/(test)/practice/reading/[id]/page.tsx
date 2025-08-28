@@ -200,7 +200,7 @@ export default function TestTaking() {
     // Simulate marking process for 2.5 seconds
     setTimeout(() => {
       router.push('/result/reading/1');
-    }, 4000);
+    }, 3000);
   };
 
   const gapFillSummaryContent = (

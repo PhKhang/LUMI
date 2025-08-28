@@ -47,7 +47,7 @@ export default function HomePage() {
                 <br />
                 anytime, anywhere
               </Text>
-              <Text color={"text.primary"}>
+              <Text color={"text.primary"} fontWeight={"medium"}>
                 Join LUMI today to start your IELTS journey!
               </Text>
               <Button
@@ -63,7 +63,7 @@ export default function HomePage() {
             </Box>
 
             <Text color={"text.primary"} fontSize={"2xl"} mt={"20"}>
-              Learn, Improve and Master the IELTS exam
+              Learn, Upgrade and Master the IELTS exam
             </Text>
           </div>
         </Box>
