@@ -34,6 +34,7 @@ import {
   MenuItem,
 } from "@chakra-ui/menu";
 import { IcoIcon } from "hugeicons-react";
+import { useColorMode } from "@/components/ui/color-mode"
 
 export interface DialogProps {
   title: string;
@@ -44,6 +45,7 @@ export interface DialogProps {
 }
 
 export const drawer = createOverlay<DialogProps>((props) => {
+  const { colorMode } = useColorMode()
   const { title, description, content, containerRef, ...rest } = props;
   const [likeStatus, setLikeStatus] = useState<'liked' | 'disliked' | null>(null);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
@@ -228,10 +230,10 @@ export const drawer = createOverlay<DialogProps>((props) => {
                             >
                                 <HStack>
                                   <Icon as={selectedTopics.length > 0 ? MdCheck : MdAdd} />
-                                  <Text>{selectedTopics.length > 0 ? "Saved" : "Save word"}</Text>
+                                  <Text>{selectedTopics.length > 0 ? "Saved" : "Save Word"}</Text>
                                 </HStack>
                             </MenuButton>
-                            <MenuList background='#F0FDF4' borderColor="#BBF7D0" borderWidth={"1px"} borderRadius="5px" px="24px" py="12px" color="black">
+                            <MenuList background={colorMode == "light" ? '#F0FDF4' : '#111111'} borderColor="green" borderWidth={"1px"} borderRadius="5px" px="24px" py="12px" color={colorMode == "light" ? 'black' : 'white'} zIndex={1}>
                               <MenuGroup title="Choose topic" fontWeight={"bold"}>
                                 <MenuOptionGroup
                                   type="radio"

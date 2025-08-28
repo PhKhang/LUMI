@@ -68,7 +68,7 @@ export default function PracticeTestButtonMiniTest() {
           alt="weight icon"
           style={{ width: 18, height: 18, marginRight: 4 }}
         />
-        Practice test
+        Practice Test
       </Button>
       <Modal
         isOpen={open}

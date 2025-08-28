@@ -62,7 +62,7 @@ export default function PracticeTestButton() {
         size={"xs"}
       >
         <img src="/weight-icon.svg" alt="weight icon" style={{ width: 18, height: 18, marginRight: 4 }} />
-        Practice test
+        Practice Test
       </Button>
       <Modal isOpen={open} onClose={onClose} isCentered size="xs" closeOnEsc closeOnOverlayClick>
         <ModalOverlay
