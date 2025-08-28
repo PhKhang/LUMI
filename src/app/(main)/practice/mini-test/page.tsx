@@ -29,6 +29,9 @@ export default function FullTestPage() {
   const [showSource, setShowSource] = useState(true);
   const [showSection, setShowSection] = useState(true);
   const [showType, setShowType] = useState(true);
+  const [sourceClearTrigger, setSourceClearTrigger] = useState(0);
+  const [sectionClearTrigger, setSectionClearTrigger] = useState(0);
+  const [typeClearTrigger, setTypeClearTrigger] = useState(0);
   const [tests, setTests] = useState([
     {
       id: "reading-cam-01-p1",
@@ -182,6 +185,18 @@ export default function FullTestPage() {
     "Other Types",
   ]);
 
+  const clearSource = () => {
+    setSourceClearTrigger(prev => prev + 1);
+  };
+
+  const clearSection = () => {
+    setSectionClearTrigger(prev => prev + 1);
+  };
+
+  const clearType = () => {
+    setTypeClearTrigger(prev => prev + 1);
+  };
+
   return (
     <>
       <VStack gap={0} py={2} px={10} alignItems="flex-start" borderBottom="0.8px solid" borderColor="#C7C7CC">
@@ -233,21 +248,33 @@ export default function FullTestPage() {
           <FilterTest />
 
           <VStack borderTop="1px solid" borderColor="#E5E5EA" pt={4} width="100%" justifyContent={"flex-start"} alignItems="flex-start">
-            <HStack justifyContent={"space-between"} width="100%" cursor="pointer" onClick={() => setShowSource((v) => !v)}>
-              <Text
-                fontSize="md"
-                fontWeight="bolder"
-                color="text.primary"
-                textAlign={"left"}
+            <HStack justifyContent={"space-between"} width="100%">
+              <HStack cursor="pointer" onClick={() => setShowSource((v) => !v)} flex={1}>
+                <Text
+                  fontSize="md"
+                  fontWeight="bolder"
+                  color="text.primary"
+                  textAlign={"left"}
+                >
+                  Source
+                </Text>
+                <Icon
+                  as={showSource ? BiChevronUp : BiChevronDown}
+                  boxSize={5}
+                  color="text.primary"
+                  transition="transform 0.2s ease-in-out"
+                />
+              </HStack>
+              <Button 
+                size="xs" 
+                variant="ghost" 
+                color="gray.500" 
+                fontSize="xs" 
+                onClick={clearSource}
+                _hover={{ color: "gray.700" }}
               >
-                Source
-              </Text>
-              <Icon
-                as={showSource ? BiChevronUp : BiChevronDown}
-                boxSize={5}
-                color="text.primary"
-                transition="transform 0.2s ease-in-out"
-              />
+                Clear
+              </Button>
             </HStack>
             <Box 
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -256,27 +283,39 @@ export default function FullTestPage() {
               width="100%"
             >
               <Box mb={3} className={`transition-transform duration-300 ease-in-out ${showSource ? 'translate-y-0' : '-translate-y-2'}`}>
-                <CheckBox options={sourceList} />
+                <CheckBox options={sourceList} clearTrigger={sourceClearTrigger} />
               </Box>
             </Box>
           </VStack>
 
           <VStack borderTop="1px solid" borderColor="#E5E5EA" pt={4} width="100%" justifyContent={"flex-start"} alignItems="flex-start">
-            <HStack justifyContent={"space-between"} width="100%" cursor="pointer" onClick={() => setShowSection((v) => !v)}>
-              <Text
-                fontSize="md"
-                fontWeight="bolder"
-                color="text.primary"
-                textAlign={"left"}
+            <HStack justifyContent={"space-between"} width="100%">
+              <HStack cursor="pointer" onClick={() => setShowSection((v) => !v)} flex={1}>
+                <Text
+                  fontSize="md"
+                  fontWeight="bolder"
+                  color="text.primary"
+                  textAlign={"left"}
+                >
+                  Section
+                </Text>
+                <Icon
+                  as={showSection ? BiChevronUp : BiChevronDown}
+                  boxSize={5}
+                  color="text.primary"
+                  transition="transform 0.2s ease-in-out"
+                />
+              </HStack>
+              <Button 
+                size="xs" 
+                variant="ghost" 
+                color="gray.500" 
+                fontSize="xs" 
+                onClick={clearSection}
+                _hover={{ color: "gray.700" }}
               >
-                Section
-              </Text>
-              <Icon
-                as={showSection ? BiChevronUp : BiChevronDown}
-                boxSize={5}
-                color="text.primary"
-                transition="transform 0.2s ease-in-out"
-              />
+                Clear
+              </Button>
             </HStack>
             <Box 
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -285,27 +324,39 @@ export default function FullTestPage() {
               width="100%"
             >
               <Box mb={3} className={`transition-transform duration-300 ease-in-out ${showSection ? 'translate-y-0' : '-translate-y-2'}`}>
-                <CheckBox options={sectionList} />
+                <CheckBox options={sectionList} clearTrigger={sectionClearTrigger} />
               </Box>
             </Box>
           </VStack>
 
           <VStack borderTop="1px solid" borderColor="#E5E5EA" pt={4} width="100%" justifyContent={"flex-start"} alignItems="flex-start">
-            <HStack justifyContent={"space-between"} width="100%" cursor="pointer" onClick={() => setShowType((v) => !v)}>
-              <Text
-                fontSize="md"
-                fontWeight="bolder"
-                color="text.primary"
-                textAlign={"left"}
+            <HStack justifyContent={"space-between"} width="100%">
+              <HStack cursor="pointer" onClick={() => setShowType((v) => !v)} flex={1}>
+                <Text
+                  fontSize="md"
+                  fontWeight="bolder"
+                  color="text.primary"
+                  textAlign={"left"}
+                >
+                  Type
+                </Text>
+                <Icon
+                  as={showType ? BiChevronUp : BiChevronDown}
+                  boxSize={5}
+                  color="text.primary"
+                  transition="transform 0.2s ease-in-out"
+                />
+              </HStack>
+              <Button 
+                size="xs" 
+                variant="ghost" 
+                color="gray.500" 
+                fontSize="xs" 
+                onClick={clearType}
+                _hover={{ color: "gray.700" }}
               >
-                Type
-              </Text>
-              <Icon
-                as={showType ? BiChevronUp : BiChevronDown}
-                boxSize={5}
-                color="text.primary"
-                transition="transform 0.2s ease-in-out"
-              />
+                Clear
+              </Button>
             </HStack>
             <Box 
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -314,7 +365,7 @@ export default function FullTestPage() {
               width="100%"
             >
               <Box mb={3} className={`transition-transform duration-300 ease-in-out ${showType ? 'translate-y-0' : '-translate-y-2'}`}>
-                <CheckBox options={typeList} />
+                <CheckBox options={typeList} clearTrigger={typeClearTrigger} />
               </Box>
             </Box>
           </VStack>
