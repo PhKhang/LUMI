@@ -17,10 +17,10 @@ export default function CheckBox({
         <Checkbox.Root key={option} colorPalette={"green"}>
           <Checkbox.HiddenInput />
           <Checkbox.Control rounded={"md"}>
-            <Checkbox.Indicator />
+            <Checkbox.Indicator cursor={"pointer"}/>
           </Checkbox.Control>
           <Checkbox.Label>
-            <HStack>
+            <HStack cursor={"pointer"}>
               <Text color={textColor} fontWeight={"bold"}>
                 {option}
               </Text>

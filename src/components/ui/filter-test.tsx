@@ -153,7 +153,7 @@ export default function FilterTest() {
                       skillState.selected && skillState.sectionType === "single"
                     }
                     onChange={() => setSectionType(skill, "single")}
-                    className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500"
+                    className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500 accent-black"
                   />
                   <Text
                     color={skillState.selected ? "text.primary" : "gray.400"}
@@ -172,7 +172,7 @@ export default function FilterTest() {
                       skillState.selected && skillState.sectionType === "full"
                     }
                     onChange={() => setSectionType(skill, "full")}
-                    className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500"
+                    className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500 accent-black"
                   />
                   <Text
                     color={skillState.selected ? "text.primary" : "gray.400"}

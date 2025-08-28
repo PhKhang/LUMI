@@ -30,10 +30,10 @@ export default function TestBlock({
     <Box
       h={"250px"}
       w={"260px"}
-      shadow={"sm"}
+      shadow={"md"}
       // overflow={"hidden"}
       rounded={"2xl"}
-      _hover={{ shadow: "xs" }}
+      _hover={{ shadow: "sm" }}
       transition={"all 0.2s ease-in-out"}
       position={"relative"}
       overflow={"hidden"}
