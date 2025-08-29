@@ -1868,7 +1868,7 @@ export default function ReportPage() {
                               color="blue.500" 
                               fontSize="sm" 
                               fontWeight="medium"
-                              href={`http://localhost:3000/practice/${selectedTab.toLowerCase()}/1`}
+                              href={`/practice/${selectedTab.toLowerCase()}/1`}
                             >
                               Retake
                             </Link>
@@ -1887,7 +1887,7 @@ export default function ReportPage() {
                               color="blue.500" 
                               fontSize="sm" 
                               fontWeight="medium"
-                              href={`http://localhost:3000/result/${selectedTab.toLowerCase()}/1`}
+                              href={`/result/${selectedTab.toLowerCase()}/1`}
                             >
                               Review
                             </Link>
@@ -2008,7 +2008,7 @@ export default function ReportPage() {
                               color="blue.500" 
                               fontSize="sm" 
                               fontWeight="medium"
-                              href={`http://localhost:3000/practice/${selectedTab.toLowerCase()}/1`}
+                              href={`/practice/${selectedTab.toLowerCase()}/1`}
                             >
                               Retake
                             </Link>
@@ -2027,7 +2027,7 @@ export default function ReportPage() {
                               color="blue.500" 
                               fontSize="sm" 
                               fontWeight="medium"
-                              href={`http://localhost:3000/result/${selectedTab.toLowerCase()}/1`}
+                              href={`/result/${selectedTab.toLowerCase()}/1`}
                             >
                               Review
                             </Link>
@@ -2131,7 +2131,7 @@ export default function ReportPage() {
                               color="blue.500" 
                               fontSize="sm" 
                               fontWeight="medium"
-                              href={`http://localhost:3000/practice/${selectedTab.toLowerCase()}/1`}
+                              href={`/practice/${selectedTab.toLowerCase()}/1`}
                             >
                               Retake
                             </Link>
@@ -2150,7 +2150,7 @@ export default function ReportPage() {
                               color="blue.500" 
                               fontSize="sm" 
                               fontWeight="medium"
-                              href={`http://localhost:3000/result/${selectedTab.toLowerCase()}/1`}
+                              href={`/result/${selectedTab.toLowerCase()}/1`}
                             >
                               Review
                             </Link>
