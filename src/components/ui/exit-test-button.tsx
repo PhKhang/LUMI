@@ -69,7 +69,7 @@ export default function ExitTestButton() {
               <Button onClick={onClose} variant="outline" colorPalette="gray" borderRadius="full">
                 Continue Test
               </Button>
-              <Button onClick={() => router.back()} variant="solid" colorPalette="black" borderRadius="full">
+              <Button onClick={() => router.push('/practice/mini-test')} variant="solid" colorPalette="black" borderRadius="full">
                 Exit
               </Button>
             </ModalFooter>
