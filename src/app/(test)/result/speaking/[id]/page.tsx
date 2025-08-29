@@ -41,7 +41,7 @@ export default function SpeakingTestResult() {
   const [userNotes, setUserNotes] = useState("")
   const [highlightedCorrection, setHighlightedCorrection] = useState<number | null>(null)
   const [isManualTabChange, setIsManualTabChange] = useState(false)
-  
+  const strikethroughColor = useColorModeValue("red", "red.300")
   const { colorMode, toggleColorMode } = useColorMode()
   
   // Always call hooks - never conditionally
@@ -433,7 +433,7 @@ export default function SpeakingTestResult() {
 
               <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8" px={6}>
                 I think it depends. If we are talking about the network conditions, I would say, if my computer can't connect to the Wi-Fi,{' '}
-                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm" textDecoration="line-through">
+                <Box as="span" bg={highlightYellowBg} color={strikethroughColor} px={1} borderRadius="sm" textDecoration="line-through">
                   to access to
                 </Box>{' '}
                 <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm">
@@ -444,14 +444,14 @@ export default function SpeakingTestResult() {
                   all
                 </Box>{' '}
                 my time using it to surf the web. But in{' '}
-                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm" textDecoration="line-through">
+                <Box as="span" bg={highlightYellowBg} color={strikethroughColor} px={1} borderRadius="sm" textDecoration="line-through">
                   in
                 </Box>{' '}
                 <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm">
                   on
                 </Box>{' '}
                 the other hand, if we are talking about {' '} 
-                <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm" textDecoration="line-through">
+                <Box as="span" bg={highlightYellowBg} color={strikethroughColor} px={1} borderRadius="sm" textDecoration="line-through">
                    environment,{' '} the atmosphere is around
                 </Box>{' '}
                 <Box as="span" bg={highlightYellowBg} color={highlightYellowText} px={1} borderRadius="sm">
@@ -597,7 +597,7 @@ export default function SpeakingTestResult() {
 
               <Text fontSize={getFontSizeValue()} color={textColor} mb={4} lineHeight="1.8" px={6}>
                 I think it depends. If we are talking about{" "}
-                <Text as="span" bg={highlightGreenBg} color={highlightGreenText} px={1} textDecoration="line-through" borderRadius={"sm"}>
+                <Text as="span" bg={highlightGreenBg} color={strikethroughColor} px={1} textDecoration="line-through" borderRadius={"sm"}>
                   the network condition
                 </Text>
                 <Text as="span" bg={highlightGreenBg} color={highlightGreenText} px={1} ml={1} borderRadius={"sm"}>
@@ -606,7 +606,7 @@ export default function SpeakingTestResult() {
                 , I would say, if my computer can connect to the Wi-Fi, to access the Internet, It would be difficult
                 for me to use it because I spend almost my time using it to surf the web. But in the other hand, if we
                 are talking about the environment, the{" "}
-                <Text as="span" bg={highlightGreenBg} color={highlightGreenText} px={1} textDecoration="line-through" borderRadius={"sm"}>
+                <Text as="span" bg={highlightGreenBg} color={strikethroughColor} px={1} textDecoration="line-through" borderRadius={"sm"}>
                   atmosphere
                 </Text>
                 <Text as="span" bg={highlightGreenBg} color={highlightGreenText} px={1} ml={1} borderRadius={"sm"}>
