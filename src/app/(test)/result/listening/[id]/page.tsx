@@ -392,7 +392,7 @@ export default function ListeningTestResult() {
   }
 
   const listeningTabs = [
-    { value: "note", label: "Take notes mode", icon: FaPen },
+    { value: "note", label: "Take Notes mode", icon: FaPen },
     { value: "lookup", label: "Dictionary mode", icon: FaBook },
   ]
 

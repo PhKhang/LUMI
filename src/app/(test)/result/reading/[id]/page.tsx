@@ -272,7 +272,7 @@ export default function TestResult() {
   }
 
   const readingTabs = [
-    { value: "note", label: "Take notes Mode", icon: FaPen },
+    { value: "note", label: "Take Notes Mode", icon: FaPen },
     { value: "lookup", label: "Dictionary Mode", icon: FaBook },
   ]
 

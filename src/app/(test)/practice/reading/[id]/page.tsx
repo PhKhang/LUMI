@@ -143,7 +143,7 @@ export default function TestTaking() {
   const greenThemeColor = useColorModeValue("green.600", "green.500");
   const resizerColor = useColorModeValue("orange.500", "orange.400")
   const readingTabs = [
-    { value: "note", label: "Take notes Mode", icon: FaPen },
+    { value: "note", label: "Take Notes Mode", icon: FaPen },
     { value: "lookup", label: "Dictionary Mode", icon: FaBook },
   ];
 
