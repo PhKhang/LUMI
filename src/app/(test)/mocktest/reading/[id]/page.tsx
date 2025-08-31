@@ -496,7 +496,7 @@ export default function TestTaking() {
                   fontWeight="medium"
                   color={timerColor}
                 >
-                  {minutesRemaining} minute{minutesRemaining !== 1 ? "s" : ""}
+                  {minutesRemaining} minute{minutesRemaining !== 1 ? "s remaining" : " remaining"}
                 </Text>
               </HStack>
             </HStack>

@@ -392,8 +392,8 @@ export default function ListeningTestResult() {
   }
 
   const listeningTabs = [
-    { value: "note", label: "Take Notes mode", icon: FaPen },
-    { value: "lookup", label: "Dictionary mode", icon: FaBook },
+    { value: "note", label: "Notes Taking Mode", icon: FaPen },
+    { value: "lookup", label: "Dictionary Mode", icon: FaBook },
   ]
 
   const partNavigationData = [
